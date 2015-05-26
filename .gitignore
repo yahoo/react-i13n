@@ -1,0 +1,12 @@
+artifacts/
+build/
+results/
+coverage/
+node_modules/
+tmp/
+dist/
+*.log
+*.tap
+tests/functional/bundle.js
+tests/functional/i13n-functional.js
+tests/functional/css/
