@@ -1,0 +1,219 @@
+## Integrate with Components
+
+If you have a video player and you want to trace each link, you might need to have `onClick` for each links, like:
+
+```js
+var Player = React.createClass({
+    ...
+    render: function () {
+        trackButton: function (category, action) {
+            beacon(category, action); // some beaconing function, e.g., ga provide by analytics.js
+        },
+        trackExternalLink: function (category, action, url) {
+            // typically you will redirect users to the destination page after beaconing
+            beacon(category, action, function onBeaconFinish() {
+                document.location = url;
+            }); 
+        },
+        return (
+            <div>
+                ...
+                <button onClick="this.trackButton('VideoPlayer', 'Play')">Play</button>
+                <button onClick="this.trackButton('VideoPlayer', 'Download')">Download</button>
+                <a onClick="this.trackExternalLink('VideoPlayer', 'More', 'http://some.more.link')" href="http://some.more.link">More</a>
+            </div>
+        )
+    }
+});
+
+// in some other component
+<Player></Player>
+```
+
+#### Replace with I13n Components
+
+For better approach of instrumentation, you might want to remove the `onClick` hook everywhere, once you [setup](../api/setupI13n.md) `react-i13n` and have a [plugin](./guides/createPlugins.md) to handle the click event, you can start to use [createI13nNode](../api/createI13nNode.md#createi13nnodecomponent-options) to create components and integrate them to do the same thing.
+
+```js
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nAnchor = createI13nNode('a', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: true
+});
+var I13nButton = createI13nNode('button', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false // it's only interaction here, we don't want to redirect users to the destination page, set it as false
+});
+var Player = React.createClass({
+    ...
+    render: function () {
+        return (
+            <div>
+                ...
+                <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Play'}}>Play</I13nButton>
+                <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Download'}}>Download</I13nButton>
+                <I13nAnchor i13nModel={{category: 'VideoPlayer', action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+            </div>
+        )
+    }
+});
+
+// in some other component
+<Player></Player>
+```
+
+### Integrate with Parent Nodes
+
+Now it seems easier, and you will notice that you have to put `category: VideoPlayer` everywhere, which seems duplicated, now you can integrate the inherit architecture, i.e., creating a parent i13n node for them to define the `category`, here we use [createI13nNode](../api/createI13nNode.md#createi13nnodecomponent-options) to wrap `Player` as an `I13nNode`, then define `category: VideoPlayer` here.
+
+```js
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nAnchor = createI13nNode('a', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: true
+});
+var I13nButton = createI13nNode('button', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false
+});
+var Player = React.createClass({
+    ...
+    render: function () {
+        return (
+            <div>
+                ...
+                <I13nButton i13nModel={{action: 'Play'}}>Play</I13nButton>
+                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+            </div>
+        )
+    }
+});
+
+Player = createI13nNode(Player);
+
+// in some other component
+<Player i13nModel={{category: 'VideoPlayer'}}></Player> // the player component is not a i13nNode and you can pass i13nModel here, all the links inside will apply these model data
+```
+
+### Dynamic I13n Model 
+
+If you need to pass video title as `label`, instead of static data, you will need to dynamically generate label value, here you can modify to pass `function` as `i13nModel`.
+
+```js
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nAnchor = createI13nNode('a', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: true
+});
+var I13nButton = createI13nNode('button', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false
+});
+var Player = React.createClass({
+    ...
+    getPlayI13nModel: function () {
+        return {
+            action: 'Play',
+            label: this.getVideoTitle();
+        }
+    },
+    render: function () {
+        return (
+            <div>
+                ...
+                <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
+                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+            </div>
+        )
+    }
+});
+
+Player = createI13nNode(Player);
+
+// in some other component
+<Player i13nModel={{category: 'VideoPlayer'}}></Player>
+```
+
+### I13n Wrapper In Templates
+
+Sometimes you just want to group links in your template instead of creating a component with i13n functionalities, you can create a middle tag and pass `i13nModel` directly as following modification. So that you can easily group links with some shared i13n data definition.
+* Please not that since we integrate the feature of `parent-based context`, with `dev` env, react will generate warning like
+
+```js
+Warning: owner-based and parent-based contexts differ (values: [object Object] vs [object Object]) for key (parentI13nNode) while mounting I13nAnchor (see: http://fb.me/react-context-by-parent)
+```
+
+* This feature can only used after `react-0.13`, if you are using older version, you will have to create a component as above [example](#integrate-with-parent-nodes).
+
+```js
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nDiv = createI13nNode('div', {
+    isLeafNode: false,
+    bindClickEvent: false,
+    follow: false
+});
+
+<I13nDiv i13nModel={parentI13nModel}>
+    // the i13n node inside will inherit the model data of its parent
+</I13nDiv>
+```
+
+```js
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nAnchor = createI13nNode('a', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: true
+});
+var I13nButton = createI13nNode('button', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false
+});
+var I13nDiv = createI13nNode('div', {
+    isLeafNode: false,
+    bindClickEvent: false,
+    follow: false
+});
+
+var Player = React.createClass({
+    ...
+    getPlayI13nModel: function () {
+        return {
+            action: 'Play',
+            label: this.getVideoTitle();
+        }
+    },
+    render: function () {
+        return (
+            <I13nDiv i13nModel={{category: 'VideoPlayer'}}>
+                ...
+                <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
+                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+            </I13nDiv>
+        )
+    }
+});
+
+// in some other component
+<Player></Player>
+```
+
+### Default I13n Components
+
+For common usage, we define some components with specific setting, you can require them without generating them every time. These setting can be overwritten by `props`.
+
+| Component | isLeafNode | bindClickEvent | follow |
+| --------- | ---------- | -------------- | -------- |
+| **I13nAnchor** | true | true | true |
+| **I13nButton** | true | true | true |
+| **I13nDiv** | false | false | false |
