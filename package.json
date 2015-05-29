@@ -8,10 +8,9 @@
     "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
-    "cover": "grunt cover",
     "func": "./tests/functional/saucelabs.sh",
     "lint": "jshint",
-    "test": "grunt unit"
+    "test": "grunt cover"
   },
   "dependencies": {
     "async": "^0.9.0",
