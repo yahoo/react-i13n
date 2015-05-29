@@ -1,8 +1,6 @@
 # react-i13n
 
-[![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n-ga) [![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
-
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/react-i13n.svg)](https://saucelabs.com/u/react-i13n)
+[![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n) [![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
 
 `react-i13n` provides a performant and scalable approach to instrumentation.
 
