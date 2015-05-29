@@ -6,7 +6,7 @@ In most cases, you will have to manually add the code to what you want to track,
 
 Moreover, we provide a mechanism to build the `instrumentation tree`, typically you might have to manage the `instrumentation model data` you want and send out beacons separately, by using `react-i13n`, you have a better way to manage beacon data with an inheritance architecture, refer to [integrate with components](./docs/guides/integrateWithComponents.md) to see how do we get the benifit of `react-i13n`.
 
-It's originated from [Rafael Martins](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608). More implement detail please refer to [Main Ideas](./docs/guides/mainIdeas.md) section.
+It's originated from [Rafael Martins](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608). More implement detail please refer to [Main Ideas](#main-ideas) section.
 
 ## Features
 
@@ -71,6 +71,9 @@ var I13nDempApp = setupI13n(DemoApp, {
 }, [somePlugin]);
 // then you could use I13nDemoApp to render you app
 ```
+
+## Available Plugins
+* [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga) - Google Analytics plugin
 
 ## Test
 

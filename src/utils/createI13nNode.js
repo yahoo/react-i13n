@@ -7,15 +7,7 @@
 var React = require('react');
 var I13nMixin = require('../mixins/I13nMixin');
 var objectAssign = require('object-assign');
-var STATIC_CLONE_BLACK_LIST = [
-    'childContextTypes',
-    'contextTypes',
-    'displayName',
-    'getDefaultProps',
-    'isReactLegacyFactory',
-    'propTypes',
-    'type'
-];
+var hoistNonReactStatics = require('hoist-non-react-statics');
 
 /**
  * createI13nNode higher order function to create a Component with I13nNode functionality
@@ -24,19 +16,9 @@ var STATIC_CLONE_BLACK_LIST = [
  */
 module.exports = function createI13nNode (Component, options) {
     var componentName = Component.displayName || Component.name || Component;
-    var staticsObject = {};
     options = options || {};
    
-    if ('function' === typeof Component) {
-        // clone the all the static functions except the black list
-        Object.keys(Component).forEach(function cloneStaticProperty (key) {
-            if (Component.hasOwnProperty(key) && -1 === STATIC_CLONE_BLACK_LIST.indexOf(key)) {
-                staticsObject[key] = Component[key];
-            }   
-        });
-    }
-
-    var I13nComponent = React.createClass(objectAssign({}, I13nMixin, {statics: staticsObject}, {
+    var I13nComponent = React.createClass(objectAssign({}, I13nMixin, {
         displayName: 'I13n' + componentName,
 
         /**
@@ -79,5 +61,10 @@ module.exports = function createI13nNode (Component, options) {
             );
         }
     }));
+    
+    if ('function' === typeof Component) {
+        hoistNonReactStatics(I13nComponent, Component);
+    }
+
     return I13nComponent;
 };
