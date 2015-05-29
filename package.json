@@ -22,6 +22,7 @@
     "setimmediate": "^1.0.2"
   },
   "devDependencies": {
+    "coveralls": "^2.11.1",
     "es5-shim": "^4.0.0",
     "expect.js": "^0.3.1",
     "grunt": "^0.4.5",
