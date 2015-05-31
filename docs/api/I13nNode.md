@@ -1,5 +1,5 @@
 ## I13nNode
-The `I13nNode` class used to create an `I13nTree`, you will need this if you are implementing a plugin, we provide APIs for you to build the functionalities you want with the plugin.
+The `I13nNode` class used to create an `I13nTree`. You will need this if you are implementing a plugin.
 
 ### Constructor(parentNode, model, isLeafNode, isViewportEnabled)
  * `parentNode` - parent node

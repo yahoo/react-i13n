@@ -2,52 +2,42 @@
 
 [![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n) [![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
 
-`react-i13n` provides a performant and scalable approach to instrumentation.
+`react-i13n` provides a performant, scalable and pluggable approach to instrumenting your React application.
 
-In most cases, you will have to manually add the code to what you want to track, e.g., you have to hook `onClick` to the links you want to track. `react-i13n` provide a convenient approach for you to do the instrumentation, all you have to do is to define the data model you want to beacon out.
+Typically, you have to manually add instrumentation code throughout your application, e.g., hooking up `onClick` handlers to the links you want to track. `react-i13n` provides a simplified approach, all you have to do is to define the data model you want to track and let `react-i13n` handle the beaconing.
 
-Moreover, we provide a mechanism to build the `instrumentation tree`, typically you might have to manage the `instrumentation model data` you want and send out beacons separately, by using `react-i13n`, you have a better way to manage beacon data with an inheritance architecture, refer to [integrate with components](./docs/guides/integrateWithComponents.md) to see how do we get the benifit of `react-i13n`.
-
-It's originated from [Rafael Martins](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608). More implement detail please refer to [Main Ideas](#main-ideas) section.
+`react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do it leverage our [React component or mixin](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
 
 ## Features
 
-* Provides [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) and [I13nMixin](./docs/api/createI13nNode.md#i13nmixin) to generate components as an easy way to track the links.
-* By integrating the tree architecture, you can get instrumentation data efficiently, and you can integrate the inherit architecture to manage them.
-* `react-i13n` is pluggable to integrate any data analytics library into the same tree architecture. All that is needed is to implement the plugin and the handler functions which integrate with the libraries transport functions.
-* `i13nModel` could be a plain object or a `dynamic function` with a proper `i13nModel` object return, which means you can dynamically change `i13nModel` data without causing re-render due to the `props` changes.
-* All the components we provide are harmony with both server side and client side, If you are using isomorphic framework to build your app, you could get some events e.g., `pageview` on both server and client side, which means you could select a prefer way to handle the event.
-* We integrate the viewport checking and set the status in each `I13nNode`, it could be used to know if you want to send out the data only when node is in viewport.
-
-## Main Ideas
-`react-i13n` utilizes the life cycle events provided by `React` to build an i13n tree that mirrors the React component hierarchy. This approach optimizes for performance by reducing the need to scrape the DOM for data before beaconing.
-
-### I13n Tree
-* `react-i13n` build the `I13n Tree` with `context` and life cycle event `componentWillMount`, we can define the `i13nModel` data we need. Which means we don't need additional DOM manipulation when we want to get `i13nModel` values for sending out beacons for the link.
-
-### Inherit Architecture
-* We can define i13n data for each level, whenever we want to get the `i13nModel` for certain node, it traverses back to the root and merge all the `i13nModel` information in the path. Since the tree is already built and we don't need extra DOM access, it should be pretty cheap and efficient. 
+* **i13n tree** - Automated [instrumentation tree](#i13n-tree) creation that mirrors your applications React component hierarchy.
+* **React integration** - Provides a [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) component and [I13nMixin](./docs/api/createI13nNode.md#i13nmixin) easily integrate with your application.
+* **Pluggable** - A pluggable interface lets you integrate any data analytics library (i.e. Google Analytics, Segment, etc). Take a look at the currently [available plugins](#available-plugins).
+* **Performant** - The i13n data model (`i13nModel`) can be a plain JS object or a `dynamic function` with a proper `i13nModel` object return. which means you can dynamically change `i13nModel` data without causing re-render due to the `props` changes.
+* **Adaptable** - If you are using isomorphic framework (e.g. [Fluxible](http://fluxible.io)) to build your app, you can easily [change the tracking implementation](./docs/guides/createPlugins.md) on the server and client side. For example, to track page views, you can fire an http request on server and xhr request on the client.
+* **Optimizable** - We provide an option to enable viewport checking for each `I13nNode`. Which means the data will only be beaconed when the node is in the viewport. This reduces the network usage for the user and provides better tracking details.
 
 ## Install
 
 ```
-npm install react-i13n
+npm install react-i13n --save
 ```
 
 ## Usage
 
-* Implement the [plugin](./docs/guides/createPlugins.md) for your preferred instrumentation mechanism.
-* Use [setupI13n](./docs/api/setupI13n.md) to create a top level component.
+* Choose the appropriate [plugin](#available-plugins).
+* Use the [setupI13n](./docs/api/setupI13n.md) utility to wrap your application component.
 * Define your instrumentation data and [integrate with your components](./docs/guides/integrateWithComponents.md)
 * Follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
 
 ```js
-var React = require('react/addons');
+var React = require('react');
 var ReactI13n = require('react-i13n').ReactI13n;
 var setupI13n = require('react-i13n').setupI13n;
 var somePlugin = require('some-i13n-plugin'); // a plugin for a certain instrumentation mechanism
 
 // create a i13n anchor for link tracking
+// or you can use the mixin to track an existing component
 var createI13nNode = require('react-i13n').createI13nNode;
 var I13nAnchor = createI13nNode('a', {
     isLeafNode: true,
@@ -77,12 +67,24 @@ var I13nDempApp = setupI13n(DemoApp, {
 ## Available Plugins
 * [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga) - Google Analytics plugin
 
-## Test
+Or follow our guide and [create your own](./docs/api/createPlugins.md).
+
+
+## I13n Tree
+`react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define the `i13nModel` data it needs. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the `i13nModel` values for sending out beacons.
+
+Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
+
+## Presentation
+Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608) from a recent React meetup to understand more.
+
+
+## Testing
 
 ### Unit
 
-* `grunt unit` to run simply unit test
-* `grunt cover` to generate the coverage report
+* `grunt unit` to run unit tests
+* `grunt cover` to generate the istanbul coverage report
 
 ### Functional
 
@@ -92,3 +94,9 @@ var I13nDempApp = setupI13n(DemoApp, {
 * run functional test on `saucelabs`:
    * setup [sauce-connect](https://docs.saucelabs.com/reference/sauce-connect/)
    * `grunt functional`
+
+
+## License
+
+This software is free to use under the Yahoo Inc. BSD license.
+See the [LICENSE file][] for license text and copyright information.

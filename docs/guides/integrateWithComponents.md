@@ -1,13 +1,18 @@
-## Integrate with Components
+## Integrating with Components
 
-If you have a video player and you want to trace each link, you might need to have `onClick` for each links, like:
+This guide will show you how to take an existing component and modify it to leverage `react-i13n`. This assumes you already [setup your application](../api/setupI13n.md) and are leveraging a [plugin](./guides/createPlugins.md).
+
+### Existing component
+
+Say you have a video player component and you want to track each link, you might need to have `onClick` for each links, for example:
 
 ```js
 var Player = React.createClass({
     ...
     render: function () {
         trackButton: function (category, action) {
-            beacon(category, action); // some beaconing function, e.g., ga provide by analytics.js
+            // assume "beacon" is some beaconing function
+            beacon(category, action);
         },
         trackExternalLink: function (category, action, url) {
             // typically you will redirect users to the destination page after beaconing
@@ -30,9 +35,11 @@ var Player = React.createClass({
 <Player></Player>
 ```
 
-#### Replace with I13n Components
+### Replace with I13n Components
 
-For better approach of instrumentation, you might want to remove the `onClick` hook everywhere, once you [setup](../api/setupI13n.md) `react-i13n` and have a [plugin](./guides/createPlugins.md) to handle the click event, you can start to use [createI13nNode](../api/createI13nNode.md#createi13nnodecomponent-options) to create components and integrate them to do the same thing.
+A better approach might be to remove the `onClick` hooks everywhere and use the [createI13nNode](../api/createI13nNode.md) component to create i13n components to do the same thing.
+
+Note, that you can also leverage the [i13nMixin](../api/createI13nNode.md#i13nmixin) to enhance an existing component with i13n functionality.
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
@@ -66,7 +73,9 @@ var Player = React.createClass({
 
 ### Integrate with Parent Nodes
 
-Now it seems easier, and you will notice that you have to put `category: VideoPlayer` everywhere, which seems duplicated, now you can integrate the inherit architecture, i.e., creating a parent i13n node for them to define the `category`, here we use [createI13nNode](../api/createI13nNode.md#createi13nnodecomponent-options) to wrap `Player` as an `I13nNode`, then define `category: VideoPlayer` here.
+This is better, however, you will notice that you have to put `category: VideoPlayer` on each node, which is verbose and not very [DRY](http://en.wikipedia.org/wiki/Don%27t_repeat_yourself). Now lets integrate the i13n inherit architecture, which will create an i13n parent node for them to define the `category`.
+
+Below we use [createI13nNode](../api/createI13nNode.md) to wrap `Player` as an `I13nNode`, then define `category: VideoPlayer`.
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
@@ -97,12 +106,15 @@ var Player = React.createClass({
 Player = createI13nNode(Player);
 
 // in some other component
-<Player i13nModel={{category: 'VideoPlayer'}}></Player> // the player component is not a i13nNode and you can pass i13nModel here, all the links inside will apply these model data
+<Player i13nModel={{category: 'VideoPlayer'}}></Player>
 ```
+
+The player component is now an i13nNode and you can pass i13nModel here, all the links inside will apply this model data.
+
 
 ### Dynamic I13n Model 
 
-If you need to pass video title as `label`, instead of static data, you will need to dynamically generate label value, here you can modify to pass `function` as `i13nModel`.
+If you need to pass video title as `label`, instead of static data, you will need to dynamically generate label value, here you can pass in a `function` as `i13nModel`.
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
@@ -142,16 +154,17 @@ Player = createI13nNode(Player);
 <Player i13nModel={{category: 'VideoPlayer'}}></Player>
 ```
 
-### I13n Wrapper In Templates
+### I13n Wrapper in Components
 
-Sometimes you just want to group links in your template instead of creating a component with i13n functionalities, you can create a middle tag and pass `i13nModel` directly as following modification. So that you can easily group links with some shared i13n data definition.
-* Please not that since we integrate the feature of `parent-based context`, with `dev` env, react will generate warning like
+Sometimes you just want to group links in your template instead of creating a component with i13n functionalities, you can create a simple component and pass `i13nModel` data directly. This way, you can easily group links with some shared i13n data definition.
+
+* Please note that since we integrate the feature of `parent-based context`, with `dev` env, react will generate warning like
 
 ```js
 Warning: owner-based and parent-based contexts differ (values: [object Object] vs [object Object]) for key (parentI13nNode) while mounting I13nAnchor (see: http://fb.me/react-context-by-parent)
 ```
 
-* This feature can only used after `react-0.13`, if you are using older version, you will have to create a component as above [example](#integrate-with-parent-nodes).
+* This feature can only be used after `react-0.13`, if you are using an older version, you will have to create the component as mentioned above [example](#integrate-with-parent-nodes).
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
@@ -178,6 +191,8 @@ var I13nButton = createI13nNode('button', {
     bindClickEvent: true,
     follow: false
 });
+
+// this will be used to group the i13n data without creating a i13nNode
 var I13nDiv = createI13nNode('div', {
     isLeafNode: false,
     bindClickEvent: false,
@@ -210,7 +225,7 @@ var Player = React.createClass({
 
 ### Default I13n Components
 
-For common usage, we define some components with specific setting, you can require them without generating them every time. These setting can be overwritten by `props`.
+For common usage, the following components are available, you can require them without generating them every time. These setting can be overwritten by `props`.
 
 | Component | isLeafNode | bindClickEvent | follow |
 | --------- | ---------- | -------------- | -------- |
