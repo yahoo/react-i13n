@@ -13,11 +13,11 @@
     "test": "grunt cover"
   },
   "dependencies": {
-    "async": "^0.9.0",
     "debug": "^2.1.3",
     "eventemitter3": "^0.1.6",
     "hoist-non-react-statics": "^1.0.0",
     "object-assign": "^2.0.0",
+    "promise": "^7.0.1",
     "setimmediate": "^1.0.2"
   },
   "devDependencies": {
@@ -67,5 +67,11 @@
   },
   "jshintConfig": {
     "node": true
-  }
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/yahoo/react-i13n/blob/master/LICENSE.md"
+    }
+  ]
 }

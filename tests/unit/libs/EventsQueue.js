@@ -51,7 +51,9 @@ describe('EventsQueue', function () {
             }
         };
         var eventsQueue = new EventsQueue(testPlugin);
-        eventsQueue.executeEvent('click', {}, function eventCallback() {
+        
+        // the reject function will be executed
+        eventsQueue.executeEvent('click', {}, null, function eventCallback() {
             // after events are executed, the pending evnets should be empty
             expect(eventsQueue._pendingCallbacks.length).to.eql(0);
             expect(eventsQueue._pendingEventsCount).to.eql(0);

@@ -7,11 +7,12 @@
 
 var debugLib = require('debug');
 var debug = debugLib('ReactI13n');
-var async = require('async');
 var EventsQueue = require('./EventsQueue');
 var I13nNode = require('./I13nNode');
+var Promise = require('promise');
 var ENVIRONMENT = (typeof window !== 'undefined') ? 'client' : 'server';
 var GLOBAL_OBJECT = ('client' === ENVIRONMENT) ? window : global;
+var DEFAULT_HANDLER_TIMEOUT = 1000;
 
 // export the debug lib in client side
 if ('client' === ENVIRONMENT) {
@@ -36,6 +37,7 @@ var ReactI13n = function ReactI13n (options) {
     this._eventsQueues = {};
     this._isViewportEnabled = options.isViewportEnabled || false;
     this._rootModelData = options.rootModelData || {};
+    this._handlerTimeout = options.handlerTimeout || DEFAULT_HANDLER_TIMEOUT;
     
     // set itself to the global object so that we can get it anywhere by the static function getInstance
     GLOBAL_OBJECT.reactI13n = this;
@@ -70,12 +72,22 @@ ReactI13n.prototype.createRootI13nNode = function createRootI13nNode () {
  * @async
  */
 ReactI13n.prototype.execute = function execute (eventName, payload, callback) {
+    var self = this;
     payload = payload || {};
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
-    var handlers = this.getEventHandlers(eventName, payload);
-    // async execute all handlers if plugins and then call callback function
-    async.parallel(handlers, function asyncEnd() {
+    var promiseHandlers = this.getEventHandlers(eventName, payload);
+    promiseHandlers.push(new Promise(function handlerTimeoutPromise(resolve, reject) {
+        setTimeout(function handlerTimeout () {
+            debug('handler timeout in ' + self._handlerTimeout + 'ms.');
+            resolve();
+        }, self._handlerTimeout);
+    }));
+    // promised execute all handlers if plugins and then call callback function
+    Promise.race(promiseHandlers).then(function promiseSuccess () {
+        callback && callback();
+    }, function promiseFailed (e) {
+        debug('execute event failed', e);
         callback && callback();
     });
 };
@@ -99,24 +111,24 @@ ReactI13n.prototype.plug = function plug (plugin) {
  * @method getEventHandlers
  * @param {String} eventName event name
  * @param {Object} payload payload object
- * @return {Array} the handlers
+ * @return {Array} the promise handlers
  */
 ReactI13n.prototype.getEventHandlers = function getEventHandlers (eventName, payload) {
     var self = this;
-    var handlers = [];
+    var promiseHandlers = [];
     if (self._plugins) {
         Object.keys(self._plugins).forEach(function getEventHandler (pluginName) {
             var plugin = self._plugins[pluginName];
             var eventsQueue = self._eventsQueues[pluginName];
             var eventHandler = plugin && plugin.eventHandlers && plugin.eventHandlers[eventName];
             if (eventHandler) {
-                handlers.push(function executeEventHandler(asyncCallback) {
-                    eventsQueue.executeEvent(eventName, payload, asyncCallback);
-                });
+                promiseHandlers.push(new Promise(function executeEventHandler(resolve, reject) {
+                    eventsQueue.executeEvent(eventName, payload, resolve, reject);
+                }));
             }
         });
     }
-    return handlers;
+    return promiseHandlers;
 };
 
 /**
@@ -158,5 +170,7 @@ ReactI13n.prototype.updateOptions = function updateOptions (options) {
     this._isViewportEnabled = (undefined !== options.isViewportEnabled) ?
         options.isViewportEnabled : this._isViewportEnabled;
     this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
+    this._handlerTimeout = options.handlerTimeout ? options.handlerTimeout : this._handlerTimeout;
 };
+
 module.exports = ReactI13n;
