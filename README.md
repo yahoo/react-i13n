@@ -4,18 +4,18 @@
 
 `react-i13n` provides a performant, scalable and pluggable approach to instrumenting your React application.
 
-Typically, you have to manually add instrumentation code throughout your application, e.g., hooking up `onClick` handlers to the links you want to track. `react-i13n` provides a simplified approach, all you have to do is to define the data model you want to track and let `react-i13n` handle the beaconing.
+Typically, you have to manually add instrumentation code throughout your application, e.g., hooking up `onClick` handlers to the links you want to track. `react-i13n` provides a simplified approach by letting you define the data model you want to track and handling the beaconing for you.
 
 `react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do it leverage our [React component or mixin](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
 
 ## Features
 
 * **i13n tree** - Automated [instrumentation tree](#i13n-tree) creation that mirrors your applications React component hierarchy.
-* **React integration** - Provides a [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) component and [I13nMixin](./docs/api/createI13nNode.md#i13nmixin) easily integrate with your application.
-* **Pluggable** - A pluggable interface lets you integrate any data analytics library (i.e. Google Analytics, Segment, etc). Take a look at the currently [available plugins](#available-plugins).
-* **Performant** - The i13n data model (`i13nModel`) can be a plain JS object or a `dynamic function` with a proper `i13nModel` object return. which means you can dynamically change `i13nModel` data without causing re-render due to the `props` changes.
-* **Adaptable** - If you are using isomorphic framework (e.g. [Fluxible](http://fluxible.io)) to build your app, you can easily [change the tracking implementation](./docs/guides/createPlugins.md) on the server and client side. For example, to track page views, you can fire an http request on server and xhr request on the client.
-* **Optimizable** - We provide an option to enable viewport checking for each `I13nNode`. Which means the data will only be beaconed when the node is in the viewport. This reduces the network usage for the user and provides better tracking details.
+* **React integration** - Provides a [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) component and [I13nMixin](./docs/api/createI13nNode.md#i13nmixin) that easily integrate with your application.
+* **Pluggable** - A pluggable interface lets you integrate any data analytics library (i.e. Google Analytics, Segment, etc). Take a look at the [available plugins](#available-plugins).
+* **Performant** - Tracking data (`i13nModel`) can be a plain JS object or custom function. This means you can [dynamically change tracking data](./docs/guides/integrateWithComponents.md#dynamic-i13n-model) without causing unnecessary re-renders.
+* **Adaptable** - If you are using an isomorphic framework (e.g. [Fluxible](http://fluxible.io)) to build your app, you can easily [change the tracking implementation](./docs/guides/createPlugins.md) on the server and client side. For example, to track page views, you can fire an http request on server and xhr request on the client.
+* **Optimizable** - We provide an option to enable viewport checking for each `I13nNode`. Which means that data will only be beaconed when the node is in the viewport. This reduces the network usage for the user and provides better tracking details.
 
 ## Install
 
@@ -28,7 +28,7 @@ npm install react-i13n --save
 * Choose the appropriate [plugin](#available-plugins).
 * Use the [setupI13n](./docs/api/setupI13n.md) utility to wrap your application component.
 * Define your instrumentation data and [integrate with your components](./docs/guides/integrateWithComponents.md)
-* Follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
+* (Optionally) follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
 
 ```js
 var React = require('react');
@@ -61,6 +61,7 @@ var I13nDempApp = setupI13n(DemoApp, {
     rootModelData: {site: 'foo'},
     isViewportEnabled: true
 }, [somePlugin]);
+
 // then you could use I13nDemoApp to render you app
 ```
 
@@ -71,7 +72,7 @@ Or follow our guide and [create your own](./docs/api/createPlugins.md).
 
 
 ## I13n Tree
-`react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define the `i13nModel` data it needs. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the `i13nModel` values for sending out beacons.
+`react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
 
 Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
 
