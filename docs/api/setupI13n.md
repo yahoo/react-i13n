@@ -7,6 +7,7 @@ We provide `setupI13n` as a convenient [higher order function](https://medium.co
  * `options.rootModelData` - define the `i13nModel` data of the root.
  * `options.I13nNodeClass` - you can inherit the `I13nNode` and add the functionality you need, just pass the class.
  * `options.isViewportEnabled` - define if you want to enable the viewport checking.
+ * `options.handlerTimeout` - define the timeout of the event handler, the event callback will be executed even if handlers don't finish in time, default to 1000ms.
  * `plugins` - plugins array that you defined according to the definition below.
 
 ```js
@@ -20,7 +21,8 @@ var DemoApp = React.createClass({
 
 var I13nDempApp = setupI13n(DemoApp, {
     rootModelData: {site: 'foo'}, // the default i13n model data to apply to all i13n nodes
-    isViewportEnabled: true
+    isViewportEnabled: true,
+    handlerTimeout: 500
 }, [someReactI13nPlugin]);
 
 // then you could use I13nDemoApp to render you app

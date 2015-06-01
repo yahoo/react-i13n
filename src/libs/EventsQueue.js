@@ -48,9 +48,10 @@ EventsQueue.prototype._callbackAndCheckQueue = function callbackAndCheckQueue (c
  * @method executeEvent
  * @param {String} eventName event name
  * @param {Object} payload payload
- * @param {Function} callback callback
+ * @param {Function} resolve promise resolve callback
+ * @param {Function} reject promise reject callback
  */
-EventsQueue.prototype.executeEvent = function executeEvent (eventName, payload, callback) {
+EventsQueue.prototype.executeEvent = function executeEvent (eventName, payload, resolve, reject) {
     var self = this;
     var eventLog = {
         pluginName: self._plugin.name,
@@ -61,15 +62,15 @@ EventsQueue.prototype.executeEvent = function executeEvent (eventName, payload, 
     try {
         if (self._plugin && self._plugin.eventHandlers && self._plugin.eventHandlers[eventName]) {
             self._plugin.eventHandlers[eventName].apply(self._plugin, [payload, function eventCallback() {
-                self._callbackAndCheckQueue(callback);
+                self._callbackAndCheckQueue(resolve);
             }]);
         } else {
             debug('Handler ' + eventName + ' is not found: ' + self._plugin.name, eventLog);
-            self._callbackAndCheckQueue(callback);
+            self._callbackAndCheckQueue(resolve);
         }
     } catch (e) {
         debug('Handler ' + eventName + ' throws error: ' + self._plugin.name, e);
-        self._callbackAndCheckQueue(callback);
+        self._callbackAndCheckQueue(reject);
     }
 };
 

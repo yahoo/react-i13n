@@ -77,5 +77,24 @@ describe('ReactI13n', function () {
             done();
         });
     });
-
+    
+    it('should have a global timeout if event handler does not finish in time', function (done) {
+        var mockPlugin1 = {
+            name: 'test1',
+            eventHandlers: {
+                click: function (payload, callback) {
+                    // do nothing, without callback, simulate if event handler does not execute correctly or timeout
+                }
+            }
+        };
+        
+        var reactI13n = new ReactI13n({});
+        reactI13n.plug(mockPlugin1);
+        // two plugin should be executed correctly then call the custom callback
+        reactI13n.execute('click', {}, function () {
+            // should still have callback due to the global timeout 
+            expect(true).to.eql(true);
+            done();
+        });
+    });
 });
