@@ -22,15 +22,7 @@ var mockData = {
     isViewportEnabled: false
 };
 var MockReactI13n = {};
-var mockViewport = {
-    _detectViewport: function () {},
-    _detectHidden: function () {},
-    onEnterViewport: function (handler) {
-        mockViewport._handleEnterViewport = handler;
-    },
-    subscribeViewportEvents: function () {},
-    unsubscribeViewportEvents: function () {}
-};
+var mockViewport = {}
 var mockClickHandler = function () {};
 MockReactI13n.getInstance = function () {
     return mockData.reactI13n;
@@ -70,6 +62,16 @@ describe('createI13nNode', function () {
                 isViewportEnabled: function () {
                     return mockData.isViewportEnabled;
                 }
+            };
+            
+            mockViewport = {
+                _detectViewport: function () {},
+                _detectHidden: function () {},
+                onEnterViewport: function (handler) {
+                    mockViewport._handleEnterViewport = handler;
+                },
+                subscribeViewportEvents: function () {},
+                unsubscribeViewportEvents: function () {}
             };
 
             done();
@@ -197,6 +199,34 @@ describe('createI13nNode', function () {
         var component = React.render(React.createElement(I13nTestComponent, {bindClickEvent: true}), container);
         expect(component).to.be.an('object');
     });
+    
+    it('should handle scan the links inside if autoScanLinks is enable', function (done) {
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            render: function() {
+                return React.createElement("div", null, 
+                    React.createElement("a", {href: "/foo"}, "foo"), 
+                    React.createElement("button", null, "bar")
+                );
+            }
+        });
+        var I13nTestComponent = createI13nNode(TestComponent);
+        var container = document.createElement('div');
+        var executeCount = 0;
+        // should get three created events
+        mockData.reactI13n.execute = function (eventName, payload) {
+            expect(eventName).to.eql('created');
+            executeCount = executeCount + 1;
+            if (executeCount === 2) {
+                expect(payload.i13nNode.getText()).to.eql('foo');
+            }
+            if (executeCount === 3) {
+                expect(payload.i13nNode.getText()).to.eql('bar');
+                done();
+            }
+        };
+        var component = React.render(React.createElement(I13nTestComponent, {scanLinks: {enable: true}}), container);
+    });
 
     it('should handle the case if we enable viewport checking', function (done) {
         var TestComponent = React.createClass({
@@ -210,7 +240,7 @@ describe('createI13nNode', function () {
         mockData.reactI13n.execute = function (eventName) {
             // should get a created event
             expect(eventName).to.eql('created');
-        }
+        };
         var container = document.createElement('div');
         var component = React.render(React.createElement(I13nTestComponent, {}), container);
         expect(rootI13nNode.getChildrenNodes()[0].isInViewport()).to.eql(false);
@@ -219,7 +249,7 @@ describe('createI13nNode', function () {
             // should get a created event
             expect(eventName).to.eql('enterViewport');
             done();
-        }
+        };
         mockViewport._handleEnterViewport(); // enter the viewport
         expect(rootI13nNode.getChildrenNodes()[0].isInViewport()).to.eql(true);
     });

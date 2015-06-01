@@ -32,14 +32,14 @@ var Viewport = {
 
     exitViewportCallback: null,
 
-    _detectViewport: function () {
-        var self = this;
-        var DOMNode = self.getDOMNode();
-        if (!self.isMounted() || !DOMNode) {
+    _detectElement: function (i13nNode, enterViewportCallback, exitViewportCallback) {
+        
+        var element = i13nNode && i13nNode.getDOMNode();
+        if (!element) {
             return;
         }
-        var rect = DOMNode.getBoundingClientRect();
-        var viewportMargins = self.props.viewport.margins;
+        var rect = element.getBoundingClientRect();
+        var viewportMargins = this.props.viewport.margins;
         var margins;
         if (viewportMargins.usePercent) {
             margins = {
@@ -49,18 +49,28 @@ var Viewport = {
         } else {
             margins = viewportMargins;
         }
+        
         // Detect Screen Bottom                           // Detect Screen Top
         if ((rect.top < window.innerHeight + margins.top) && (rect.bottom > 0  - margins.bottom)) {
-            if (!self.isOnViewport) {
-                self.enterViewportCallback && self.enterViewportCallback();
-                self.isOnViewport = true;
+            if (!i13nNode.isInViewport()) {
+                enterViewportCallback && enterViewportCallback();
+                i13nNode.setIsInViewport(true);
             }
         } else {
-            if (self.isOnViewport) {
-                self.exitViewportCallback && self.exitViewportCallback();
-                self.isOnViewport = false;
+            if (i13nNode.isInViewport()) {
+                exitViewportCallback && exitViewportCallback();
+                i13nNode.setIsInViewport(false);
             }
         }
+    },
+
+    _detectViewport: function () {
+        var self = this;
+        if (!self.isMounted()) {
+            return;
+        }
+        self._detectElement(self._i13nNode, self.enterViewportCallback, self.exitViewportCallback);
+        self._subComponentsViewportDetection && self._subComponentsViewportDetection();
     },
 
     _detectHidden: function (hidden) {
