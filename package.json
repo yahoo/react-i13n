@@ -53,7 +53,7 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "<= 0.13.x"
+    "react": "<0.14.0"
   },
   "precommit": [
     "lint",
