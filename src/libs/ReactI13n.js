@@ -77,16 +77,19 @@ ReactI13n.prototype.execute = function execute (eventName, payload, callback) {
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     var promiseHandlers = this.getEventHandlers(eventName, payload);
+    var handlerTimeout;
     promiseHandlers.push(new Promise(function handlerTimeoutPromise(resolve, reject) {
-        setTimeout(function handlerTimeout () {
+        handlerTimeout = setTimeout(function handlerTimeout () {
             debug('handler timeout in ' + self._handlerTimeout + 'ms.');
             resolve();
         }, self._handlerTimeout);
     }));
     // promised execute all handlers if plugins and then call callback function
     Promise.race(promiseHandlers).then(function promiseSuccess () {
+        clearTimeout(handlerTimeout);
         callback && callback();
     }, function promiseFailed (e) {
+        clearTimeout(handlerTimeout);
         debug('execute event failed', e);
         callback && callback();
     });
