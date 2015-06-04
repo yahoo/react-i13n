@@ -2,7 +2,7 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* global window, global */
+/* global window, global, document */
 'use strict';
 
 var debugLib = require('debug');
@@ -60,6 +60,9 @@ ReactI13n.getInstance = function getInstance () {
 ReactI13n.prototype.createRootI13nNode = function createRootI13nNode () {
     var I13nNodeClass = this.getI13nNodeClass();
     GLOBAL_OBJECT.rootI13nNode = new I13nNodeClass(null, this._rootModelData, false);
+    if ('client' === ENVIRONMENT) {
+        GLOBAL_OBJECT.rootI13nNode.setDOMNode(document.body);
+    }
     return GLOBAL_OBJECT.rootI13nNode;
 };
 

@@ -67,7 +67,7 @@ var I13nComponentLevel1 = React.createClass({
                     <div>
                         <I13nDiv className="NestTestI13nComponentLevel2" i13nModel={{vl2:'bar'}}>
                             <div>
-                                <I13nAnchor className="NestTestI13nComponentLevel3" follow={false} i13nModel={{vl3:'baz', vl3_ovr:'baz'}}>NestTestI13nComponentLevel3</I13nAnchor>
+                                <I13nAnchor href="./mock-destination-page.html" className="NestTestI13nComponentLevel3" follow={false} i13nModel={{vl3:'baz', vl3_ovr:'baz'}}>NestTestI13nComponentLevel3</I13nAnchor>
                             </div>
                         </I13nDiv>
                     </div>
