@@ -6,7 +6,7 @@
 
 Typically, you have to manually add instrumentation code throughout your application, e.g., hooking up `onClick` handlers to the links you want to track. `react-i13n` provides a simplified approach by letting you define the data model you want to track and handling the beaconing for you.
 
-`react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do it leverage our [React component or mixin](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
+`react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do is leverage our [React component or mixin](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
 
 ## Features
 
@@ -52,7 +52,7 @@ var DemoApp = React.createClass({
     render: function () {
         ...
         <I13nAnchor href="http://foo.bar" i13nModel={{action: 'click', label: 'foo'}}>...</I13nAnchor> 
-        // this link will be tracked, and the click event handlers provided the plugin will get the model data as 
+        // this link will be tracked, and the click event handlers provided by the plugin will get the model data as 
         // {site: 'foo', action: 'click', label: 'foo'}
     }
 });
@@ -72,6 +72,8 @@ Or follow our guide and [create your own](./docs/api/createPlugins.md).
 
 
 ## I13n Tree
+![I13n Tree](https://cloud.githubusercontent.com/assets/3829183/7980892/0b38eb70-0a60-11e5-8cc2-712ec42089fc.png)
+
 `react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
 
 Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
