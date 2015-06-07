@@ -44,6 +44,7 @@ function cumulativeOffset (DOMNode) {
  * @constructor
  */
 var DebugDashboard = function DebugDashboard (i13nNode) {
+    var self = this;
     var DOMNode = i13nNode.getDOMNode();
     if (!DOMNode) {
         return;
@@ -52,22 +53,58 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     container.id = 'i13n-debug-' + uniqueId;
     var triggerNode = document.createElement('span');
     var dashboard = document.createElement('div');
-    var model = i13nNode.getMergedModel();
-    var modelInfomation = '';
+    var model = i13nNode.getMergedModel(true);
+
+    self.modelItemsListener = [];
 
     // compose model data
-    model.position = i13nNode.getPosition();
-    modelInfomation += '<ul style="margin: 0; padding-left: 0; border: #400090 1px solid;">';
-    modelInfomation += '<li style="background: #400090; color: #FFF; padding: 5px;' + 
-        'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + i13nNode.getText() + '</li>';
+    if (!model.position) {
+        model.position = {
+            value: i13nNode.getPosition(),
+            DOMNode: DOMNode
+        };
+    }
+    var dashboardContainer = document.createElement('ul');
+    dashboardContainer.style.margin = 0;
+    dashboardContainer.style['padding-left'] = 0;
+    dashboardContainer.style.border = '#400090 1px solid';
+
+    // compose title
+    var dashboardTitle = document.createElement('li');
+    dashboardTitle.style.background = '#400090';
+    dashboardTitle.style.color = '#FFF';
+    dashboardTitle.style.padding = '5px';
+    dashboardTitle.style['white-space'] = 'nowrap';
+    dashboardTitle.style['overflow'] = 'hidden';
+    dashboardTitle.style['text-overflow'] = 'ellipsis';
+    dashboardTitle.innerHTML = i13nNode.getText();
+    dashboardContainer.appendChild(dashboardTitle);
+
+    // compose model items
     Object.keys(model).forEach(function generateModelInfo(key) {
-        modelInfomation += '<li style="border-top: #400090 1px solid; padding: 5px;' + 
-        'white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + key + ': ' + model[key] + '</li>';
+        var dashboardItem = document.createElement('li');
+        dashboardItem.style.background = '#5a00c8';
+        dashboardItem.style['border-top'] = '#400090 1px solid';
+        dashboardItem.style.padding = '5px';
+        dashboardItem.style['white-space'] = 'nowrap';
+        dashboardItem.style['overflow'] = 'hidden';
+        dashboardItem.style['text-overflow'] = 'ellipsis';
+        dashboardItem.innerHTML = key + ' : ' + model[key].value + (model[key].DOMNode !== DOMNode ? ' (inherited)' : '');
+      
+        // set up scroll listener to show where the model data comes from 
+        if (model[key].DOMNode) {
+            model[key].DOMNode.style.transition = 'border 0.05s';
+            self.modelItemsListener.push(EventListener.listen(dashboardItem, 'mouseover', function () {
+                model[key].DOMNode.style.border = '5px solid #b493f5';
+            }));
+            self.modelItemsListener.push(EventListener.listen(dashboardItem, 'mouseout', function () {
+                model[key].DOMNode.style.border = null;
+            }));
+        }
+        dashboardContainer.appendChild(dashboardItem);
     }); 
-    modelInfomation += '</ul>';
 
     // generate dashboard
-    dashboard.innerHTML = modelInfomation;
     dashboard.style.position = 'relative';
     dashboard.style.display = 'none';
     dashboard.style.background = '#7300ff';
@@ -76,6 +113,7 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     dashboard.style.width = '100%';
     dashboard.style['margin-top'] = '2px';
     dashboard.style['z-index'] = '1';
+    dashboard.appendChild(dashboardContainer);
 
     // generate trigger node
     triggerNode.innerHTML = '...';
@@ -83,7 +121,7 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     triggerNode.style.color = '#FFF';
     triggerNode.style.padding = '2px';
     triggerNode.style.cursor = 'pointer';
-    this.clickListener = EventListener.listen(triggerNode, 'click', function () {
+    self.clickListener = EventListener.listen(triggerNode, 'click', function () {
         if ('none' === dashboard.style.display) {
             dashboard.style.display = 'block';
             container.style['z-index'] = '11';
@@ -94,27 +132,29 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     });
 
     DOMNode.style.transition = 'border 0.05s';
-
-    this.mouseOverListener = EventListener.listen(triggerNode, 'mouseover', function () {
+    self.mouseOverListener = EventListener.listen(triggerNode, 'mouseover', function () {
         DOMNode.style.border = '5px solid #5a00c8';
     });
-
-    this.mouseOutListener = EventListener.listen(triggerNode, 'mouseout', function () {
+    self.mouseOutListener = EventListener.listen(triggerNode, 'mouseout', function () {
         DOMNode.style.border = null;
     });
-
     
     container.appendChild(triggerNode);
     container.appendChild(dashboard);
     setupContainerPosition(DOMNode, container, dashboard);
     document.body.appendChild(container);
-    this.container = container;
+    self.container = container;
 };
 
 DebugDashboard.prototype.destroy = function () {
     this.clickListener && this.clickListener.remove();
     this.mouseOverListener && this.mouseOverListener.remove();
     this.mouseOutListener && this.mouseOutListener.remove();
+    if (this.modelItemsListener) {
+        this.modelItemsListener.forEach(function removeModelITemsListener(listener) {
+            listener.remove();
+        });
+    }
     if (this.container) {
         document.body.removeChild(this.container);
     }

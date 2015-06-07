@@ -81,6 +81,8 @@ Since the i13n data is defined at each level. Whenever you want to get the `i13n
 ## Presentation
 Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608) from a recent React meetup to understand more.
 
+## Debugging
+Add `i13n_debug=1` to the request url, you will get the i13n model for each `i13n node` directly shown on the page. It shows the information for each model data and where the data inherits from.
 
 ## Testing
 

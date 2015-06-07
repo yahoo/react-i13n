@@ -88,30 +88,47 @@ I13nNode.prototype.getDOMNode = function getDOMNode () {
 /**
  * Get merged model which is traced to the root 
  * @method getMergedModel
+ * @param {Boolean} debugMode indicate it's debug mode, will return additional information for debug tool
  * @return {Object} the merged model
  */
-I13nNode.prototype.getMergedModel = function getMergedModel () {
+I13nNode.prototype.getMergedModel = function getMergedModel (debugMode) {
     if (this._parentNode) {
-        var parentModel = this._parentNode.getMergedModel();
-        return objectAssign({}, parentModel, this.getModel());
+        var parentModel = this._parentNode.getMergedModel(debugMode);
+        return objectAssign({}, parentModel, this.getModel(debugMode));
     } else {
-        return this.getModel();
+        return this.getModel(debugMode);
     }
 };
 
 /**
  * Get plain model object, from either dynamic function or plain object
  * @method getModel
+ * @param {Boolean} debugMode indicate it's debug mode, will return additional information for debug tool
  * @return {Object} the plain object model
  */
-I13nNode.prototype.getModel = function getModel () {
+I13nNode.prototype.getModel = function getModel (debugMode) {
+    var self = this;
     var model = null;
-    if ('function' === typeof this._model) {
-        model = this._model();
+    var finalModel = null;
+    if ('function' === typeof self._model) {
+        model = self._model();
     } else {
-        model = this._model;
+        model = self._model;
     }
-    return objectAssign({}, model); // always return new object to prevent reference issue
+    
+    //always return new object to prevent reference issue
+    finalModel = objectAssign({}, model);
+
+    if (debugMode) {
+        // add the DOMNode to the returned model, so that it can be used in debug tool
+        Object.keys(finalModel).forEach(function interateModel(index) {
+            finalModel[index] = {
+                value: finalModel[index],
+                DOMNode: self.getDOMNode()
+            };
+        });
+    }
+    return finalModel;
 };
 
 /**
