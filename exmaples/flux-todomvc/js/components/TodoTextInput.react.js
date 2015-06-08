@@ -9,10 +9,16 @@
 
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
+var ReactI13n = require('react-i13n').ReactI13n;
+var createI13nNode = require('react-i13n').createI13nNode;
 
 var ENTER_KEY_CODE = 13;
 
 var TodoTextInput = React.createClass({
+
+  contextTypes: {
+    parentI13nNode: React.PropTypes.object
+  },
 
   propTypes: {
     className: ReactPropTypes.string,
@@ -71,10 +77,16 @@ var TodoTextInput = React.createClass({
    */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
+      // execute the custom event textInput here
+      // createI13nNode will create a parent component with i13nNode, 
+      // use context to get the i13n node generate from it's parent and pass into the handler function
+      var i13nNode = this.context.parentI13nNode;
+      ReactI13n.getInstance().execute('textInput', {i13nNode: i13nNode});
       this._save();
     }
   }
 
 });
 
-module.exports = TodoTextInput;
+// create a i13n node for todo text input and define default i13n model value
+module.exports = createI13nNode(TodoTextInput, {i13nModel: {category: 'todo-text-input', action: 'input'}});

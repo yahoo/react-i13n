@@ -70,7 +70,6 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 Or follow our guide and [create your own](./docs/api/createPlugins.md).
 
-
 ## I13n Tree
 ![I13n Tree](https://cloud.githubusercontent.com/assets/3829183/7980892/0b38eb70-0a60-11e5-8cc2-712ec42089fc.png)
 
@@ -83,6 +82,10 @@ Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins2
 
 ## Debugging
 Add `i13n_debug=1` to the request url, you will get the i13n model for each `i13n node` directly shown on the page. It shows the information for each model data and where the data inherits from.
+
+## Integrated Apps
+* [Examples](https://github.com/yahoo/react-i13n/tree/master/exmaples) - We integrate two flux examples with react-i13n.
+* [Fluxible.io](http://fluxible.io/) ([github](https://github.com/yahoo/fluxible.io))
 
 ## Testing
 

@@ -15,6 +15,7 @@ var MessageStore = require('../stores/MessageStore');
 var ThreadListItem = require('../components/ThreadListItem.react');
 var ThreadStore = require('../stores/ThreadStore');
 var UnreadThreadStore = require('../stores/UnreadThreadStore');
+var createI13nNode = require('react-i13n').createI13nNode;
 
 function getStateFromStores() {
   return {
@@ -75,4 +76,4 @@ var ThreadSection = React.createClass({
 
 });
 
-module.exports = ThreadSection;
+module.exports = createI13nNode(ThreadSection, {i13nModel: {category: 'thread'}});

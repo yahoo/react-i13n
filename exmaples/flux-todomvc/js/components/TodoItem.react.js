@@ -12,6 +12,17 @@ var ReactPropTypes = React.PropTypes;
 var TodoActions = require('../actions/TodoActions');
 var TodoTextInput = require('./TodoTextInput.react');
 
+// react provide I13nButton for common usage
+var I13nButton = require('react-i13n').I13nButton;
+
+// for customized usage, you can create a I13n component with createI13nNode
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nInput = createI13nNode('input', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false
+});
+
 var cx = require('react/lib/cx');
 
 var TodoItem = React.createClass({
@@ -55,16 +66,17 @@ var TodoItem = React.createClass({
         })}
         key={todo.id}>
         <div className="view">
-          <input
+          <I13nInput
             className="toggle"
             type="checkbox"
             checked={todo.complete}
             onChange={this._onToggleComplete}
+            i13nModel={{action: 'toggle'}}
           />
           <label onDoubleClick={this._onDoubleClick}>
             {todo.text}
           </label>
-          <button className="destroy" onClick={this._onDestroyClick} />
+          <I13nButton i13nModel={{action: 'destory'}} className="destroy" onClick={this._onDestroyClick} />
         </div>
         {input}
       </li>
@@ -96,4 +108,5 @@ var TodoItem = React.createClass({
 
 });
 
-module.exports = TodoItem;
+// create a i13n node for todo item, and define the default i13n model value
+module.exports = createI13nNode(TodoItem, {i13nModel: {category: 'todo-item'}});

@@ -14,6 +14,14 @@ var ChatThreadActionCreators = require('../actions/ChatThreadActionCreators');
 var React = require('react');
 var cx = require('react/lib/cx');
 
+// create a i13n node for li to track the click event
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nLi = createI13nNode('li', {
+    isLeafNode: false,
+    bindClickEvent: true,
+    follow: false
+});
+
 var ReactPropTypes = React.PropTypes;
 
 var ThreadListItem = React.createClass({
@@ -27,11 +35,12 @@ var ThreadListItem = React.createClass({
     var thread = this.props.thread;
     var lastMessage = thread.lastMessage;
     return (
-      <li
+      <I13nLi
         className={cx({
           'thread-list-item': true,
           'active': thread.id === this.props.currentThreadID
         })}
+        i13nModel={{action: 'switch-thread'}}
         onClick={this._onClick}>
         <h5 className="thread-name">{thread.name}</h5>
         <div className="thread-time">
@@ -40,7 +49,7 @@ var ThreadListItem = React.createClass({
         <div className="thread-last-message">
           {lastMessage.text}
         </div>
-      </li>
+      </I13nLi>
     );
   },
 

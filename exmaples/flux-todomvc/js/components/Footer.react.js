@@ -11,6 +11,9 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var TodoActions = require('../actions/TodoActions');
 
+// for common usage, i13n button is already created and exposed by react-i13n, require it directly
+var I13nButton = require('react-i13n').I13nButton;
+
 var Footer = React.createClass({
 
   propTypes: {
@@ -43,11 +46,12 @@ var Footer = React.createClass({
     var clearCompletedButton;
     if (completed) {
       clearCompletedButton =
-        <button
+        <I13nButton
           id="clear-completed"
+          i13nModel={{action: 'clear-completed'}}
           onClick={this._onClearCompletedClick}>
           Clear completed ({completed})
-        </button>;
+        </I13nButton>;
     }
 
   	return (

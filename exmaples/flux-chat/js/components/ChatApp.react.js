@@ -13,9 +13,15 @@
 var MessageSection = require('./MessageSection.react');
 var React = require('react');
 var ThreadSection = require('./ThreadSection.react');
+var setupI13n = require('react-i13n').setupI13n;
+var ReactI13n = require('react-i13n').ReactI13n;
+var DemoPlugin = require('../../../demo-plugin');
 
 var ChatApp = React.createClass({
-
+  componentDidMount: function() {
+    // fire a pageview
+    ReactI13n.getInstance().execute('pageview', {});
+  },
   render: function() {
     return (
       <div className="chatapp">
@@ -27,4 +33,4 @@ var ChatApp = React.createClass({
 
 });
 
-module.exports = ChatApp;
+module.exports = setupI13n(ChatApp, {rootModelData: {app: 'chat'}}, [DemoPlugin]);

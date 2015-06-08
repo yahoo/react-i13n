@@ -12,10 +12,16 @@
 
 var ChatMessageActionCreators = require('../actions/ChatMessageActionCreators');
 var React = require('react');
+var ReactI13n = require('react-i13n').ReactI13n;
+var createI13nNode = require('react-i13n').createI13nNode;
 
 var ENTER_KEY_CODE = 13;
 
 var MessageComposer = React.createClass({
+
+  contextTypes: {
+    parentI13nNode: React.PropTypes.object
+  },
 
   propTypes: {
     threadID: React.PropTypes.string.isRequired
@@ -49,9 +55,16 @@ var MessageComposer = React.createClass({
         ChatMessageActionCreators.createMessage(text, this.props.threadID);
       }
       this.setState({text: ''});
+      // execute the custom event textInput here
+      // createI13nNode will create a parent component with i13nNode, 
+      // use context to get the i13n node generate from it's parent and pass into the handler function
+      var i13nNode = this.context.parentI13nNode;
+      ReactI13n.getInstance().execute('textInput', {i13nNode: i13nNode});
     }
+    
   }
 
 });
 
-module.exports = MessageComposer;
+// create a i13n node for message composer, so that we can get the i13n node via context and fire event
+module.exports = createI13nNode(MessageComposer, {i13nModel: {category: 'message-composer', action: 'compose'}});

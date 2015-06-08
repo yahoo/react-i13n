@@ -12,6 +12,14 @@ var ReactPropTypes = React.PropTypes;
 var TodoActions = require('../actions/TodoActions');
 var TodoItem = require('./TodoItem.react');
 
+// for customized usage, you can create a I13n component with createI13nNode
+var createI13nNode = require('react-i13n').createI13nNode;
+var I13nInput = createI13nNode('input', {
+    isLeafNode: true,
+    bindClickEvent: true,
+    follow: false
+});
+
 var MainSection = React.createClass({
 
   propTypes: {
@@ -38,11 +46,12 @@ var MainSection = React.createClass({
 
     return (
       <section id="main">
-        <input
+        <I13nInput
           id="toggle-all"
           type="checkbox"
           onChange={this._onToggleCompleteAll}
           checked={this.props.areAllComplete ? 'checked' : ''}
+            i13nModel={{action: 'toggle-all'}}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul id="todo-list">{todos}</ul>
