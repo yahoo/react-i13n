@@ -1,3 +1,4 @@
+/* global process */
 /**
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
@@ -15,6 +16,13 @@ var hoistNonReactStatics = require('hoist-non-react-statics');
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, options) {
+    if (!Component) {
+        if ('production' !== process.env.NODE_ENV) {
+            console && console.warn && console.warn('You are passing a null component into createI13nNode');
+            console && console.trace && console.trace();
+        }
+        return;
+    }
     var componentName = Component.displayName || Component.name || Component;
     options = options || {};
    
