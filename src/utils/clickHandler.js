@@ -58,7 +58,7 @@ module.exports = function clickHandler (e) {
     var href = '';
 
     // return and do nothing if the handler is append on a component without I13nMixin
-    if (!self._executeI13nEvent) {
+    if (!self.executeI13nEvent) {
         return;
     }
 
@@ -91,7 +91,7 @@ module.exports = function clickHandler (e) {
         }
     }
 
-    self._executeI13nEvent('click', {i13nNode: self._i13nNode, e:e}, function clickBeaconCallback () {
+    self.executeI13nEvent('click', {i13nNode: self.getI13nNode(), e:e}, function clickBeaconCallback () {
         if (isRedirectLink) {
             if (isFormSubmit(target)) {
                 // if the button has no form linked, then do nothing

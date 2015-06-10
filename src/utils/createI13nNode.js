@@ -49,7 +49,12 @@ module.exports = function createI13nNode (Component, options) {
          * @method render
          */
         render: function () {
-            var props = objectAssign({}, this.props);
+            var props = objectAssign({}, {
+                i13n: {
+                    executeEvent: this.executeI13nEvent,
+                    getI13nNode: this.getI13nNode
+                }
+            }, this.props);
 
             // delete the props that only used in this level
             try {

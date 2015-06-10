@@ -6,6 +6,8 @@
 
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
+var I13nUtils = require('../mixins/I13nUtils');
+var objectAssign = require('object-assign');
 
 /**
  * Create an app level component with i13n setup
@@ -28,6 +30,8 @@ module.exports = function setupI13n (Component, options, plugins) {
 
     RootI13nComponent = React.createClass({
 
+        mixins: [I13nUtils],
+
         displayName: 'RootI13n' + componentName,
     
         /**
@@ -40,10 +44,16 @@ module.exports = function setupI13n (Component, options, plugins) {
         },
 
         render: function () {
+            var props = objectAssign({}, {
+                i13n: {
+                    executeEvent: this.executeI13nEvent,
+                    getI13nNode: this.getI13nNode
+                }
+            }, this.props);
             return React.createElement(
                 Component,
-                this.props,
-                this.props.children
+                props,
+                props.children
             );
         }
     });

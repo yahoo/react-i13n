@@ -48,9 +48,12 @@ describe('clickHandler', function () {
     it('should run click handler correctly', function (done) {
         var i13nNode = new I13nNode(null, {});
         mockClickEvent.preventDefault = function () {};
-        mockComponent._executeI13nEvent = function () {
-            // simply done here to make sure it goes to the _executeI13nEvent
+        mockComponent.executeI13nEvent = function () {
+            // simply done here to make sure it goes to the executeI13nEvent
             done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -69,8 +72,11 @@ describe('clickHandler', function () {
             expect(executedActions).to.eql(['preventDefault', 'assign']);
             done();
         }
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             callback();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -91,8 +97,11 @@ describe('clickHandler', function () {
                 done();
             }
         }
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             callback();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -114,8 +123,11 @@ describe('clickHandler', function () {
                 done();
             }
         }
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             callback();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -127,9 +139,12 @@ describe('clickHandler', function () {
         mockClickEvent.preventDefault = function () {
             executedActions.push('preventDefault');
         };
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             expect(executedActions).to.eql(['preventDefault']);
             done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -144,9 +159,12 @@ describe('clickHandler', function () {
         mockClickEvent.preventDefault = function () {
             executedActions.push('preventDefault');
         };
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             expect(executedActions).to.eql([]);
             done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -162,9 +180,12 @@ describe('clickHandler', function () {
         mockClickEvent.preventDefault = function () {
             executedActions.push('preventDefault');
         };
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             expect(executedActions).to.eql([]);
             done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
@@ -179,9 +200,12 @@ describe('clickHandler', function () {
         mockClickEvent.preventDefault = function () {
             executedActions.push('preventDefault');
         };
-        mockComponent._executeI13nEvent = function (eventName, payload, callback) {
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             expect(executedActions).to.eql([]);
             done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });

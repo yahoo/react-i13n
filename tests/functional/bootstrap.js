@@ -11,3 +11,4 @@ window.I13nDiv = require('../../dist/components/I13nDiv');
 window.createI13nNode = require('../../dist/utils/createI13nNode');
 window.clickHandler = require('../../dist/utils/clickHandler');
 window.setupI13n = require('../../dist/utils/setupI13n');
+window.I13nUtils = require('../../dist/mixins/I13nUtils');

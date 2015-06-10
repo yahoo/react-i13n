@@ -145,4 +145,19 @@ describe('I13nNode', function () {
         i13nNode.setDOMNode(mockDomNode);
         expect(i13nNode.getText()).to.eql('bar');
     });
+    
+    it('should be able to set the parent node', function () {
+        var model = {
+            sec: 'foo-generated'
+        };
+        var parentModel = {
+            sec: 'foo-parent'
+        };
+        var i13nNode = new I13nNode(null, model, true, true);
+        var parentNode = new I13nNode(null, parentModel, true, true);
+        expect(i13nNode.getMergedModel()).to.eql(model);
+        expect(i13nNode.getParentNode()).to.eql(null);
+        i13nNode.setParentNode(parentNode);
+        expect(i13nNode.getParentNode()).to.eql(parentNode);
+    });
 });
