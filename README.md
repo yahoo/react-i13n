@@ -84,6 +84,35 @@ Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins2
 ## Debugging
 Add `i13n_debug=1` to the request url, you will get the i13n model for each `i13n node` directly shown on the page. It shows the information for each model data and where the data inherits from.
 
+## Set ENV during CI process
+We check `process.env.NODE_ENV !== 'production'` to determine if we should do some action like print out warning massage, that means it's recommended to use tools like `envify` as part of your build process to strip out non-production code for production build.
+
+### With Webpack
+
+Use `DefinePlugin` to define the value for `process.env`.
+
+```js
+Example of the webpack configuration:
+
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('production')
+            }
+        }),
+        ...
+    ]
+```
+
+### With Browserify
+
+Similar to webpack, you can also use `envify` to set process.env.NODE_ENV to the desired environment
+
+```bash
+$ browserify index.js -t [ envify --NODE_ENV production  ] | uglifyjs -c > bundle.js
+
+```
+
 ## Testing
 
 ### Unit

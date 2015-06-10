@@ -223,4 +223,8 @@ describe('createI13nNode', function () {
         mockViewport._handleEnterViewport(); // enter the viewport
         expect(rootI13nNode.getChildrenNodes()[0].isInViewport()).to.eql(true);
     });
+    it('should not cause error if we pass a undefined to createI13nNode', function () {
+        var I13nTestComponent = createI13nNode(undefined);
+        expect(I13nTestComponent).to.eql(undefined);
+    });
 });
