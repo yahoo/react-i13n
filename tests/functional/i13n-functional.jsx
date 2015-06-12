@@ -72,6 +72,9 @@ var I13nComponentLevel1 = React.createClass({
                         </I13nDiv>
                     </div>
                 </I13nDiv>
+                <I13nDiv i13nModel={{sec: 'auto-scan'}} scanLinks={{enable: true}}>
+                    <a className="AutoScanLink" href="/mock-destination-page.html" target="_blank">AutoScanLink</a>
+                </I13nDiv>
             </div>
         );
     }

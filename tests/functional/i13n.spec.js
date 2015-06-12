@@ -74,10 +74,20 @@ describe('React I13n test', function () {
         link.click();
         var events = window.firedEvents;
         var currentEventCount = events.length;
-        var currentEventCount = events.length;
         expect(events[currentEventCount - 1].name).to.eql('click');
         expect(events[currentEventCount - 1].model).to.eql({page: 'test-page', sec:'foo'});
         expect(events[currentEventCount - 1].text).to.eql('NormalLinkWithTargetBlank');
         expect(events[currentEventCount - 1].position).to.eql(4);
+    });
+    
+    it('should fire a click for the auto-scanned links', function () {
+        var link = document.querySelectorAll('.AutoScanLink')[0];
+        link.click();
+        var events = window.firedEvents;
+        var currentEventCount = events.length;
+        expect(events[currentEventCount - 1].name).to.eql('click');
+        expect(events[currentEventCount - 1].model).to.eql({page: 'test-page', sec:'auto-scan'});
+        expect(events[currentEventCount - 1].text).to.eql('AutoScanLink');
+        expect(events[currentEventCount - 1].position).to.eql(1);
     });
 });

@@ -167,8 +167,8 @@ I13nNode.prototype.getText = function getText (target) {
     if (!DOMNode && !target) {
         return '';
     }
-    var text = (DOMNode && (DOMNode.value || DOMNode.innerHTML)) ||
-        (target && (target.value || target.innerHTML));
+    var text = (target && (target.value || target.innerHTML)) || 
+        (DOMNode && (DOMNode.value || DOMNode.innerHTML));
     if (text) {
         text = text.replace(TAG_PATTERN, '');
     }

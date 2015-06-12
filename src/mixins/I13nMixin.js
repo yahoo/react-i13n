@@ -11,8 +11,10 @@ var clickHandler = require('../utils/clickHandler');
 var EventListener = require('react/lib/EventListener');
 var ViewportMixin = require('./viewport/ViewportMixin');
 var DebugDashboard = require('../utils/DebugDashboard');
+var objectAssign = require('object-assign');
 require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
+var DEFAULT_SCAN_TAGS = ['a', 'button'];
 
 function isDebugMode () {
     function getJsonFromUrl() {
@@ -47,7 +49,11 @@ var I13nMixin = {
         i13nModel: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
         isLeafNode: React.PropTypes.bool,
         bindClickEvent: React.PropTypes.bool,
-        follow: React.PropTypes.bool
+        follow: React.PropTypes.bool,
+        scanLinks: React.PropTypes.shape({
+            enable: React.PropTypes.bool,
+            tags: React.PropTypes.array
+        })
     },
     
     /**
@@ -103,13 +109,16 @@ var I13nMixin = {
             self.subscribeViewportEvents();
             self._enableViewportDetection();
         }
+        self._executeI13nEvent('created', {});
+        if (self.props.scanLinks && self.props.scanLinks.enable) {
+            self._scanLinks();
+        }
 
         if (IS_DEBUG_MODE) {
             setImmediate(function asyncShowDebugDashboard() {
-                self._debugDashboard = new DebugDashboard(self._i13nNode); 
+                self._debugDashboard = new DebugDashboard(self._i13nNode);
             });
         }
-        self._executeI13nEvent('created', {});
     },
 
     /**
@@ -148,8 +157,93 @@ var I13nMixin = {
         if (IS_DEBUG_MODE) {
             this._debugDashboard.destroy();
         }
+
+        this._removeSubComponentsListenersAndDebugDashboards();
     },
-   
+  
+    /**
+     * scan links, if user enable it, scan the links(users can define the tags they want) with componentDidMount, 
+     * and this function will find all the elements by getElementsByTagName, then
+     * 1. create i13n node 
+     * 2. bind the click event
+     * 3. fire created event
+     * 4. (if enabled) create debug node for it
+     * @method _scanLinks
+     * @private
+     */
+    _scanLinks: function () {
+        var self = this;
+        var DOMNode = self.getDOMNode();
+        var foundElements = [];
+        var reactI13n = self._getReactI13n();
+        var scanTags = (self.props.scanLinks && self.props.scanLinks.tags) || DEFAULT_SCAN_TAGS;
+        if (!DOMNode) {
+            return;
+        }
+        self._subI13nComponents = [];
+
+        // find all links
+        scanTags.forEach(function scanElements(tagName) {
+            var collections = DOMNode.getElementsByTagName(tagName);
+            if (collections) {
+                foundElements = foundElements.concat(Array.prototype.slice.call(collections));
+            }
+        })
+
+        // for each link
+        // 1. create a i13n node
+        // 2. bind the click event
+        // 3. fire created event
+        // 4. (if enabled) create debug node for it
+        foundElements.forEach(function registerFoundElement(element) {
+            var I13nNode = reactI13n.getI13nNodeClass();
+            var i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
+            i13nNode.setDOMNode(element);
+            self._subI13nComponents.push({
+                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(objectAssign({}, self, {_i13nNode: i13nNode}))),
+                i13nNode: i13nNode,
+                debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null
+            });
+            self._getReactI13n().execute('created', {i13nNode: i13nNode});
+        });
+    },
+
+    /**
+     * _subComponentsViewportDetection, will be executed by viewport mixin
+     * @method _subComponentsViewportDetection
+     * @private
+     */
+    _subComponentsViewportDetection: function () {
+        var self = this;
+        if (self._subI13nComponents && 0 < self._subI13nComponents.length) {
+            self._subI13nComponents.forEach(function detectSubComponentViewport(subI13nComponent) {
+                self._detectElement(subI13nComponent.i13nNode, function enterViewportCallback() {
+                    subI13nComponent.i13nNode.setIsInViewport(true);
+                    self._getReactI13n().execute('enterViewport', {
+                        i13nNode: subI13nComponent.i13nNode
+                    });
+                });
+            });
+        }
+    },
+
+    /**
+     * remove all click listeners and debug dashboards
+     * @method _removeSubComponentsListenersAndDebugDashboards
+     * @private
+     */
+    _removeSubComponentsListenersAndDebugDashboards: function () {
+        var self = this;
+        if (self._subI13nComponents && 0 < self._subI13nComponents.length) {
+            self._subI13nComponents.forEach(function detectSubComponentViewport(subI13nComponent) {
+                subI13nComponent.componentClickHandler.remove();
+                if (subI13nComponent.debugDashboard) {
+                    subI13nComponent.debugDashboard.destroy();
+                }
+            });
+        }
+    },
+ 
     /**
      * _enableViewportDetection for react-viewport
      * @method _enableViewportDetection
@@ -203,7 +297,7 @@ var I13nMixin = {
      */
     _executeI13nEvent: function (eventName, payload, callback) {
         payload = payload || {};
-        payload.i13nNode = this._i13nNode;
+        payload.i13nNode = payload.i13nNode || this._i13nNode;
         this._getReactI13n().execute(eventName, payload, callback);
     },
     
