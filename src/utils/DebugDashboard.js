@@ -7,33 +7,50 @@ var EventListener = require('react/lib/EventListener');
 
 var uniqueId = 0;
 
-function setupContainerPosition (DOMNode, container, dashboard) {
-    var offset = cumulativeOffset(DOMNode);
-    var left = offset.left + DOMNode.offsetWidth - 15;
-    
-    container.style.position = 'absolute';
-    container.style['max-width'] = '300px';
-    container.style.top = offset.top + 'px';
-
-    // adjust layout if dashboard is out of the viewport
-    if (left + 305 > window.innerWidth) {
-        dashboard.style.left = (window.innerWidth - (left + 300) - 5) + 'px';
+// create a additional level on the original DOMNode, then we can show a trigger node on the DOMNode with correct position
+function appendTriggerNode (DOMNode, triggerNode) {
+    var DOMParent = DOMNode.parentNode;
+    if (DOMParent) {
+        DOMParent.removeChild(DOMNode);
+    } else {
+        DOMParent = document.body;
     }
 
-    container.style.left = (offset.left + DOMNode.offsetWidth - 15) + 'px';
-    container.style['z-index'] = '10';
+    // create a new container and insert both original DOMNode and trigger node on it
+    var newContainer = document.createElement('div');
+    newContainer.appendChild(DOMNode);
+    newContainer.appendChild(triggerNode);
+    newContainer.style.position = 'relative';
+    if (DOMNode.style.cssFloat) {
+        newContainer.style.float = DOMNode.style.cssFloat;
+    }
+    triggerNode.style.position = 'absolute';
+    triggerNode.style.top = 0;
+    triggerNode.style.left = 0;
+    DOMParent.appendChild(newContainer);
+} 
+
+function showDashboard (DOMNode, triggerNode, dashboard) {
+    var offset = cumulativeOffset(triggerNode);
+    dashboard.style.position = 'absolute';
+    dashboard.style.top = (offset.top + 25) + 'px'; // top plus the trigger node height
+    dashboard.style.left = offset.left + 'px';
+    document.body.appendChild(dashboard);
 }
 
 function cumulativeOffset (DOMNode) {
-    var top = 0;
     var rect = DOMNode.getBoundingClientRect();
-    do {
-        top += DOMNode.offsetTop  || 0;
-        DOMNode = DOMNode.offsetParent;
-    } while (DOMNode);
+    var elementLeft; // x
+    var elementTop; // y
+    var scrollTop = document.documentElement.scrollTop ?
+        document.documentElement.scrollTop : document.body.scrollTop;
+    var scrollLeft = document.documentElement.scrollLeft ?                   
+        document.documentElement.scrollLeft : document.body.scrollLeft;
+    elementTop = rect.top + scrollTop;
+    elementLeft = rect.left + scrollLeft;
     return {
-        top: top,
-        left: rect.left
+        top: elementTop,
+        left: elementLeft
     };
 }
 
@@ -49,8 +66,6 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     if (!DOMNode) {
         return;
     }
-    var container = document.createElement('div');
-    container.id = 'i13n-debug-' + uniqueId;
     var triggerNode = document.createElement('span');
     var dashboard = document.createElement('div');
     var model = i13nNode.getMergedModel(true);
@@ -106,28 +121,30 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
 
     // generate dashboard
     dashboard.style.position = 'relative';
-    dashboard.style.display = 'none';
     dashboard.style.background = '#7300ff';
     dashboard.style.color = '#FFF';
     dashboard.style.fontsize = '14px';
-    dashboard.style.width = '100%';
-    dashboard.style['margin-top'] = '2px';
-    dashboard.style['z-index'] = '1';
+    dashboard.style['max-width'] = '300px';
+    dashboard.style['z-index'] = 11;
     dashboard.appendChild(dashboardContainer);
 
     // generate trigger node
     triggerNode.innerHTML = '...';
+    triggerNode.style.fontsize = '12px';
     triggerNode.style.background = '#400090';
     triggerNode.style.color = '#FFF';
     triggerNode.style.padding = '2px';
     triggerNode.style.cursor = 'pointer';
+    triggerNode.style['z-index'] = 10;
+    triggerNode.style['line-height'] = 'normal';
+
     self.clickListener = EventListener.listen(triggerNode, 'click', function () {
-        if ('none' === dashboard.style.display) {
-            dashboard.style.display = 'block';
-            container.style['z-index'] = '11';
+        if (!self.isDashboardOn) {
+            showDashboard (DOMNode, triggerNode, dashboard);
+            self.isDashboardOn = true;
         } else {
-            dashboard.style.display = 'none';
-            container.style['z-index'] = '10';
+            document.body.removeChild(dashboard);
+            self.isDashboardOn = false;
         }
     });
 
@@ -139,11 +156,8 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
         DOMNode.style.border = null;
     });
     
-    container.appendChild(triggerNode);
-    container.appendChild(dashboard);
-    setupContainerPosition(DOMNode, container, dashboard);
-    document.body.appendChild(container);
-    self.container = container;
+    self.dashboard = dashboard;
+    appendTriggerNode(DOMNode, triggerNode);
 };
 
 DebugDashboard.prototype.destroy = function () {
@@ -155,8 +169,8 @@ DebugDashboard.prototype.destroy = function () {
             listener.remove();
         });
     }
-    if (this.container) {
-        document.body.removeChild(this.container);
+    if (this.isDashboardOn) {
+        document.body.removeChild(this.dashboard);
     }
 };
 
