@@ -8,8 +8,8 @@ By default, `react-i13n` will fire the following events:
  * `created` - happens when the `I13nComponent` is created
  * `enterViewport` - happens when the `isViewportEnabled` is true and the node enters the viewport
 
-### reactI13n.execute(eventName, payload, callback)
-Other than the default events, you can define the `eventHandlers` yourself and use `[$reactI13nInstance].execute` to execute that.
+### executeI13nEvents(eventName, payload, callback)
+Other than the default events, you can define the `eventHandlers` yourself and use `executeI13nEvents` (provided by [I13nUtils](../api/I13nUtils.md)) to execute that.
  * `eventName` - the event name
  * `payload` - the payload object you want to pass into the event handler
  * `callback` - the callback function after event is executed
@@ -17,8 +17,9 @@ Other than the default events, you can define the `eventHandlers` yourself and u
 ```js
 var React = require('react');
 var ReactI13n = require('react-i13n').ReactI13n;
+var I13nUtils = require('react-i13n').I13nUtils;
 var fooPlugin = {
-    name: 'foo', 
+    name: 'foo',
     eventHandlers: {
         customEvent: function (payload, callback) {
             // handle the event here, typically you will use some beacon function to fire the beacon
@@ -29,9 +30,10 @@ var fooPlugin = {
 }
 
 var Foo = React.createClass({
+    mixins: [I13nUtils],
     componentWillMount: function () {
         // whenever you define a event handler, you can fire an event for that.
-        ReactI13n.getInstance().execute('customEvent', {payload}, function beaconCallback () {
+        this.executeI13nEvent('customEvent', {payload}, function beaconCallback () {
             // do whatever after beaconing
         });
     }
@@ -41,3 +43,4 @@ var Foo = React.createClass({
 var I13nFoo = setupI13n(Foo, {}, [fooPlugin]);
 
 ```
+

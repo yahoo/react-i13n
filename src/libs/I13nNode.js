@@ -255,6 +255,15 @@ I13nNode.prototype.setCustomAttribute = function setCustomAttribute (name, value
 };
 
 /**
+ * Set the parent node, this method provide you the ability to update I13n Tree dynamically
+ * @method setParentNode
+ * @param {Object} parentNode the parent node
+ */
+I13nNode.prototype.setParentNode = function setParentNode (parentNode) {
+    this._parentNode = parentNode;
+};
+
+/**
  * Sort children according to the position in the page
  * @method sortChildrenNodes
  * @param {Boolean} propagate indicate if want to propagate the sorting event to its parent

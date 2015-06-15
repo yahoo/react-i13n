@@ -27,3 +27,7 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 // then you could use I13nDemoApp to render you app
 ```
+
+### Util Functions
+
+You will get i13n util functions automatically via `this.props.i13n` by using `setupI13n`, more detail please refer to [util functions](../guide/utilFunctions.md).

@@ -12,7 +12,7 @@ If your component needs i13n functionality, we will mirror an `I13nNode` in `I13
  * you can pass all the `props` you need for the original component, we will pass them to the component.
 
 ### createI13nNode(component, options)
-The `high order component` which integrates the `I13nMixin`, it will return a compoment with full I13n functionality.
+The `high order component` integrates the functionalities of i13n, it returns a decorated component with full I13n functionality.
 
  * `component` - can be a string for native tags e.g., `a`, `button` or a react component you create
  * `options` - options object, it would be the default `props` of that I13nNode, you can also pass options with `props` to overwrite it.
@@ -54,27 +54,6 @@ var I13nDiv = createI13nNode('div', {
 </I13nDiv>
 ```
 
+### Utils Functions
 
-
-### I13nMixin
-Everything is done by the `i13nMixin`, which means you can add the `I13nMixin` into the component directly to give the component i13n functionality.
-
-```js
-var I13nMixin = require('react-i13n').I13nMixin;
-var Foo = React.createClass({
-    mixins: [I13nMixin],
-    // you can set the default props or pass them as props when you are using Foo
-    getDefaultProps: {
-        isLeafNode: false,
-        bindClickEvent: false,
-        follow: false
-    }
-    ...
-});
-
-// in template
-<Foo i13nModel={i13nModel}>
-    // will create a i13n node for Foo
-    ...
-</Foo>
-```
+You will get i13n util functions automatically via `this.props.i13n` by using `createI13nNode`, more detail please refer to [util functions](../guide/utilFunctions.md).

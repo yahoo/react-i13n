@@ -11,7 +11,7 @@ Typically, you have to manually add instrumentation code throughout your applica
 ## Features
 
 * **i13n tree** - Automated [instrumentation tree](#i13n-tree) creation that mirrors your applications React component hierarchy.
-* **React integration** - Provides a [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) component and [I13nMixin](./docs/api/createI13nNode.md#i13nmixin) that easily integrate with your application.
+* **React integration** - Provides a [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) component that easily integrate with your application.
 * **Pluggable** - A pluggable interface lets you integrate any data analytics library (i.e. Google Analytics, Segment, etc). Take a look at the [available plugins](#available-plugins).
 * **Performant** - Tracking data (`i13nModel`) can be a plain JS object or custom function. This means you can [dynamically change tracking data](./docs/guides/integrateWithComponents.md#dynamic-i13n-model) without causing unnecessary re-renders.
 * **Adaptable** - If you are using an isomorphic framework (e.g. [Fluxible](http://fluxible.io)) to build your app, you can easily [change the tracking implementation](./docs/guides/createPlugins.md) on the server and client side. For example, to track page views, you can fire an http request on server and xhr request on the client.
@@ -48,7 +48,7 @@ var I13nAnchor = createI13nNode('a', {
 
 var DemoApp = React.createClass({
     componentWillMount: function () {
-        ReactI13n.getInstance().execute('pageview', {}); // fire a custom event
+        this.props.i13n.executeEvent('pageview', {}); // fire a custom event
     },
     render: function () {
         ...

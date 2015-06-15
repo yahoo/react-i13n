@@ -13,6 +13,7 @@ var rootI13nNode = null;
 var React;
 var ReactTestUtils;
 var createI13nNode;
+var I13nUtils;
 var mockData = {
     options: {},
     reactI13n: {},
@@ -50,6 +51,7 @@ describe('createI13nNode', function () {
 
             createI13nNode = require('../../../../dist/utils/createI13nNode');
             I13nNode = require('../../../../dist/libs/I13nNode');
+            I13nUtils = require('../../../../dist/mixins/I13nUtils');
             
             rootI13nNode = new I13nNode(null, {});
             mockData.reactI13n = {
@@ -227,6 +229,46 @@ describe('createI13nNode', function () {
         };
         var component = React.render(React.createElement(I13nTestComponent, {scanLinks: {enable: true}}), container);
     });
+    
+    it('should able to use props.getI13nNode to get the nearest i13n node', function () {
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            render: function() {
+                // should able to get the I13nNode we just create by createI13nNode
+                // check the i13nModel here, should equal to what we pass into
+                expect(this.props.i13n.getI13nNode().getModel()).to.eql({foo: 'bar'});
+                return React.createElement('div');
+            }
+        });
+        mockData.reactI13n.execute = function (eventName) {
+        }
+        mockData.isViewportEnabled = false;
+        var I13nTestComponent = createI13nNode(TestComponent);
+        var container = document.createElement('div');
+        var component = React.render(React.createElement(I13nTestComponent, {i13nModel: {foo: 'bar'}}), container);
+    });
+    
+    it('should able to use props.executeEvent to execute i13n event', function (done) {
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            render: function() {
+                this.props.i13n.executeEvent('foo', {});
+                return React.createElement('div');
+            }
+        });
+        var executeCount = 0;
+        mockData.reactI13n.execute = function (eventName) {
+            executeCount = executeCount + 1;
+            if (executeCount === 1) {
+                expect(eventName).to.eql('foo');
+                done();
+            }
+        }
+        mockData.isViewportEnabled = false;
+        var I13nTestComponent = createI13nNode(TestComponent);
+        var container = document.createElement('div');
+        var component = React.render(React.createElement(I13nTestComponent, {i13nModel: {foo: 'bar'}}), container);
+    });
 
     it('should handle the case if we enable viewport checking', function (done) {
         var TestComponent = React.createClass({
@@ -253,8 +295,38 @@ describe('createI13nNode', function () {
         mockViewport._handleEnterViewport(); // enter the viewport
         expect(rootI13nNode.getChildrenNodes()[0].isInViewport()).to.eql(true);
     });
+
     it('should not cause error if we pass a undefined to createI13nNode', function () {
         var I13nTestComponent = createI13nNode(undefined);
         expect(I13nTestComponent).to.eql(undefined);
+    });
+    
+    it('should get i13n util functions via both props and context', function (done) {
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            contextTypes: {
+                i13n: React.PropTypes.object
+            },
+            render: function() {
+                expect(this.props.i13n).to.be.an('object');
+                expect(this.props.i13n.executeEvent).to.be.a('function');
+                expect(this.props.i13n.getI13nNode).to.be.a('function');
+                expect(this.context.i13n).to.be.an('object');
+                expect(this.context.i13n.executeEvent).to.be.a('function');
+                expect(this.context.i13n.getI13nNode).to.be.a('function');
+                done();
+                return React.createElement('div');
+            }
+        });
+
+        // check the initial state is correct after render
+        var I13nTestComponent = createI13nNode(TestComponent);
+        mockData.reactI13n.execute = function (eventName) {
+            // should get a created event
+            expect(eventName).to.eql('created');
+        }
+        expect(I13nTestComponent.displayName).to.eql('I13nTestComponent');
+        var container = document.createElement('div');
+        var component = React.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
     });
 });

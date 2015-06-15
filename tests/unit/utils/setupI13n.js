@@ -81,4 +81,26 @@ describe('setupI13n', function () {
         expect(mockData.reactI13n._rootI13nNode).to.be.an('object');
         done();
     });
+    
+    it('should get i13n util functions via both props and context', function (done) {
+        var TestApp = React.createClass({
+            displayName: 'TestApp',
+            contextTypes: {
+                i13n: React.PropTypes.object
+            },
+            render: function() {
+                expect(this.props.i13n).to.be.an('object');
+                expect(this.props.i13n.executeEvent).to.be.a('function');
+                expect(this.props.i13n.getI13nNode).to.be.a('function');
+                expect(this.context.i13n).to.be.an('object');
+                expect(this.context.i13n.executeEvent).to.be.a('function');
+                expect(this.context.i13n.getI13nNode).to.be.a('function');
+                done();
+                return React.createElement('div');
+            }
+        });
+        var I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
+        var container = document.createElement('div');
+        var component = React.render(React.createElement(I13nTestApp, {}), container);
+    });
 });

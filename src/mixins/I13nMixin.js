@@ -10,6 +10,7 @@ var ReactI13n = require('../libs/ReactI13n');
 var clickHandler = require('../utils/clickHandler');
 var EventListener = require('react/lib/EventListener');
 var ViewportMixin = require('./viewport/ViewportMixin');
+var I13nUtils = require('./I13nUtils');
 var DebugDashboard = require('../utils/DebugDashboard');
 var objectAssign = require('object-assign');
 require('setimmediate');
@@ -41,7 +42,7 @@ function isDebugMode () {
  */
 var I13nMixin = {
     
-    mixins: [ViewportMixin],
+    mixins: [I13nUtils, ViewportMixin],
 
     propTypes: {
         component: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
@@ -57,16 +58,6 @@ var I13nMixin = {
     },
     
     /**
-     * getChildContext
-     * @method getChildContext
-     */
-    getChildContext: function () {
-        return {
-            parentI13nNode: this._i13nNode
-        };
-    },
-    
-    /**
      * getDefaultProps
      * @method getDefaultProps
      * @return {Object} default props
@@ -76,14 +67,6 @@ var I13nMixin = {
             model: null,
             i13nModel: null
         };
-    },
-
-    childContextTypes: {
-        parentI13nNode: React.PropTypes.object
-    },
-
-    contextTypes: {
-        parentI13nNode: React.PropTypes.object
     },
 
     /**
@@ -109,7 +92,7 @@ var I13nMixin = {
             self.subscribeViewportEvents();
             self._enableViewportDetection();
         }
-        self._executeI13nEvent('created', {});
+        self.executeI13nEvent('created', {});
         if (self.props.scanLinks && self.props.scanLinks.enable) {
             self._scanLinks();
         }
@@ -200,7 +183,9 @@ var I13nMixin = {
             var i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
             i13nNode.setDOMNode(element);
             self._subI13nComponents.push({
-                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(objectAssign({}, self, {_i13nNode: i13nNode}))),
+                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(objectAssign({}, self, {getI13nNode: function getI13nNodeForScannedNode() {
+                    return i13nNode;
+                }}))),
                 i13nNode: i13nNode,
                 debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null
             });
@@ -264,7 +249,7 @@ var I13nMixin = {
     _handleEnterViewport: function () {
         if (!this._i13nNode.isInViewport()) {
             this._i13nNode.setIsInViewport(true);
-            this._executeI13nEvent('enterViewport', {});
+            this.executeI13nEvent('enterViewport', {});
         }
     },
     
@@ -285,45 +270,7 @@ var I13nMixin = {
             self.isLeafNode(), 
             self._getReactI13n().isViewportEnabled());
     },
-
-    /**
-     * execute the i13n event
-     * @method _executeI13nEvent
-     * @param {String} eventName event name
-     * @param {Object} payload payload object
-     * @param {Function} callback function
-     * @async
-     * @private
-     */
-    _executeI13nEvent: function (eventName, payload, callback) {
-        payload = payload || {};
-        payload.i13nNode = payload.i13nNode || this._i13nNode;
-        this._getReactI13n().execute(eventName, payload, callback);
-    },
     
-    /**
-     * get React I13n instance
-     * @method _getReactI13n
-     * @private
-     * @return {Object} react i13n instance
-     */
-    _getReactI13n: function () {
-        return ReactI13n.getInstance();
-    },
-
-    /**
-     * _getParentI13nNode, defualt would go to the rootI13nNode
-     * @method _getParentI13nNode
-     * @private
-     * @return {Object} parent i13n node
-     */
-    _getParentI13nNode: function () {
-        // https://twitter.com/andreypopp/status/578974316483608576, get the context from parent context
-        // TODO remove this at react 0.14
-        var context = (this._reactInternalInstance && this._reactInternalInstance._context) || this.context;
-        return (context && context.parentI13nNode) || this._getReactI13n().getRootI13nNode();
-    },
-
     /**
      * isLeafNode
      * @method isLeafNode
