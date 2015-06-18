@@ -41,7 +41,7 @@
     "minimist": "^0.2.0",
     "mocha": "^2.0",
     "mockery": "^1.4.0",
-    "precommit-hook": "^1.0.2",
+    "pre-commit": "^1.0.0",
     "react": "<= 0.13.x",
     "react-tools": "<= 0.13.x",
     "xunit-file": "^0.0.5"
