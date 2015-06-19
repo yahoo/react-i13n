@@ -17,6 +17,22 @@ require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
 
+function convertToArray (arr) {
+    try {
+        // try using .slice()
+        return Array.prototype.slice.call(arr);
+    } catch (e) {
+        // otherwise, manually create the array
+        var i;
+        var length = arr.length;
+        var result = [];
+        for (i = 0; i < length; i = i + 1) {
+            result.push(arr[i]);
+        }
+        return result;
+    }
+}
+
 function isDebugMode () {
     function getJsonFromUrl() {
         var query = location.search.substr(1);
@@ -169,9 +185,9 @@ var I13nMixin = {
         scanTags.forEach(function scanElements(tagName) {
             var collections = DOMNode.getElementsByTagName(tagName);
             if (collections) {
-                foundElements = foundElements.concat(Array.prototype.slice.call(collections));
+                foundElements = foundElements.concat(convertToArray(collections));
             }
-        })
+        });
 
         // for each link
         // 1. create a i13n node
