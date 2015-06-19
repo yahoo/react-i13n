@@ -154,7 +154,7 @@ var I13nMixin = {
        
         // remove debug dashboard
         if (IS_DEBUG_MODE) {
-            this._debugDashboard.destroy();
+            this._debugDashboard && this._debugDashboard.destroy();
         }
 
         this._removeSubComponentsListenersAndDebugDashboards();
