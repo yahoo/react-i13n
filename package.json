@@ -1,6 +1,6 @@
 {
   "name": "react-i13n",
-  "description": "react i13n",
+  "description": "React I13n provides a performant and scalable solution to application instrumentation.",
   "version": "0.1.19",
   "main": "index.js",
   "repository": {
