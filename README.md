@@ -134,4 +134,4 @@ $ browserify index.js -t [ envify --NODE_ENV production  ] | uglifyjs -c > bundl
 ## License
 
 This software is free to use under the Yahoo Inc. BSD license.
-See the [LICENSE file][./LICENSE.md] for license text and copyright information.
+See the [LICENSE file](./LICENSE.md) for license text and copyright information.
