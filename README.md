@@ -85,6 +85,10 @@ Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins2
 ## Debugging
 Add `i13n_debug=1` to the request url, you will get the i13n model for each `i13n node` directly shown on the page. It shows the information for each model data and where the data inherits from.
 
+## Examples
+* [react-i13n-flux-examples](https://github.com/kaesonho/react-i13n-flux-examples) - we forked the [flux examples](https://github.com/facebook/flux/tree/master/examples) and integrated `react-i13n` with it.
+* [fluxible.io](http://fluxible.io/) - [fluxible](https://github.com/yahoo/fluxible) site integrating `react-i13n` and [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga).
+
 ## Set ENV during CI process
 We check `process.env.NODE_ENV !== 'production'` to determine if we should do some action like print out warning massage, that means it's recommended to use tools like `envify` as part of your build process to strip out non-production code for production build.
 
