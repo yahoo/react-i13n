@@ -148,6 +148,23 @@ describe('clickHandler', function () {
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
+    
+    it('should not follow it if followLink is set to false', function (done) {
+        var i13nNode = new I13nNode(null, {});
+        var executedActions = [];
+        mockComponent.props.followLink = false;
+        mockClickEvent.preventDefault = function () {
+            executedActions.push('preventDefault');
+        };
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+            expect(executedActions).to.eql(['preventDefault']);
+            done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
+        };
+        clickHandler.apply(mockComponent, [mockClickEvent]);
+    });
 
     it('should simply execute event without prevent default and redirection if the link is #', function (done) {
         var i13nNode = new I13nNode(null, {});

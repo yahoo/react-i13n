@@ -55,6 +55,7 @@ module.exports = function clickHandler (e) {
     var isRedirectLink = isDefaultRedirectLink(target);
     var isPreventDefault = true;
     var props = self.props;
+    var followLink = (undefined !== props.followLink) ? props.followLink : props.follow;
     var href = '';
 
     // return and do nothing if the handler is append on a component without I13nMixin
@@ -65,8 +66,8 @@ module.exports = function clickHandler (e) {
     href = props.href;
 
     // if users disable the redirect by follow, force set it as false
-    if (undefined !== props.follow) {
-        isRedirectLink = props.follow;
+    if (undefined !== followLink) {
+        isRedirectLink = followLink;
     }
 
     // if it's not an anchor or this is a hash link url for page's internal links.
