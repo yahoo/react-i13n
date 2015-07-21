@@ -30,13 +30,10 @@ var Viewport = {
 
     enterViewportCallback: null,
 
-    exitViewportCallback: null,
-
-    _detectElement: function (i13nNode, enterViewportCallback, exitViewportCallback) {
-        
+    _detectElement: function (i13nNode, enterViewportCallback, callback) {
         var element = i13nNode && i13nNode.getDOMNode();
         if (!element) {
-            return;
+            return callback && callback();
         }
         var rect = element.getBoundingClientRect();
         var viewportMargins = this.props.viewport.margins;
@@ -49,38 +46,20 @@ var Viewport = {
         } else {
             margins = viewportMargins;
         }
-        
         // Detect Screen Bottom                           // Detect Screen Top
         if ((rect.top < window.innerHeight + margins.top) && (rect.bottom > 0  - margins.bottom)) {
-            if (!i13nNode.isInViewport()) {
-                enterViewportCallback && enterViewportCallback();
-                i13nNode.setIsInViewport(true);
-            }
-        } else {
-            if (i13nNode.isInViewport()) {
-                exitViewportCallback && exitViewportCallback();
-                i13nNode.setIsInViewport(false);
-            }
+            enterViewportCallback && enterViewportCallback()
         }
+        callback && callback();
     },
 
-    _detectViewport: function () {
+    _detectViewport: function (callback) {
         var self = this;
         if (!self.isMounted()) {
             return;
         }
-        self._detectElement(self._i13nNode, self.enterViewportCallback, self.exitViewportCallback);
+        self._detectElement(self._i13nNode, self.enterViewportCallback, callback);
         self._subComponentsViewportDetection && self._subComponentsViewportDetection();
-    },
-
-    _detectHidden: function (hidden) {
-        var self = this;
-        if (!hidden) {
-            this._detectViewport();
-        } else {
-            self.exitViewportCallback && self.exitViewportCallback();
-            self.isOnViewport = false;
-        }
     },
 
     getDefaultProps: function () {
@@ -97,12 +76,10 @@ var Viewport = {
 
     subscribeViewportEvents: function () {
         this.subscribe('scroll', this._detectViewport);
-        this.subscribe('visibilitychange', this._detectHidden);
     },
 
     unsubscribeViewportEvents: function () {
         this.unsubscribe('scroll');
-        this.unsubscribe('visibilitychange');
     },
 
     onEnterViewport: function (callback) {

@@ -6,6 +6,7 @@
 'use strict';
 
 var React = require('react');
+var debug = require('debug')('I13nMixin');
 var ReactI13n = require('../libs/ReactI13n');
 var clickHandler = require('../utils/clickHandler');
 var EventListener = require('react/lib/EventListener');
@@ -16,6 +17,8 @@ var objectAssign = require('object-assign');
 require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
+var pageInitViewportDetectionTimeout = null;
+var pageInitViewportDetected = false;
 
 function convertToArray (arr) {
     try {
@@ -72,18 +75,6 @@ var I13nMixin = {
             tags: React.PropTypes.array
         })
     },
-    
-    /**
-     * getDefaultProps
-     * @method getDefaultProps
-     * @return {Object} default props
-     */
-    getDefaultProps: function () {
-        return {
-            model: null,
-            i13nModel: null
-        };
-    },
 
     /**
      * componentDidMount
@@ -100,7 +91,7 @@ var I13nMixin = {
         if (self.props.bindClickEvent) {
             self.clickEventListener = EventListener.listen(self.getDOMNode(), 'click', clickHandler.bind(self));
         }
-        
+
         self._i13nNode.setDOMNode(self.getDOMNode());
 
         // enable viewport checking if enabled
@@ -129,6 +120,7 @@ var I13nMixin = {
             return;
         }
         this._createI13nNode();
+        this._i13nNode.setReactComponent(this);
     },
 
     /**
@@ -244,17 +236,22 @@ var I13nMixin = {
             });
         }
     },
- 
+
     /**
-     * _enableViewportDetection for react-viewport
+     * _enableViewportDetection
      * @method _enableViewportDetection
      * @private
      */
     _enableViewportDetection: function () {
         this.onEnterViewport(this._handleEnterViewport);
-        // TODO remove this manually functiona calling if mixin support the initial detection
-        ViewportMixin._detectViewport.apply(this);
-        ViewportMixin._detectHidden.apply(this);
+       
+        // for page init status, trigger page-init viewport detection to improve performance
+        // otherwise for page update case, detect viewport directly
+        if (!pageInitViewportDetected) {
+            this._triggerPageInitViewportDetection();
+        } else {
+            this._detectViewport();
+        }
     },
 
     /**
@@ -263,10 +260,56 @@ var I13nMixin = {
      * @private
      */
     _handleEnterViewport: function () {
-        if (!this._i13nNode.isInViewport()) {
-            this._i13nNode.setIsInViewport(true);
-            this.executeI13nEvent('enterViewport', {});
-        }
+        this._i13nNode.setIsInViewport(true);
+        this.unsubscribeViewportEvents();
+        this.executeI13nEvent('enterViewport', {});
+    },
+    
+    /**
+     * trigger the page-init viewport detection
+     * @method _triggerPageInitViewportDetection
+     * @private
+     */
+    _triggerPageInitViewportDetection: function () {
+        var self = this;
+        // clear the timeout until latest node is mounted, then trigger the viewport detection
+        clearTimeout(pageInitViewportDetectionTimeout);
+        pageInitViewportDetectionTimeout = setTimeout(function executePageInitViewportDetection () {
+            self._pageInitViewportDetection();
+            pageInitViewportDetected = true;
+        }, 500);
+    },
+    
+    /**
+     * page-init viewport detection
+     * @method _pageInitViewportDetection
+     * @private
+     */
+    _pageInitViewportDetection: function () {
+        debug('page init viewport detection');
+        var reactI13n = this._getReactI13n();
+        var rootI13nNode = reactI13n.getRootI13nNode();
+        // we don't have react component for root node, start from it's children
+        rootI13nNode.getChildrenNodes().forEach(function detectRootChildrenViewport (childNode) {
+            childNode.getReactComponent()._recursiveDetectViewport();
+        });
+    },
+
+    /**
+     * recursively detect viewport
+     * @method _recursiveDetectViewport
+     * @private
+     */
+    _recursiveDetectViewport: function () {
+        var self = this;
+        // detect viewport from the root, and skip all children's detection if it's not in the viewport
+        self._detectViewport(function detectCallback () {
+            if (self._i13nNode.isInViewport()) {
+                self._i13nNode.getChildrenNodes().forEach(function detectChildrenViewport (childNode) {
+                    childNode.getReactComponent()._recursiveDetectViewport();
+                });
+            }
+        });
     },
     
     /**

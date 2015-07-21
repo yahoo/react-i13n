@@ -26,8 +26,9 @@ module.exports = function createI13nNode (Component, options) {
     var componentName = Component.displayName || Component.name || Component;
     options = options || {};
    
-    var I13nComponent = React.createClass(objectAssign({}, I13nMixin, {
+    var I13nComponent = React.createClass({
         displayName: 'I13n' + componentName,
+        mixins: [I13nMixin],
 
         /**
          * getDefaultProps
@@ -35,13 +36,15 @@ module.exports = function createI13nNode (Component, options) {
          * @return {Object} default props
          */
         getDefaultProps: function () {
-            return {
-                model: options.model || null,
-                i13nModel: options.i13nModel || null,
-                isLeafNode: options.isLeafNode || false,
-                bindClickEvent: options.bindClickEvent || false,
-                follow: options.follow || false
-            };
+            return objectAssign({}, {
+                model: null,
+                i13nModel: null,
+                isLeafNode: false,
+                bindClickEvent: false,
+                follow: false,
+                followLink: false,
+                scanLinks: null
+            }, options);
         },
         
         /**
@@ -73,7 +76,7 @@ module.exports = function createI13nNode (Component, options) {
                 props.children
             );
         }
-    }));
+    });
     
     if ('function' === typeof Component) {
         hoistNonReactStatics(I13nComponent, Component);

@@ -160,4 +160,13 @@ describe('I13nNode', function () {
         i13nNode.setParentNode(parentNode);
         expect(i13nNode.getParentNode()).to.eql(parentNode);
     });
+    
+    it('should be able to get and set react component', function () {
+        var mockReactComponent = {
+            foo: 'bar'
+        };
+        var i13nNode = new I13nNode(null, {sec: 'foo'}, true, true);
+        i13nNode.setReactComponent(mockReactComponent);
+        expect(i13nNode.getReactComponent()).to.eql(mockReactComponent);
+    });
 });

@@ -77,6 +77,15 @@ I13nNode.prototype.getCustomAttribute = function getCustomAttribute (name) {
 };
 
 /**
+ * Get the react component
+ * @method getReactComponent
+ * @return {Object} the react component
+ */
+I13nNode.prototype.getReactComponent = function getReactComponent () {
+    return this._component;
+};
+
+/**
  * Get the dom node
  * @method getDOMNode
  * @return {Object} the DOMNode
@@ -224,6 +233,15 @@ I13nNode.prototype.removeChildNode = function removeChildNode (childNode) {
     var index = this._childrenNodes.indexOf(childNode);
     this._childrenNodes.splice(index, 1);
     this._isOrderDirty = true;
+};
+
+/**
+ * set react component
+ * @method setReactComponent
+ * @param {Object} react component
+ */
+I13nNode.prototype.setReactComponent = function setDOMNode (component) {
+    this._component = component;
 };
 
 /**
