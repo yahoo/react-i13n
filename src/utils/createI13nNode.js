@@ -42,7 +42,6 @@ module.exports = function createI13nNode (Component, options) {
                 isLeafNode: false,
                 bindClickEvent: false,
                 follow: false,
-                followLink: false,
                 scanLinks: null
             }, options);
         },
