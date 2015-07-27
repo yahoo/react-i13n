@@ -69,7 +69,7 @@ var I13nDempApp = setupI13n(DemoApp, {
 ## Available Plugins
 * [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga) - Google Analytics plugin
 
-Or follow our guide and [create your own](./docs/api/createPlugins.md).
+Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 
 
 ## I13n Tree
