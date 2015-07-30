@@ -119,6 +119,7 @@ var I13nMixin = {
         if (!this._getReactI13n()) {
             return;
         }
+        clearTimeout(pageInitViewportDetectionTimeout);
         this._createI13nNode();
         this._i13nNode.setReactComponent(this);
     },
@@ -306,7 +307,10 @@ var I13nMixin = {
         self._detectViewport(function detectCallback () {
             if (self._i13nNode.isInViewport()) {
                 self._i13nNode.getChildrenNodes().forEach(function detectChildrenViewport (childNode) {
-                    childNode.getReactComponent()._recursiveDetectViewport();
+                    var reactComponent = childNode.getReactComponent();
+                    if (reactComponent) {
+                        reactComponent._recursiveDetectViewport();
+                    }
                 });
             }
         });
