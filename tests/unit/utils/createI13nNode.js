@@ -101,7 +101,7 @@ describe('createI13nNode', function () {
             // should get a created event
             expect(eventName).to.eql('created');
             done();
-        }
+        };
         expect(I13nTestComponent.displayName).to.eql('I13nTestComponent');
         var container = document.createElement('div');
         var component = React.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
@@ -122,7 +122,7 @@ describe('createI13nNode', function () {
             // should get a created event
             expect(eventName).to.eql('created');
             done();
-        }
+        };
         expect(I13nTestComponent.displayName).to.eql('I13nTestComponent');
         var container = document.createElement('div');
         var component = React.render(React.createElement(I13nTestComponent, {model: {sec: 'foo'}}), container);
@@ -173,7 +173,7 @@ describe('createI13nNode', function () {
             // should get a created event
             expect(eventName).to.eql('created');
             done();
-        }
+        };
         var container = document.createElement('div');
         var component = React.render(React.createElement(I13nTestComponent, {}), container);
         expect(rootI13nNode.getChildrenNodes()[0]).to.be.an('object');
@@ -241,7 +241,7 @@ describe('createI13nNode', function () {
             }
         });
         mockData.reactI13n.execute = function (eventName) {
-        }
+        };
         mockData.isViewportEnabled = false;
         var I13nTestComponent = createI13nNode(TestComponent);
         var container = document.createElement('div');
@@ -263,11 +263,36 @@ describe('createI13nNode', function () {
                 expect(eventName).to.eql('foo');
                 done();
             }
-        }
+        };
         mockData.isViewportEnabled = false;
         var I13nTestComponent = createI13nNode(TestComponent);
         var container = document.createElement('div');
         var component = React.render(React.createElement(I13nTestComponent, {i13nModel: {foo: 'bar'}}), container);
+    });
+    
+    it('should update the i13n model when component updates', function () {
+        var i13nModel = {sec: 'foo'};
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            contextTypes: {
+                i13n: React.PropTypes.object
+            },
+            render: function() {
+                return React.createElement('div');
+            }
+        });
+
+        // check the initial state is correct after render
+        var I13nTestComponent = createI13nNode(TestComponent);
+        mockData.reactI13n.execute = function (eventName) {
+            // should get a created event
+            expect(eventName).to.eql('created');
+        };
+        var container = document.createElement('div');
+        var component = React.render(React.createElement(I13nTestComponent, {i13nModel: i13nModel}), container);
+        i13nModel.sec = 'bar';
+        component.componentWillUpdate({i13nModel: i13nModel}, null);
+        expect(component._i13nNode.getModel()).to.eql(i13nModel);
     });
 
     it('should handle the case if we enable viewport checking', function (done) {
