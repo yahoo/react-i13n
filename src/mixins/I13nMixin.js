@@ -60,7 +60,7 @@ function isDebugMode () {
  * @class I13nMixin
  */
 var I13nMixin = {
-    
+
     mixins: [I13nUtils, ViewportMixin],
 
     propTypes: {
@@ -81,8 +81,10 @@ var I13nMixin = {
      * @method componentWillUpdate
      */
     componentWillUpdate: function (nextProps, nextState) {
-        if (nextProps) {
-            this._i13nNode.updateModel(nextProps.model || nextProps.i13nModel);
+        var self = this;
+
+        if (nextProps && self._i13nNode) {
+            self._i13nNode.updateModel(nextProps.model || nextProps.i13nModel);
         }
     },
 
@@ -150,11 +152,11 @@ var I13nMixin = {
         if (this.clickEventListener) {
             this.clickEventListener.remove();
         }
-        
+
         if (this._getReactI13n().isViewportEnabled()) {
             this.unsubscribeViewportEvents();
         }
-       
+
         // remove debug dashboard
         if (IS_DEBUG_MODE) {
             this._debugDashboard && this._debugDashboard.destroy();
@@ -162,11 +164,11 @@ var I13nMixin = {
 
         this._removeSubComponentsListenersAndDebugDashboards();
     },
-  
+
     /**
-     * scan links, if user enable it, scan the links(users can define the tags they want) with componentDidMount, 
+     * scan links, if user enable it, scan the links(users can define the tags they want) with componentDidMount,
      * and this function will find all the elements by getElementsByTagName, then
-     * 1. create i13n node 
+     * 1. create i13n node
      * 2. bind the click event
      * 3. fire created event
      * 4. (if enabled) create debug node for it
@@ -255,7 +257,7 @@ var I13nMixin = {
      */
     _enableViewportDetection: function () {
         this.onEnterViewport(this._handleEnterViewport);
-       
+
         // for page init status, trigger page-init viewport detection to improve performance
         // otherwise for page update case, detect viewport directly
         if (!pageInitViewportDetected) {
@@ -275,7 +277,7 @@ var I13nMixin = {
         this.unsubscribeViewportEvents();
         this.executeI13nEvent('enterViewport', {});
     },
-    
+
     /**
      * trigger the page-init viewport detection
      * @method _triggerPageInitViewportDetection
@@ -290,7 +292,7 @@ var I13nMixin = {
             pageInitViewportDetected = true;
         }, 500);
     },
-    
+
     /**
      * page-init viewport detection
      * @method _pageInitViewportDetection
@@ -325,7 +327,7 @@ var I13nMixin = {
             }
         });
     },
-    
+
     /**
      * _createI13nNode
      * @method _createI13nNode
@@ -338,12 +340,12 @@ var I13nMixin = {
         var parentI13nNode = self._getParentI13nNode();
         // TODO @kaesonho remove BC for model
         self._i13nNode = new I13nNode(
-            parentI13nNode, 
+            parentI13nNode,
             self.props.i13nModel || self.props.model,
-            self.isLeafNode(), 
+            self.isLeafNode(),
             self._getReactI13n().isViewportEnabled());
     },
-    
+
     /**
      * isLeafNode
      * @method isLeafNode
