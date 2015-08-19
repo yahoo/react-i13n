@@ -77,6 +77,16 @@ var I13nMixin = {
     },
 
     /**
+     * componentWillUpdate
+     * @method componentWillUpdate
+     */
+    componentWillUpdate: function (nextProps, nextState) {
+        if (nextProps) {
+            this._i13nNode.updateModel(nextProps.model || nextProps.i13nModel);
+        }
+    },
+
+    /**
      * componentDidMount
      * @method componentDidMount
      */

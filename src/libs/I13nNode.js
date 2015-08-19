@@ -13,7 +13,7 @@ var TAG_PATTERN = /<[^>]*>/g;
  * I13nNode the virtual DOM Node used to build a I13n Tree for instrumentation
  * @class I13nNode
  * @param {Object} parentNode parent node
- * @param {Object} model custom model values
+ * @param {Object|Function} model custom model values
  * @param {Boolean} isLeafNode indicate if it's a link node
  * @param {Boolean} isViewportEnabled indicate if viewport check enable
  * @constructor
@@ -279,6 +279,20 @@ I13nNode.prototype.setCustomAttribute = function setCustomAttribute (name, value
  */
 I13nNode.prototype.setParentNode = function setParentNode (parentNode) {
     this._parentNode = parentNode;
+};
+
+/**
+ * Update the i13n model
+ * @method updateModel
+ * @param {Object|Function} newModel the new i13n model
+ */
+I13nNode.prototype.updateModel = function updateModel (newModel) {
+    // if i13n is a function, just assign it to _model, otherwise use object-assign to merge old and new model data
+    if ('function' === typeof newModel) {
+        this._model = newModel;
+    } else {
+        this._model = objectAssign({}, this._model, newModel);
+    }
 };
 
 /**

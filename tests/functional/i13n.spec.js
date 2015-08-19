@@ -12,13 +12,21 @@ describe('React I13n test', function () {
         expect(events[0].name).to.eql('pageview');
     });
     
-    it('should fire an update event when dom change, click handler can work with custom click event', function () {
+    it('should fire an update event when dom change, should get i13n model updated', function () {
         var hiddenBtn = document.querySelectorAll('.HiddenBtn')[0];
         hiddenBtn.click();
         var events = window.firedEvents;
         var currentEventCount = events.length;
         expect(events[currentEventCount - 2].name).to.eql('click');
+        expect(events[currentEventCount - 2].model).to.eql({sec: 'hidden-btn', page: 'test-page', expend: false});
         expect(events[currentEventCount - 1].name).to.eql('created');
+        
+        // click the link and expect the expend value is updated
+        var hiddenLink = document.querySelectorAll('.I13nComponentLevel2Hidden a')[0];
+        hiddenLink.click();
+        currentEventCount = events.length;
+        expect(events[currentEventCount - 1].name).to.eql('click');
+        expect(events[currentEventCount - 1].model).to.eql({sec: 'hidden-btn', page: 'test-page', expend: true});
     });
     
     it('should handle nested model data well', function () {

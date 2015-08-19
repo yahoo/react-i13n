@@ -169,4 +169,10 @@ describe('I13nNode', function () {
         i13nNode.setReactComponent(mockReactComponent);
         expect(i13nNode.getReactComponent()).to.eql(mockReactComponent);
     });
+    
+    it('should be able to update i13n model', function () {
+        var i13nNode = new I13nNode(null, {sec: 'foo', sec2: 'bar'}, true, true);
+        i13nNode.updateModel({sec2: 'baz', sec3: 'foo'});
+         expect(i13nNode.getModel()).to.eql({sec: 'foo', sec2: 'baz', sec3: 'foo'});
+    });
 });

@@ -121,15 +121,16 @@ var I13nComponentLevel2Hidden = React.createClass({
                 var linkText = 'Link Level2 Hidden ' + i;
                 links.push(
                     <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
-                        <I13nAnchor href="/mock-destination-page.html">{linkText}</I13nAnchor>
+                        <I13nAnchor href="/mock-destination-page.html" follow={false}>{linkText}</I13nAnchor>
                     </div>
                 );
             }
         }
         return (
             <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden">
-                <I13nDiv className="HiddenBtn" onClick={this.clickHandler} bindClickEvent={true} i13nModel={{sec:'hidden-btn'}}>Show Hidden Links</I13nDiv>
-                {links}
+                <I13nDiv className="HiddenBtn" onClick={this.clickHandler} bindClickEvent={true} i13nModel={{sec:'hidden-btn', expend: this.state.expend}}>Show Hidden Links
+                    {links}
+                </I13nDiv>
             </div>
         );
     }
