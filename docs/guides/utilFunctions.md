@@ -38,7 +38,7 @@ var DemoComponent = React.createClass({
 get the nearest `i13nNode` created by `createI13nNode`
 
 ### executeEvent(eventName, payload, callback)
-execute the i13n event, so that you don't need to call `ReactI13n.getInstnace().execute`, it also get the i13nNode and add into payload for you
+execute the i13n event, so that you don't need to call `ReactI13n.getInstance().execute`, it also get the i13nNode and add into payload for you
 
 ```js
 var DemoComponent = React.createClass({
