@@ -6,6 +6,7 @@
 /docs/
 /results/
 /src/
+/tmp/
 /tests/
 lcov-*
 xunit*
