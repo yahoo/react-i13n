@@ -316,7 +316,7 @@ var I13nMixin = {
     _recursiveDetectViewport: function () {
         var self = this;
         // detect viewport from the root, and skip all children's detection if it's not in the viewport
-        self._detectViewport(function detectCallback () {
+        self._detectViewport(null, null, function detectCallback () {
             if (self._i13nNode.isInViewport()) {
                 self._i13nNode.getChildrenNodes().forEach(function detectChildrenViewport (childNode) {
                     var reactComponent = childNode.getReactComponent();

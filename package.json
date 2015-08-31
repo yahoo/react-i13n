@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "debug": "^2.1.3",
-    "eventemitter3": "^1.0.0",
     "hoist-non-react-statics": "^1.0.0",
     "object-assign": "^4.0.0",
     "promise": "^7.0.1",
-    "setimmediate": "^1.0.2"
+    "setimmediate": "^1.0.2",
+    "subscribe-ui-event": "^0.2.2"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
