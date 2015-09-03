@@ -6,18 +6,11 @@
 'use strict';
 
 var React = require('react/addons');
-
-var MsgMixin = require('./MessageMixin');
-
-if (typeof window !== 'undefined') {
-    require('./scroll');
-    require('./visibility');
-}
+var subscribe = require('subscribe-ui-event').subscribe;
 
 /* Viewport mixin assumes you are on browser and already have the scroll lib */
 var Viewport = {
-    mixins: [MsgMixin],
-
+    
     propTypes: {
         viewport: React.PropTypes.shape({
             margins: React.PropTypes.shape({
@@ -53,7 +46,7 @@ var Viewport = {
         callback && callback();
     },
 
-    _detectViewport: function (callback) {
+    _detectViewport: function (err, payload, callback) {
         var self = this;
         if (!self.isMounted()) {
             return;
@@ -75,11 +68,11 @@ var Viewport = {
     },
 
     subscribeViewportEvents: function () {
-        this.subscribe('scroll', this._detectViewport);
+        this.subscription = subscribe('scrollEnd', this._detectViewport);
     },
 
     unsubscribeViewportEvents: function () {
-        this.unsubscribe('scroll');
+        this.subscription.unsubscribe();
     },
 
     onEnterViewport: function (callback) {
