@@ -32,5 +32,6 @@ describe('clickHandler', function () {
         i13nNode.setDOMNode(domNode);
         var debugDashboard = new DebugDashboard(i13nNode);
         expect(document.getElementById('i13n-debug-0')).to.be.an('object');
+        debugDashboard.destroy();
     });
 });
