@@ -7,6 +7,21 @@ var EventListener = require('react/lib/EventListener');
 
 var uniqueId = 0;
 
+function checkHidden (DOMNode) {
+    if (DOMNode !== document) {
+        var styles = window.getComputedStyle(DOMNode) || {};
+        if ('none' === styles.display || 
+            'hidden' === styles.visibility || 
+            '0' === styles.opacity) { 
+            return true;
+        } else {
+            return checkHidden(DOMNode.parentNode);
+        }
+    } else {
+        return false;
+    }
+}
+
 function setupContainerPosition (DOMNode, container, dashboard) {
     var offset = cumulativeOffset(DOMNode);
     var left = offset.left + DOMNode.offsetWidth - 15;
@@ -47,6 +62,9 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     var self = this;
     var DOMNode = i13nNode.getDOMNode();
     if (!DOMNode) {
+        return;
+    }
+    if (checkHidden(DOMNode)) {
         return;
     }
     var container = document.createElement('div');
