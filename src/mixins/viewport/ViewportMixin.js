@@ -72,7 +72,9 @@ var Viewport = {
     },
 
     unsubscribeViewportEvents: function () {
-        this.subscription.unsubscribe();
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     },
 
     onEnterViewport: function (callback) {
