@@ -78,6 +78,30 @@ describe('ReactI13n', function () {
         });
     });
     
+    it('should be able to execute event without modifying payload', function (done) {
+        var mockPlugin1 = {
+            name: 'test1',
+            eventHandlers: {
+                click: function (payload, callback) {
+                    expect(payload).to.eql({});
+                    callback();
+                }
+            }
+        };
+
+        var payload = {
+            foo: 'bar'
+        };
+        
+        var reactI13n = new ReactI13n({});
+        reactI13n.plug(mockPlugin1);
+        reactI13n.execute('click', payload, function () {
+            // should only have one attribute as 'foo', which means payload is not modified inside reactI13n.execute
+            expect(payload).to.eql({foo: 'bar'});
+            done();
+        });
+    });
+    
     it('should have a global timeout if event handler does not finish in time', function (done) {
         var mockPlugin1 = {
             name: 'test1',
