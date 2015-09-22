@@ -10,9 +10,10 @@ var debug = debugLib('ReactI13n');
 var EventsQueue = require('./EventsQueue');
 var I13nNode = require('./I13nNode');
 var Promise = require('promise');
-var ENVIRONMENT = (typeof window !== 'undefined') ? 'client' : 'server';
-var GLOBAL_OBJECT = ('client' === ENVIRONMENT) ? window : global;
+var objectAssign = require('object-assign');
 var DEFAULT_HANDLER_TIMEOUT = 1000;
+var GLOBAL_OBJECT = ('client' === ENVIRONMENT) ? window : global;
+var ENVIRONMENT = (typeof window !== 'undefined') ? 'client' : 'server';
 
 // export the debug lib in client side
 if ('client' === ENVIRONMENT) {
@@ -76,7 +77,7 @@ ReactI13n.prototype.createRootI13nNode = function createRootI13nNode () {
  */
 ReactI13n.prototype.execute = function execute (eventName, payload, callback) {
     var self = this;
-    payload = payload || {};
+    payload = objectAssign({}, payload);
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     var promiseHandlers = this.getEventHandlers(eventName, payload);
