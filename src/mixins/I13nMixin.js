@@ -256,14 +256,20 @@ var I13nMixin = {
      * @private
      */
     _enableViewportDetection: function () {
-        this.onEnterViewport(this._handleEnterViewport);
+        var self = this;
+        self.onEnterViewport(self._handleEnterViewport);
 
         // for page init status, trigger page-init viewport detection to improve performance
         // otherwise for page update case, detect viewport directly
         if (!pageInitViewportDetected) {
-            this._triggerPageInitViewportDetection();
+            self._triggerPageInitViewportDetection();
         } else {
-            this._detectViewport();
+            // in case we have many i13n component mounted at one time, e.g., page switch
+            // might cause large CPU usage,
+            // delay viewport detection to the next tick.
+            setImmediate(function delayDetectViewport() {
+                self._detectViewport();
+            });
         }
     },
 
