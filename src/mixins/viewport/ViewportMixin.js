@@ -25,6 +25,7 @@ var Viewport = {
 
     _detectElement: function (i13nNode, enterViewportCallback, callback) {
         var element = i13nNode && i13nNode.getDOMNode();
+        var innerHeight = window.innerHeight;
         if (!element) {
             return callback && callback();
         }
@@ -33,14 +34,14 @@ var Viewport = {
         var margins;
         if (viewportMargins.usePercent) {
             margins = {
-                top: viewportMargins.top * window.innerHeight,
-                bottom: viewportMargins.bottom * window.innerHeight
+                top: viewportMargins.top * innerHeight,
+                bottom: viewportMargins.bottom * innerHeight
             };
         } else {
             margins = viewportMargins;
         }
         // Detect Screen Bottom                           // Detect Screen Top
-        if ((rect.top < window.innerHeight + margins.top) && (rect.bottom > 0  - margins.bottom)) {
+        if ((rect.top < innerHeight + margins.top) && (rect.bottom > 0  - margins.bottom)) {
             enterViewportCallback && enterViewportCallback()
         }
         callback && callback();
