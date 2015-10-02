@@ -1,5 +1,6 @@
 /*global window */
-window.React = require('react/addons');
+window.React = require('react');
+window.ReactDOM = require('react-dom');
 
 window.I13nMixin = require('../../dist/mixins/I13nMixin');
 window.ReactI13n = require('../../dist/libs/ReactI13n');

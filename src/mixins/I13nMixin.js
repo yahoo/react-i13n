@@ -6,10 +6,11 @@
 'use strict';
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var debug = require('debug')('I13nMixin');
 var ReactI13n = require('../libs/ReactI13n');
 var clickHandler = require('../utils/clickHandler');
-var EventListener = require('react/lib/EventListener');
+var EventListener = require('fbjs/lib/EventListener');
 var ViewportMixin = require('./viewport/ViewportMixin');
 var I13nUtils = require('./I13nUtils');
 var DebugDashboard = require('../utils/DebugDashboard');
@@ -101,10 +102,10 @@ var I13nMixin = {
 
         // bind the click event for i13n component if it's enabled
         if (self.props.bindClickEvent) {
-            self.clickEventListener = EventListener.listen(self.getDOMNode(), 'click', clickHandler.bind(self));
+            self.clickEventListener = EventListener.listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
         }
 
-        self._i13nNode.setDOMNode(self.getDOMNode());
+        self._i13nNode.setDOMNode(ReactDOM.findDOMNode(self));
 
         // enable viewport checking if enabled
         if (self._getReactI13n().isViewportEnabled()) {
@@ -177,7 +178,7 @@ var I13nMixin = {
      */
     _scanLinks: function () {
         var self = this;
-        var DOMNode = self.getDOMNode();
+        var DOMNode = ReactDOM.findDOMNode(self);
         var foundElements = [];
         var reactI13n = self._getReactI13n();
         var scanTags = (self.props.scanLinks && self.props.scanLinks.tags) || DEFAULT_SCAN_TAGS;

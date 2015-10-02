@@ -9,7 +9,6 @@ var expect = require('expect.js');
 var jsdom = require('jsdom');
 var clickHandler;
 var React;
-var ReactTestUtils;
 var mockData = {
 };
 var mockClickEvent;
@@ -22,8 +21,7 @@ describe('clickHandler', function () {
             global.document = window.document;
             global.navigator = window.navigator;
 
-            React = require('react/addons');
-            ReactTestUtils = require('react/lib/ReactTestUtils');
+            React = require('react');
             clickHandler = require('../../../../dist/utils/clickHandler');
             mockClickEvent = {
                 target: {
@@ -148,7 +146,7 @@ describe('clickHandler', function () {
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
-    
+
     it('should not follow it if followLink is set to false', function (done) {
         var i13nNode = new I13nNode(null, {});
         var executedActions = [];
@@ -165,7 +163,7 @@ describe('clickHandler', function () {
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
-    
+
     it('should follow it while follow is set to true', function (done) {
         var i13nNode = new I13nNode(null, {});
         var executedActions = [];
@@ -187,7 +185,7 @@ describe('clickHandler', function () {
         };
         clickHandler.apply(mockComponent, [mockClickEvent]);
     });
-    
+
     it('should follow it while followLink is set to true', function (done) {
         var i13nNode = new I13nNode(null, {});
         var executedActions = [];

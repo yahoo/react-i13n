@@ -5,12 +5,12 @@
 /*global window, require */
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
 var subscribe = require('subscribe-ui-event').subscribe;
 
 /* Viewport mixin assumes you are on browser and already have the scroll lib */
 var Viewport = {
-    
+
     propTypes: {
         viewport: React.PropTypes.shape({
             margins: React.PropTypes.shape({
