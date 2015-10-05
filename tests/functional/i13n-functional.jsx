@@ -1,4 +1,4 @@
-/* global document, React */
+/* global document, React, ReactDOM */
 
 'use strict';
 
@@ -201,4 +201,4 @@ I13nDemo = setupI13n(I13nDemo,
     },
     [testPlugin]
 );
-var Demo = React.render(<I13nDemo />, container);
+var Demo = ReactDOM.render(<I13nDemo />, container);

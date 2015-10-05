@@ -9,7 +9,7 @@ var expect = require('expect.js');
 var jsdom = require('jsdom');
 var mockery = require('mockery');
 var React;
-var ReactTestUtils;
+var ReactDOM;
 var setupI13n;
 var mockData = {
     options: {},
@@ -46,9 +46,9 @@ describe('setupI13n', function () {
                 useCleanCache: true
             });
 
-            React = require('react/addons');
-            ReactTestUtils = require('react/lib/ReactTestUtils');
-            
+            React = require('react');
+            ReactDOM = require('react-dom');
+
             mockery.registerMock('../libs/ReactI13n', MockReactI13n);
 
             setupI13n = require('../../../../dist/utils/setupI13n');
@@ -75,13 +75,13 @@ describe('setupI13n', function () {
         var I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
         expect(I13nTestApp.displayName).to.eql('RootI13nTestApp');
         var container = document.createElement('div');
-        var component = React.render(React.createElement(I13nTestApp, {}), container);
+        var component = ReactDOM.render(React.createElement(I13nTestApp, {}), container);
         expect(mockData.reactI13n._options).to.eql(mockData.options);
         expect(mockData.reactI13n._plugins[0]).to.eql(mockData.plugin);
         expect(mockData.reactI13n._rootI13nNode).to.be.an('object');
         done();
     });
-    
+
     it('should get i13n util functions via both props and context', function (done) {
         var TestApp = React.createClass({
             displayName: 'TestApp',
@@ -101,6 +101,6 @@ describe('setupI13n', function () {
         });
         var I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
         var container = document.createElement('div');
-        var component = React.render(React.createElement(I13nTestApp, {}), container);
+        var component = ReactDOM.render(React.createElement(I13nTestApp, {}), container);
     });
 });
