@@ -95,33 +95,32 @@ var I13nMixin = {
      */
     componentDidMount: function () {
         var self = this;
+        setImmediate(function asyncBindHandlers() {
+            if (!self._getReactI13n() || !self.isMounted()) {
+                return;
+            }
 
-        if (!self._getReactI13n()) {
-            return;
-        }
+            // bind the click event for i13n component if it's enabled
+            if (self.props.bindClickEvent) {
+                self.clickEventListener = EventListener.listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
+            }
 
-        // bind the click event for i13n component if it's enabled
-        if (self.props.bindClickEvent) {
-            self.clickEventListener = EventListener.listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
-        }
+            self._i13nNode.setDOMNode(ReactDOM.findDOMNode(self));
 
-        self._i13nNode.setDOMNode(ReactDOM.findDOMNode(self));
+            // enable viewport checking if enabled
+            if (self._getReactI13n().isViewportEnabled()) {
+                self.subscribeViewportEvents();
+                self._enableViewportDetection();
+            }
+            self.executeI13nEvent('created', {});
+            if (self.props.scanLinks && self.props.scanLinks.enable) {
+                self._scanLinks();
+            }
 
-        // enable viewport checking if enabled
-        if (self._getReactI13n().isViewportEnabled()) {
-            self.subscribeViewportEvents();
-            self._enableViewportDetection();
-        }
-        self.executeI13nEvent('created', {});
-        if (self.props.scanLinks && self.props.scanLinks.enable) {
-            self._scanLinks();
-        }
-
-        if (IS_DEBUG_MODE) {
-            setImmediate(function asyncShowDebugDashboard() {
+            if (IS_DEBUG_MODE) {
                 self._debugDashboard = new DebugDashboard(self._i13nNode);
-            });
-        }
+            }
+        });
     },
 
     /**
