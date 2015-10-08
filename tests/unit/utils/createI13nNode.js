@@ -178,8 +178,10 @@ describe('createI13nNode', function () {
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {}), container);
         expect(rootI13nNode.getChildrenNodes()[0]).to.be.an('object');
-        ReactDOM.unmountComponentAtNode(container); // unmount should remove the child from root
-        expect(rootI13nNode.getChildrenNodes()[0]).to.eql(undefined);
+        setTimeout(function delayUnmount() {
+            ReactDOM.unmountComponentAtNode(container); // unmount should remove the child from root
+            expect(rootI13nNode.getChildrenNodes()[0]).to.eql(undefined);
+        })
     });
 
     it('should be able to bind click handler', function (done) {
