@@ -30,4 +30,4 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 ### Util Functions
 
-You will get i13n util functions automatically via `this.props.i13n` by using `setupI13n`, more detail please refer to [util functions](../guide/utilFunctions.md).
+You will get i13n util functions automatically via `this.props.i13n` by using `setupI13n`, more detail please refer to [util functions](../guides/utilFunctions.md).
