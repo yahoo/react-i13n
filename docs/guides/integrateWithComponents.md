@@ -1,6 +1,6 @@
 ## Integrating with Components
 
-This guide will show you how to take an existing component and modify it to leverage `react-i13n`. This assumes you already [setup your application](../api/setupI13n.md) and are leveraging a [plugin](./guides/createPlugins.md).
+This guide will show you how to take an existing component and modify it to leverage `react-i13n`. This assumes you already [setup your application](../api/setupI13n.md) and are leveraging a [plugin](./createPlugins.md).
 
 ### Existing component
 
