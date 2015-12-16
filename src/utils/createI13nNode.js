@@ -7,12 +7,11 @@
 
 var React = require('react');
 var I13nMixin = require('../mixins/I13nMixin');
-var objectAssign = require('object-assign');
 var hoistNonReactStatics = require('hoist-non-react-statics');
 
 /**
  * createI13nNode higher order function to create a Component with I13nNode functionality
- * @param {Object|String} Component the component you want to create a i13nNode 
+ * @param {Object|String} Component the component you want to create a i13nNode
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, options) {
@@ -25,7 +24,7 @@ module.exports = function createI13nNode (Component, options) {
     }
     var componentName = Component.displayName || Component.name || Component;
     options = options || {};
-   
+
     var I13nComponent = React.createClass({
         displayName: 'I13n' + componentName,
         mixins: [I13nMixin],
@@ -36,7 +35,7 @@ module.exports = function createI13nNode (Component, options) {
          * @return {Object} default props
          */
         getDefaultProps: function () {
-            return objectAssign({}, {
+            return Object.assign({}, {
                 model: null,
                 i13nModel: null,
                 isLeafNode: false,
@@ -45,13 +44,13 @@ module.exports = function createI13nNode (Component, options) {
                 scanLinks: null
             }, options);
         },
-        
+
         /**
          * render
          * @method render
          */
         render: function () {
-            var props = objectAssign({}, {
+            var props = Object.assign({}, {
                 i13n: {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode
@@ -70,7 +69,7 @@ module.exports = function createI13nNode (Component, options) {
             );
         }
     });
-    
+
     if ('function' === typeof Component) {
         hoistNonReactStatics(I13nComponent, Component);
     }

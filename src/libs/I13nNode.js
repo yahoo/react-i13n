@@ -6,7 +6,6 @@
 'use strict';
 
 // var debug = require('debug')('I13nNode');
-var objectAssign = require('object-assign');
 var TAG_PATTERN = /<[^>]*>/g;
 
 /**
@@ -28,9 +27,9 @@ var I13nNode = function I13nNode (parentNode, model, isLeafNode, isViewportEnabl
     if ('function' === typeof model) {
         this._model = model;
     } else {
-        this._model = objectAssign({}, model);
+        this._model = Object.assign({}, model);
     }
-    
+
     this._childrenNodes = []; // children nodes
     this._DOMNode = null; // DOM node of the i13n node, will use setDOMNode to set it in componentDidMount
     this._customAttributes = {}; // any custom value want to set in the i13n node, can used to save some status in the handler functions
@@ -41,7 +40,7 @@ var I13nNode = function I13nNode (parentNode, model, isLeafNode, isViewportEnabl
     // _isOrderDirty used to check if we need to sort children nodes before we get position of one of it child
     // will set to true if we already sort them
     // set to false once we add/remove a child
-    this._isOrderDirty = false; 
+    this._isOrderDirty = false;
 
     // _isInViewport save the status if node is already shown in the viewport, if viewport check isn't enabled, then always set to true
     this._isInViewport = !isViewportEnabled ? true : false;
@@ -95,7 +94,7 @@ I13nNode.prototype.getDOMNode = function getDOMNode () {
 };
 
 /**
- * Get merged model which is traced to the root 
+ * Get merged model which is traced to the root
  * @method getMergedModel
  * @param {Boolean} debugMode indicate it's debug mode, will return additional information for debug tool
  * @return {Object} the merged model
@@ -103,7 +102,7 @@ I13nNode.prototype.getDOMNode = function getDOMNode () {
 I13nNode.prototype.getMergedModel = function getMergedModel (debugMode) {
     if (this._parentNode) {
         var parentModel = this._parentNode.getMergedModel(debugMode);
-        return objectAssign({}, parentModel, this.getModel(debugMode));
+        return Object.assign({}, parentModel, this.getModel(debugMode));
     } else {
         return this.getModel(debugMode);
     }
@@ -124,9 +123,9 @@ I13nNode.prototype.getModel = function getModel (debugMode) {
     } else {
         model = self._model;
     }
-    
+
     //always return new object to prevent reference issue
-    finalModel = objectAssign({}, model);
+    finalModel = Object.assign({}, model);
 
     if (debugMode) {
         // add the DOMNode to the returned model, so that it can be used in debug tool
@@ -176,7 +175,7 @@ I13nNode.prototype.getText = function getText (target) {
     if (!DOMNode && !target) {
         return '';
     }
-    var text = (target && (target.value || target.innerHTML)) || 
+    var text = (target && (target.value || target.innerHTML)) ||
         (DOMNode && (DOMNode.value || DOMNode.innerHTML));
     if (text) {
         text = text.replace(TAG_PATTERN, '');
@@ -245,7 +244,7 @@ I13nNode.prototype.setReactComponent = function setDOMNode (component) {
 };
 
 /**
- * Update DOM node 
+ * Update DOM node
  * @method setDOMNode
  * @param {Object} DOMNode
  */
@@ -287,11 +286,11 @@ I13nNode.prototype.setParentNode = function setParentNode (parentNode) {
  * @param {Object|Function} newModel the new i13n model
  */
 I13nNode.prototype.updateModel = function updateModel (newModel) {
-    // if i13n is a function, just assign it to _model, otherwise use object-assign to merge old and new model data
+    // if i13n is a function, just assign it to _model, otherwise use Object.assign to merge old and new model data
     if ('function' === typeof newModel) {
         this._model = newModel;
     } else {
-        this._model = objectAssign({}, this._model, newModel);
+        this._model = Object.assign({}, this._model, newModel);
     }
 };
 

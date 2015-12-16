@@ -1,8 +1,8 @@
 # react-i13n
 
-[![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n) 
-[![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n) 
-[![Coverage Status](https://coveralls.io/repos/yahoo/react-i13n/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/react-i13n?branch=master) 
+[![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n)
+[![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
+[![Coverage Status](https://coveralls.io/repos/yahoo/react-i13n/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/react-i13n?branch=master)
 [![Dependency Status](https://david-dm.org/yahoo/react-i13n.svg)](https://david-dm.org/yahoo/react-i13n)
 [![devDependency Status](https://david-dm.org/yahoo/react-i13n/dev-status.svg)](https://david-dm.org/yahoo/react-i13n#info=devDependencies)
 
@@ -27,6 +27,16 @@ Typically, you have to manually add instrumentation code throughout your applica
 ```
 npm install react-i13n --save
 ```
+
+## Runtime Compatibility
+
+react-i13n is written with ES2015 in mind and should be used along with polyfills
+for features like [`Promise`][Promise] and [`Object.assign`][objectAssign]
+in order to support all browsers and older versions of Node.js. We recommend using [Babel][babel].
+
+[Promise]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+[objectAssign]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+[babel]: https://babeljs.io/
 
 ## Usage
 
@@ -56,8 +66,8 @@ var DemoApp = React.createClass({
     },
     render: function () {
         ...
-        <I13nAnchor href="http://foo.bar" i13nModel={{action: 'click', label: 'foo'}}>...</I13nAnchor> 
-        // this link will be tracked, and the click event handlers provided by the plugin will get the model data as 
+        <I13nAnchor href="http://foo.bar" i13nModel={{action: 'click', label: 'foo'}}>...</I13nAnchor>
+        // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
         // {site: 'foo', action: 'click', label: 'foo'}
     }
 });
