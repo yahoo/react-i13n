@@ -137,10 +137,10 @@ module.exports = function (grunt) {
                         env: env
                     }
                 },
-                command: 'node node_modules/istanbul/lib/cli.js cover --dir <%= project.coverage_dir %> -- ./node_modules/mocha/bin/_mocha <%= project.tmp %>/<%= project.unit %> --recursive --reporter xunit-file'
+                command: 'node node_modules/istanbul/lib/cli.js cover --dir <%= project.coverage_dir %> -- ./node_modules/mocha/bin/_mocha <%= project.tmp %>/<%= project.unit %> --require ./tests/setup --recursive --reporter xunit-file'
             },
             mocha: {
-                command: './node_modules/mocha/bin/mocha <%= project.tmp %>/<%= project.unit %> --recursive --reporter spec'
+                command: './node_modules/mocha/bin/mocha <%= project.tmp %>/<%= project.unit %> --require ./tests/setup --recursive --reporter spec'
             }
         },
         // webpack

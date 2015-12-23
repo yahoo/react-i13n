@@ -9,8 +9,6 @@ var debugLib = require('debug');
 var debug = debugLib('ReactI13n');
 var EventsQueue = require('./EventsQueue');
 var I13nNode = require('./I13nNode');
-var Promise = require('promise');
-var objectAssign = require('object-assign');
 var DEFAULT_HANDLER_TIMEOUT = 1000;
 var GLOBAL_OBJECT = ('client' === ENVIRONMENT) ? window : global;
 var ENVIRONMENT = (typeof window !== 'undefined') ? 'client' : 'server';
@@ -26,7 +24,7 @@ if ('client' === ENVIRONMENT) {
  * @param {Object} options options object
  * @param {Boolean} options.isViewportEnabled if enable viewport checking
  * @param {Object} options.rootModelData model data of root i13n node
- * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities 
+ * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
  * @constructor
  */
 var ReactI13n = function ReactI13n (options) {
@@ -39,7 +37,7 @@ var ReactI13n = function ReactI13n (options) {
     this._isViewportEnabled = options.isViewportEnabled || false;
     this._rootModelData = options.rootModelData || {};
     this._handlerTimeout = options.handlerTimeout || DEFAULT_HANDLER_TIMEOUT;
-    
+
     // set itself to the global object so that we can get it anywhere by the static function getInstance
     GLOBAL_OBJECT.reactI13n = this;
 };
@@ -77,7 +75,7 @@ ReactI13n.prototype.createRootI13nNode = function createRootI13nNode () {
  */
 ReactI13n.prototype.execute = function execute (eventName, payload, callback) {
     var self = this;
-    payload = objectAssign({}, payload);
+    payload = Object.assign({}, payload);
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     var promiseHandlers = this.getEventHandlers(eventName, payload);

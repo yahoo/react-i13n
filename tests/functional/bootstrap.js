@@ -1,4 +1,8 @@
 /*global window */
+
+window.Promise = require('promise');
+window.Object.assign = require('object-assign');
+
 window.React = require('react');
 window.ReactDOM = require('react-dom');
 

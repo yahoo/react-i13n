@@ -14,7 +14,6 @@ var EventListener = require('fbjs/lib/EventListener');
 var ViewportMixin = require('./viewport/ViewportMixin');
 var I13nUtils = require('./I13nUtils');
 var DebugDashboard = require('../utils/DebugDashboard');
-var objectAssign = require('object-assign');
 require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
@@ -205,7 +204,7 @@ var I13nMixin = {
             var i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
             i13nNode.setDOMNode(element);
             self._subI13nComponents.push({
-                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(objectAssign({}, self, {getI13nNode: function getI13nNodeForScannedNode() {
+                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(Object.assign({}, self, {getI13nNode: function getI13nNodeForScannedNode() {
                     return i13nNode;
                 }}))),
                 i13nNode: i13nNode,
