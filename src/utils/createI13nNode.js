@@ -28,6 +28,7 @@ module.exports = function createI13nNode (Component, options) {
     var I13nComponent = React.createClass({
         displayName: 'I13n' + componentName,
         mixins: [I13nMixin],
+        autobind: false,
 
         /**
          * getDefaultProps

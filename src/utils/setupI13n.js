@@ -33,6 +33,8 @@ module.exports = function setupI13n (Component, options, plugins) {
 
         displayName: 'RootI13n' + componentName,
 
+        autobind: false,
+
         /**
          * componentWillMount
          * @method componentWillMount
