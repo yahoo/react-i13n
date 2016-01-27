@@ -108,6 +108,19 @@ describe('createI13nNode', function () {
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
         expect(rootI13nNode.getChildrenNodes()[0].getModel()).to.eql({sec: 'foo'});
     });
+    
+    it('should generate a component with createI13nNode and custome name', function () {
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            render: function() {
+                return React.createElement('div');
+            }
+        });
+
+        // check the initial state is correct after render
+        var I13nTestComponent = createI13nNode(TestComponent, {}, {displayName: 'CustomeName'});
+        expect(I13nTestComponent.displayName).to.eql('CustomeName');
+    });
 
     it('should generate a component with createI13nNode and BC for users passing data as model', function (done) {
         var TestComponent = React.createClass({

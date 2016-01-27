@@ -15,7 +15,9 @@ If your component needs i13n functionality, we will mirror an `I13nNode` in `I13
 The `high order component` integrates the functionalities of i13n, it returns a decorated component with full I13n functionality.
 
  * `component` - can be a string for native tags e.g., `a`, `button` or a react component you create
- * `options` - options object, it would be the default `props` of that I13nNode, you can also pass options with `props` to overwrite it.
+ * `defaultProps` - defaultProps object, it would be the default `props` of that I13nNode, you can also pass options with `props` to overwrite it.
+ * `options` - options object
+ * `options.displayName` - display name of the wrapper component, will fallback to `I13n` + original display name
 
 For example, if you want to enable link tracking, you will need to create an anchor with the `createI13nNode` and enable the click tracking.
 

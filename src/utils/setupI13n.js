@@ -15,10 +15,13 @@ var I13nUtils = require('../mixins/I13nUtils');
  * @param {Boolean} options.isViewportEnabled if enable viewport checking
  * @param {Object} options.rootModelData model data of root i13n node
  * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
+ * @param {Object} options.displayName display name of the wrapper component
  * @param {Array} plugins plugins
  * @method setupI13n
  */
 module.exports = function setupI13n (Component, options, plugins) {
+    options = options || {};
+    plugins = plugins || [];
     var RootI13nComponent;
     var componentName = Component.displayName || Component.name;
 
@@ -31,7 +34,7 @@ module.exports = function setupI13n (Component, options, plugins) {
 
         mixins: [I13nUtils],
 
-        displayName: 'RootI13n' + componentName,
+        displayName: options.displayName || ('RootI13n' + componentName),
 
         autobind: false,
 
