@@ -8,6 +8,7 @@ We provide `setupI13n` as a convenient [higher order function](https://medium.co
  * `options.I13nNodeClass` - you can inherit the `I13nNode` and add the functionality you need, just pass the class.
  * `options.isViewportEnabled` - define if you want to enable the viewport checking.
  * `options.handlerTimeout` - define the timeout of the event handler, the event callback will be executed even if handlers don't finish in time, default to 1000ms.
+ * `options.displayName` - display name of the wrapper component, will fallback to `I13n` + original display name
  * `plugins` - plugins array that you defined according to the definition below.
 
 ```js

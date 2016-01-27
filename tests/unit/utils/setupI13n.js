@@ -81,6 +81,19 @@ describe('setupI13n', function () {
         expect(mockData.reactI13n._rootI13nNode).to.be.an('object');
         done();
     });
+    
+    it('should generate a component with setupI13n and custom display name', function () {
+        var TestApp = React.createClass({
+            displayName: 'TestApp',
+            render: function() {
+                return React.createElement('div');
+            }
+        });
+
+        // check the initial state is correct after render
+        var I13nTestApp = setupI13n(TestApp, {displayName: 'CustomName'});
+        expect(I13nTestApp.displayName).to.eql('CustomName');
+    });
 
     it('should get i13n util functions via both props and context', function (done) {
         var TestApp = React.createClass({
