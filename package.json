@@ -17,7 +17,7 @@
     "fbjs": "^0.6.0",
     "hoist-non-react-statics": "^1.0.0",
     "setimmediate": "^1.0.2",
-    "subscribe-ui-event": "^0.2.2"
+    "subscribe-ui-event": "^1.0.3"
   },
   "devDependencies": {
     "coveralls": "^2.11.1",
