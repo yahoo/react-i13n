@@ -14,7 +14,8 @@ var hoistNonReactStatics = require('hoist-non-react-statics');
  * @param {Object|String} Component the component you want to create a i13nNode
  * @param {Object} defaultProps default props
  * @param {Object} options
- * @param {Object} options.displayName
+ * @param {Object} options.displayName display name
+ * @param {Object} options.refToWrappedComponent ref name to wrapped component
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, defaultProps, options) {
@@ -56,12 +57,15 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          */
         render: function () {
             var props = Object.assign({}, {
-                ref: 'wrappedElement',
                 i13n: {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode
                 }
             }, this.props);
+
+            if (options.refToWrappedComponent) {
+                props.ref = options.refToWrappedComponent;
+            }
 
             // delete the props that only used in this level
             props.model = undefined;
