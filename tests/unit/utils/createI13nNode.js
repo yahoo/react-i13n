@@ -407,17 +407,4 @@ describe('createI13nNode', function () {
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
     });
-
-    it('should expose the wrapped component as refs.wrappedElement', function () {
-        var TestComponent = React.createClass({
-            render: function() {
-                return React.createElement('div');
-            }
-        });
-        var I13nTestComponent = createI13nNode(TestComponent);
-        mockData.reactI13n.execute = function () {};
-        var container = document.createElement('div');
-        var component = ReactDOM.render(React.createElement(I13nTestComponent), container);
-        expect(component.refs.wrappedElement).to.be.a(TestComponent);
-    });
 });

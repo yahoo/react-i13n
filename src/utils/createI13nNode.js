@@ -56,7 +56,6 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          */
         render: function () {
             var props = Object.assign({}, {
-                ref: 'wrappedElement',
                 i13n: {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode
