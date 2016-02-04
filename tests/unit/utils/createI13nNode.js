@@ -414,7 +414,7 @@ describe('createI13nNode', function () {
                 return React.createElement('div');
             }
         });
-        var I13nTestComponent = createI13nNode(TestComponent);
+        var I13nTestComponent = createI13nNode(TestComponent, {}, {refToWrappedComponent: 'wrappedElement'});
         mockData.reactI13n.execute = function () {};
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent), container);
