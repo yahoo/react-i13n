@@ -7,13 +7,14 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var debug = require('debug')('I13nMixin');
-var ReactI13n = require('../libs/ReactI13n');
+
 var clickHandler = require('../utils/clickHandler');
-var EventListener = require('fbjs/lib/EventListener');
-var ViewportMixin = require('./viewport/ViewportMixin');
-var I13nUtils = require('./I13nUtils');
+var debug = require('debug')('I13nMixin');
 var DebugDashboard = require('../utils/DebugDashboard');
+var I13nUtils = require('./I13nUtils');
+var listen = require('subscribe-ui-event/dist/lib/listen');
+var ReactI13n = require('../libs/ReactI13n');
+var ViewportMixin = require('./viewport/ViewportMixin');
 require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
@@ -101,7 +102,7 @@ var I13nMixin = {
 
         // bind the click event for i13n component if it's enabled
         if (self.props.bindClickEvent) {
-            self.clickEventListener = EventListener.listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
+            self.clickEventListener = listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
         }
 
         self._i13nNode.setDOMNode(ReactDOM.findDOMNode(self));
@@ -204,7 +205,7 @@ var I13nMixin = {
             var i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
             i13nNode.setDOMNode(element);
             self._subI13nComponents.push({
-                componentClickHandler: EventListener.listen(element, 'click', clickHandler.bind(Object.assign({}, self, {getI13nNode: function getI13nNodeForScannedNode() {
+                componentClickHandler: listen(element, 'click', clickHandler.bind(Object.assign({}, self, {getI13nNode: function getI13nNodeForScannedNode() {
                     return i13nNode;
                 }}))),
                 i13nNode: i13nNode,

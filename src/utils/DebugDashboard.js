@@ -3,16 +3,16 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 /* global document, window*/
-var EventListener = require('fbjs/lib/EventListener');
+var listen = require('subscribe-ui-event/dist/lib/listen');
 
 var uniqueId = 0;
 
 function checkHidden (DOMNode) {
     if (DOMNode !== document) {
         var styles = window.getComputedStyle(DOMNode) || {};
-        if ('none' === styles.display || 
-            'hidden' === styles.visibility || 
-            '0' === styles.opacity) { 
+        if ('none' === styles.display ||
+            'hidden' === styles.visibility ||
+            '0' === styles.opacity) {
             return true;
         } else {
             return checkHidden(DOMNode.parentNode);
@@ -25,7 +25,7 @@ function checkHidden (DOMNode) {
 function setupContainerPosition (DOMNode, container, dashboard) {
     var offset = cumulativeOffset(DOMNode);
     var left = offset.left + DOMNode.offsetWidth - 15;
-    
+
     container.style.position = 'absolute';
     container.style['max-width'] = '300px';
     container.style.top = offset.top + 'px';
@@ -90,7 +90,7 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     // compose title
     var dashboardTitle = document.createElement('li');
     dashboardTitle.style.background = '#400090';
-    dashboardTitle.style.color = '#FFF';
+    dashboardTitle.style.color = '#fff';
     dashboardTitle.style.padding = '5px';
     dashboardTitle.style['white-space'] = 'nowrap';
     dashboardTitle.style['overflow'] = 'hidden';
@@ -108,25 +108,25 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
         dashboardItem.style['overflow'] = 'hidden';
         dashboardItem.style['text-overflow'] = 'ellipsis';
         dashboardItem.innerHTML = key + ' : ' + model[key].value + (model[key].DOMNode !== DOMNode ? ' (inherited)' : '');
-      
-        // set up scroll listener to show where the model data comes from 
+
+        // set up scroll listener to show where the model data comes from
         if (model[key].DOMNode) {
             model[key].DOMNode.style.transition = 'border 0.05s';
-            self.modelItemsListener.push(EventListener.listen(dashboardItem, 'mouseover', function () {
+            self.modelItemsListener.push(listen(dashboardItem, 'mouseover', function () {
                 model[key].DOMNode.style.border = '5px solid #b493f5';
             }));
-            self.modelItemsListener.push(EventListener.listen(dashboardItem, 'mouseout', function () {
+            self.modelItemsListener.push(listen(dashboardItem, 'mouseout', function () {
                 model[key].DOMNode.style.border = null;
             }));
         }
         dashboardContainer.appendChild(dashboardItem);
-    }); 
+    });
 
     // generate dashboard
     dashboard.style.position = 'relative';
     dashboard.style.display = 'none';
     dashboard.style.background = '#7300ff';
-    dashboard.style.color = '#FFF';
+    dashboard.style.color = '#fff';
     dashboard.style.fontsize = '14px';
     dashboard.style.width = '100%';
     dashboard.style['margin-top'] = '2px';
@@ -136,10 +136,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     // generate trigger node
     triggerNode.innerHTML = '...';
     triggerNode.style.background = '#400090';
-    triggerNode.style.color = '#FFF';
+    triggerNode.style.color = '#fff';
     triggerNode.style.padding = '2px';
     triggerNode.style.cursor = 'pointer';
-    self.clickListener = EventListener.listen(triggerNode, 'click', function () {
+    self.clickListener = listen(triggerNode, 'click', function () {
         if ('none' === dashboard.style.display) {
             dashboard.style.display = 'block';
             container.style['z-index'] = '11';
@@ -150,13 +150,13 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     });
 
     DOMNode.style.transition = 'border 0.05s';
-    self.mouseOverListener = EventListener.listen(triggerNode, 'mouseover', function () {
+    self.mouseOverListener = listen(triggerNode, 'mouseover', function () {
         DOMNode.style.border = '5px solid #5a00c8';
     });
-    self.mouseOutListener = EventListener.listen(triggerNode, 'mouseout', function () {
+    self.mouseOutListener = listen(triggerNode, 'mouseout', function () {
         DOMNode.style.border = null;
     });
-    
+
     container.appendChild(triggerNode);
     container.appendChild(dashboard);
     setupContainerPosition(DOMNode, container, dashboard);
