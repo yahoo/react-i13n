@@ -12,7 +12,7 @@ var clickHandler = require('../utils/clickHandler');
 var debug = require('debug')('I13nMixin');
 var DebugDashboard = require('../utils/DebugDashboard');
 var I13nUtils = require('./I13nUtils');
-var listen = require('subscribe-ui-event/dist/lib/listen');
+var listen = require('subscribe-ui-event').listen;
 var ReactI13n = require('../libs/ReactI13n');
 var ViewportMixin = require('./viewport/ViewportMixin');
 require('setimmediate');

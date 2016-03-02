@@ -32,6 +32,11 @@ var mockSubscribe = {
             unsubscribe: function () {
             }
         }
+    },
+    listen: function (target, event) {
+        return {
+            remove: function () {}
+        };
     }
 };
 var mockClickHandler = function () {};
@@ -108,7 +113,7 @@ describe('createI13nNode', function () {
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
         expect(rootI13nNode.getChildrenNodes()[0].getModel()).to.eql({sec: 'foo'});
     });
-    
+
     it('should generate a component with createI13nNode and custome name', function () {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',

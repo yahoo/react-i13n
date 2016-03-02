@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 /* global document, window*/
-var listen = require('subscribe-ui-event/dist/lib/listen');
+var listen = require('subscribe-ui-event').listen;
 
 var uniqueId = 0;
 
