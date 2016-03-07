@@ -55,7 +55,7 @@ module.exports = function clickHandler (e) {
     var isRedirectLink = isDefaultRedirectLink(target);
     var isPreventDefault = true;
     var props = self.props;
-    var followLink = (undefined !== props.followLink) ? props.followLink : props.follow;
+    var followLink = self._shouldFollowLink();
     var href = '';
 
     // return and do nothing if the handler is append on a component without I13nMixin
