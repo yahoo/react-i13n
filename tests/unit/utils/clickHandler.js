@@ -31,6 +31,9 @@ describe('clickHandler', function () {
             mockComponent = {
                 props: {
                     href: 'foo'
+                },
+                _shouldFollowLink: function() {
+                    return (undefined !== this.props.followLink) ? this.props.followLink : this.props.follow;
                 }
             };
             done();

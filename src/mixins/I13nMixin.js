@@ -216,6 +216,21 @@ var I13nMixin = {
     },
 
     /**
+     * _shouldFollowLink, provide a hook to check followLink.
+     * It check if component implement its own shouldFollowLink() method, 
+     * otherwise return props.followLink or props.follow
+     * @method _shouldFollowLink
+     * @private
+     */
+    _shouldFollowLink: function () {
+        if (undefined !== this.shouldFollowLink) {
+            return this.shouldFollowLink();
+        }
+
+        return (undefined !== props.followLink) ? props.followLink : props.follow;
+    },
+
+    /**
      * _subComponentsViewportDetection, will be executed by viewport mixin
      * @method _subComponentsViewportDetection
      * @private
