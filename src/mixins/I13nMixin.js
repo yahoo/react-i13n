@@ -227,7 +227,7 @@ var I13nMixin = {
             return this.shouldFollowLink();
         }
 
-        return (undefined !== props.followLink) ? props.followLink : props.follow;
+        return (undefined !== this.props.followLink) ? this.props.followLink : this.props.follow;
     },
 
     /**
