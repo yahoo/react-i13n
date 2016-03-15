@@ -7,6 +7,11 @@
 
 var React = require('react');
 var subscribe = require('subscribe-ui-event').subscribe;
+var DEFAULT_VIEWPORT_MARGINS = {
+    usePercent: false,
+    top: 20,
+    bottom: 20
+};
 
 /* Viewport mixin assumes you are on browser and already have the scroll lib */
 var Viewport = {
@@ -30,7 +35,8 @@ var Viewport = {
             return callback && callback();
         }
         var rect = element.getBoundingClientRect();
-        var viewportMargins = this.props.viewport.margins;
+        var viewportMargins = Object.assign({}, DEFAULT_VIEWPORT_MARGINS, 
+            (this.props.viewport && this.props.viewport.margins) || {});
         var margins;
         if (viewportMargins.usePercent) {
             margins = {
@@ -54,18 +60,6 @@ var Viewport = {
         }
         self._detectElement(self._i13nNode, self.enterViewportCallback, callback);
         self._subComponentsViewportDetection && self._subComponentsViewportDetection();
-    },
-
-    getDefaultProps: function () {
-        return {
-            viewport: {
-                margins: {
-                    usePercent: false,
-                    top: 20,
-                    bottom: 20
-                }
-            }
-        };
     },
 
     subscribeViewportEvents: function () {

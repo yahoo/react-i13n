@@ -42,7 +42,6 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          */
         getDefaultProps: function () {
             return Object.assign({}, {
-                model: null,
                 i13nModel: null,
                 isLeafNode: false,
                 bindClickEvent: false,
@@ -68,9 +67,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
             }
 
             // delete the props that only used in this level
-            props.model = undefined;
             props.i13nModel = undefined;
-            props.viewport = undefined;
 
             return React.createElement(
                 Component,
