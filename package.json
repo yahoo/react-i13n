@@ -42,9 +42,8 @@
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
     "promise": "^7.0.1",
-    "react": "^0.14.0-rc1",
-    "react-dom": "^0.14.0-rc1",
-    "react-tools": "<= 0.13.x",
+    "react": "^15.0.0-rc.1",
+    "react-dom": "^15.0.0-rc.1",
     "xunit-file": "^0.0.7"
   },
   "keywords": [
@@ -54,8 +53,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^0.14.0 || 0.14.0-rc1",
-    "react-dom": "^0.14.0 || 0.14.0-rc1"
+    "react": "^0.14.0 || ^15.0.0-rc.1",
+    "react-dom": "^0.14.0 || ^15.0.0-rc.1"
   },
   "precommit": [
     "lint",
