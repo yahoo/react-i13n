@@ -62,8 +62,8 @@ var Viewport = {
         self._subComponentsViewportDetection && self._subComponentsViewportDetection();
     },
 
-    subscribeViewportEvents: function () {
-        this.subscription = subscribe('scrollEnd', this._detectViewport);
+    subscribeViewportEvents: function (options) {
+        this.subscription = subscribe('scrollEnd', this._detectViewport, options || {});
     },
 
     unsubscribeViewportEvents: function () {
