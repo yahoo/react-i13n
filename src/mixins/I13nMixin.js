@@ -224,7 +224,7 @@ var I13nMixin = {
      */
     _shouldFollowLink: function () {
         if (undefined !== this.shouldFollowLink) {
-            return this.shouldFollowLink();
+            return this.shouldFollowLink(this.props);
         }
 
         return (undefined !== this.props.followLink) ? this.props.followLink : this.props.follow;
