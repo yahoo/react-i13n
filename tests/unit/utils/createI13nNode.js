@@ -379,7 +379,14 @@ describe('createI13nNode', function () {
         }, 1000);
     });
 
-    it('should not cause error if we pass a undefined to createI13nNode', function () {
+    it('should not cause error if we pass a undefined to createI13nNode', function (done) {
+        console.warn = function (msg) {
+            expect(msg).to.equal('You are passing a null component into createI13nNode');
+            done();
+        };
+        console.trace = function () {
+            // no-op
+        };
         var I13nTestComponent = createI13nNode(undefined);
         expect(I13nTestComponent).to.eql(undefined);
     });
