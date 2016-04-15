@@ -63,6 +63,9 @@ var I13nUtils = {
      * @return {Object} i13n node
      */
     getI13nNode: function () {
+        if (!this._getReactI13n()) {
+            return;
+        }
         return this._i13nNode || this._getParentI13nNode();
     },
 
