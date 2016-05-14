@@ -99,6 +99,7 @@ var I13nMixin = {
         if (!self._getReactI13n()) {
             return;
         }
+        var reactI13n = self._getReactI13n();
 
         // bind the click event for i13n component if it's enabled
         if (self.props.bindClickEvent) {
@@ -108,8 +109,15 @@ var I13nMixin = {
         self._i13nNode.setDOMNode(ReactDOM.findDOMNode(self));
 
         // enable viewport checking if enabled
-        if (self._getReactI13n().isViewportEnabled()) {
-            self.subscribeViewportEvents();
+        if (reactI13n.isViewportEnabled()) {
+            var options = {};
+            if (reactI13n.getScrollableContainerDOMNode) {
+                var domNode = reactI13n.getScrollableContainerDOMNode();
+                if (domNode) {
+                    options.target = domNode;
+                }
+            }
+            self.subscribeViewportEvents(options);
             self._enableViewportDetection();
         }
         self.executeI13nEvent('created', {});

@@ -25,6 +25,10 @@ if ('client' === ENVIRONMENT) {
  * @param {Boolean} options.isViewportEnabled if enable viewport checking
  * @param {Object} options.rootModelData model data of root i13n node
  * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
+ * @param {String} options.scrollableContainerId id of the scrollable element that your components
+ *     reside within.  Normally, you won't need to provide a value for this.  This is only to
+ *     support viewport checking when your components are contained within a scrollable element.
+ *     Currently, only elements that fill the viewport are supported.
  * @constructor
  */
 var ReactI13n = function ReactI13n (options) {
@@ -37,6 +41,7 @@ var ReactI13n = function ReactI13n (options) {
     this._isViewportEnabled = options.isViewportEnabled || false;
     this._rootModelData = options.rootModelData || {};
     this._handlerTimeout = options.handlerTimeout || DEFAULT_HANDLER_TIMEOUT;
+    this._scrollableContainerId = options.scrollableContainerId || undefined;
 
     // set itself to the global object so that we can get it anywhere by the static function getInstance
     GLOBAL_OBJECT.reactI13n = this;
@@ -160,6 +165,27 @@ ReactI13n.prototype.isViewportEnabled = function isViewportEnabled () {
 };
 
 /**
+ * Get scrollableContainerId value
+ * @method getScrollableContainerId
+ * @return {String} scrollableContainerId value
+ */
+ReactI13n.prototype.getScrollableContainerId = function getScrollableContainerId () {
+    return this._scrollableContainerId;
+};
+
+/**
+ * Get scrollable container DOM node
+ * @method getScrollableContainerDOMNode
+ * @return {Object} scrollable container DOM node.  This will be undefined if no
+ *     scrollableContainerId was set, or null if the element was not found in the DOM.
+ */
+ReactI13n.prototype.getScrollableContainerDOMNode = function getScrollableContainerDOMNode () {
+    if (this._scrollableContainerId) {
+        return document && document.getElementById(this._scrollableContainerId);
+    }
+};
+
+/**
  * Get root i13n node
  * @method getRootI13nNode
  * @return {Object} root react i13n node
@@ -181,6 +207,8 @@ ReactI13n.prototype.updateOptions = function updateOptions (options) {
         options.isViewportEnabled : this._isViewportEnabled;
     this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
     this._handlerTimeout = options.handlerTimeout ? options.handlerTimeout : this._handlerTimeout;
+    this._scrollableContainerId = 'undefined' === typeof options.scrollableContainerId ?
+                                  this._scrollableContainerId : options.scrollableContainerId;
 };
 
 module.exports = ReactI13n;

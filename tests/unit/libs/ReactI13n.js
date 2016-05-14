@@ -121,4 +121,20 @@ describe('ReactI13n', function () {
             done();
         });
     });
+
+    it('should be able to set a scrollableContainerId', function () {
+        var reactI13n = new ReactI13n({
+            scrollableContainerId: 'scrollable-test'
+        });
+
+        expect(reactI13n.getScrollableContainerId()).to.eql('scrollable-test');
+    });
+
+    it('should have an undefined scrollableContainerDOMNode if the scrollableContainerId is undefined', function () {
+        var reactI13n = new ReactI13n({
+            isViewportEnabled: true
+        });
+
+        expect(reactI13n.getScrollableContainerDOMNode()).to.eql(undefined);
+    });
 });
