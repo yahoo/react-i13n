@@ -87,8 +87,7 @@ var I13nUtils = {
      */
     _getParentI13nNode: function () {
         // https://twitter.com/andreypopp/status/578974316483608576, get the context from parent context
-        // TODO remove this at react 0.14
-        var context = (this._reactInternalInstance && this._reactInternalInstance._context) || this.context;
+        var context = this.context;
         return (context && context.i13n && context.i13n.parentI13nNode) || this._getReactI13n().getRootI13nNode();
     }
 }
