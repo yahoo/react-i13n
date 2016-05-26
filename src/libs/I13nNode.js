@@ -128,11 +128,12 @@ I13nNode.prototype.getModel = function getModel (debugMode) {
     finalModel = Object.assign({}, model);
 
     if (debugMode) {
+        var DOMNode = self.getDOMNode();
         // add the DOMNode to the returned model, so that it can be used in debug tool
         Object.keys(finalModel).forEach(function interateModel(index) {
             finalModel[index] = {
                 value: finalModel[index],
-                DOMNode: self.getDOMNode()
+                DOMNode: DOMNode
             };
         });
     }
