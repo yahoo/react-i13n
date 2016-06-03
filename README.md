@@ -82,6 +82,7 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 ## Available Plugins
 * [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga) - Google Analytics plugin
+* [react-i13n-mixpanel](https://github.com/adlenafane/react-i13n-mixpanel) - Mixpanel plugin
 
 Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 
