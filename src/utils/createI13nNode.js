@@ -27,6 +27,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
         return;
     }
     var componentName = Component.displayName || Component.name || Component;
+    var componentIsFunction = 'function' === typeof Component;
     defaultProps = defaultProps || {};
     options = options || {};
 
@@ -69,6 +70,24 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
             // delete the props that only used in this level
             props.i13nModel = undefined;
 
+            if (!componentIsFunction) {
+              // filter props to avoid to pass unknown props to components such <a> or <button>
+              var propsToFilter = {
+                  i13n: true,
+                  i13nModel: true,
+                  follow: true,
+                  isLeafNode: true,
+                  bindClickEvent: true,
+                  scanLinks: true
+              };
+              props = Object.keys(props).reduce(function reduceProps(propsMap, propName) {
+                  if (!propsToFilter.hasOwnProperty(propName)) {
+                    propsMap[propName] = props[propName];
+                  }
+                  return propsMap;
+              }, {});
+            }
+
             return React.createElement(
                 Component,
                 props,
@@ -77,7 +96,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
         }
     });
 
-    if ('function' === typeof Component) {
+    if (componentIsFunction) {
         hoistNonReactStatics(I13nComponent, Component);
     }
 
