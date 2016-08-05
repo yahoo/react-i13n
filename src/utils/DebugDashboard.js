@@ -162,6 +162,7 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     container.appendChild(dashboard);
     setupContainerPosition(DOMNode, container, dashboard);
     document.body.appendChild(container);
+    uniqueId++;
     self.container = container;
 };
 
