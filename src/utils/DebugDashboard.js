@@ -85,13 +85,13 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     var dashboardContainer = document.createElement('ul');
     dashboardContainer.style.margin = 0;
     dashboardContainer.style['padding-left'] = 0;
-    dashboardContainer.style.border = '#400090 1px solid';
+    dashboardContainer.style['box-shadow'] = '0 1px 4px 0 rgba(0,0,0,.28)';
 
     // compose title
     var dashboardTitle = document.createElement('li');
-    dashboardTitle.style.background = '#400090';
-    dashboardTitle.style.color = '#fff';
-    dashboardTitle.style.padding = '5px';
+    dashboardTitle.style.background = '#673ab7';
+    dashboardTitle.style.color = 'rgba(255,255,255,.87)';
+    dashboardTitle.style.padding = '8px';
     dashboardTitle.style['white-space'] = 'nowrap';
     dashboardTitle.style['overflow'] = 'hidden';
     dashboardTitle.style['text-overflow'] = 'ellipsis';
@@ -101,9 +101,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     // compose model items
     Object.keys(model).forEach(function generateModelInfo(key) {
         var dashboardItem = document.createElement('li');
-        dashboardItem.style.background = '#5a00c8';
-        dashboardItem.style['border-top'] = '#400090 1px solid';
-        dashboardItem.style.padding = '5px';
+        dashboardItem.style.background = '#d1c4e9';
+        dashboardItem.style.color = 'rgba(0,0,0,.87)';
+        dashboardItem.style['border-top'] = 'rgba(0,0,0,.12) 1px solid';
+        dashboardItem.style.padding = '8px';
         dashboardItem.style['white-space'] = 'nowrap';
         dashboardItem.style['overflow'] = 'hidden';
         dashboardItem.style['text-overflow'] = 'ellipsis';
@@ -112,10 +113,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
         // set up scroll listener to show where the model data comes from
         if (model[key].DOMNode) {
             model[key].DOMNode.style.transition = 'border 0.05s';
-            self.modelItemsListener.push(listen(dashboardItem, 'mouseover', function () {
-                model[key].DOMNode.style.border = '5px solid #b493f5';
+            self.modelItemsListener.push(listen(dashboardItem, 'mouseover', function mouseover() {
+                model[key].DOMNode.style.border = '4px solid #b39ddb';
             }));
-            self.modelItemsListener.push(listen(dashboardItem, 'mouseout', function () {
+            self.modelItemsListener.push(listen(dashboardItem, 'mouseout', function mouseout() {
                 model[key].DOMNode.style.border = null;
             }));
         }
@@ -125,21 +126,21 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     // generate dashboard
     dashboard.style.position = 'relative';
     dashboard.style.display = 'none';
-    dashboard.style.background = '#7300ff';
-    dashboard.style.color = '#fff';
+    dashboard.style.color = 'rgba(255,255,255,.87)';
     dashboard.style.fontsize = '14px';
     dashboard.style.width = '100%';
     dashboard.style['margin-top'] = '2px';
     dashboard.style['z-index'] = '1';
+    dashboard.style['border-radius'] = '2px';
     dashboard.appendChild(dashboardContainer);
-
+    
     // generate trigger node
-    triggerNode.innerHTML = '...';
-    triggerNode.style.background = '#400090';
-    triggerNode.style.color = '#fff';
-    triggerNode.style.padding = '2px';
+    triggerNode.innerHTML = '&#8964;';
+    triggerNode.style.background = '#673ab7';
+    triggerNode.style.color = 'rgba(255,255,255,.87)';
+    triggerNode.style.padding = '0 3px';
     triggerNode.style.cursor = 'pointer';
-    self.clickListener = listen(triggerNode, 'click', function () {
+    self.clickListener = listen(triggerNode, 'click', function onClick() {
         if ('none' === dashboard.style.display) {
             dashboard.style.display = 'block';
             container.style['z-index'] = '11';
@@ -150,10 +151,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     });
 
     DOMNode.style.transition = 'border 0.05s';
-    self.mouseOverListener = listen(triggerNode, 'mouseover', function () {
-        DOMNode.style.border = '5px solid #5a00c8';
+    self.mouseOverListener = listen(triggerNode, 'mouseover', function mouseover() {
+        DOMNode.style.border = '4px solid #b39ddb';
     });
-    self.mouseOutListener = listen(triggerNode, 'mouseout', function () {
+    self.mouseOutListener = listen(triggerNode, 'mouseout', function mouseout() {
         DOMNode.style.border = null;
     });
 
