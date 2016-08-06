@@ -14,6 +14,7 @@ var DebugDashboard = require('../utils/DebugDashboard');
 var I13nUtils = require('./I13nUtils');
 var listen = require('subscribe-ui-event').listen;
 var ReactI13n = require('../libs/ReactI13n');
+var I13nNode = require('../libs/I13nNode');
 var ViewportMixin = require('./viewport/ViewportMixin');
 require('setimmediate');
 var IS_DEBUG_MODE = isDebugMode();
@@ -137,9 +138,6 @@ var I13nMixin = {
      * @method componentWillMount
      */
     componentWillMount: function () {
-        if (!this._getReactI13n()) {
-            return;
-        }
         clearTimeout(pageInitViewportDetectionTimeout);
         this._createI13nNode();
         this._i13nNode.setReactComponent(this);
@@ -366,14 +364,15 @@ var I13nMixin = {
     _createI13nNode: function () {
         // check if reactI13n is initialized successfully, otherwise return
         var self = this;
-        var I13nNode = self._getReactI13n().getI13nNodeClass();
         var parentI13nNode = self._getParentI13nNode();
+        var reactI13n = self._getReactI13n();
+        var I13nNodeClass = (reactI13n && reactI13n.getI13nNodeClass()) || I13nNode;
         // TODO @kaesonho remove BC for model
-        self._i13nNode = new I13nNode(
+        self._i13nNode = new I13nNodeClass(
             parentI13nNode,
             self.props.i13nModel || self.props.model,
             self.isLeafNode(),
-            self._getReactI13n().isViewportEnabled());
+            reactI13n && reactI13n.isViewportEnabled());
     },
 
     /**

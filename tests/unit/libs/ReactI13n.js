@@ -15,7 +15,6 @@ describe('ReactI13n', function () {
         var reactI13n = new ReactI13n({
             isViewportEnabled: true
         });
-        expect(ReactI13n.getInstance()).to.eql(reactI13n); // static function should be able to get the instance we created
         expect(reactI13n.isViewportEnabled()).to.eql(true);
     });
     

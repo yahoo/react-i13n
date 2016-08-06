@@ -40,16 +40,14 @@ var mockSubscribe = {
     }
 };
 var mockClickHandler = function () {};
-MockReactI13n.getInstance = function () {
-    return mockData.reactI13n;
-};
 
 function findProps(elem) {
-  try {
-    return elem[Object.keys(elem).find(function (key) {
-      return key.indexOf('__reactInternalInstance') === 0;
-    })]._currentElement.props;
-  } catch (e) {}
+    try {
+        return elem[Object.keys(elem).find(function (key) {
+            return key.indexOf('__reactInternalInstance') === 0 || 
+                key.indexOf('_reactInternalComponent') === 0;
+        })]._currentElement.props;
+    } catch (e) {}
 }
 
 describe('createI13nNode', function () {
@@ -89,6 +87,7 @@ describe('createI13nNode', function () {
                     return mockData.isViewportEnabled;
                 }
             };
+            global.window._reactI13nInstance = mockData.reactI13n;
 
             done();
         });
@@ -182,7 +181,7 @@ describe('createI13nNode', function () {
             }
         });
         var I13nTestComponent = createI13nNode(TestComponent);
-        mockData.reactI13n = null;
+        window._reactI13nInstance = null;
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {}), container);
         expect(component).to.be.an('object');
@@ -442,21 +441,21 @@ describe('createI13nNode', function () {
     });
 
     it('should not pass i13n props to string components', function () {
-      var props = {
-          i13nModel: {sec: 'foo'},
-          href: '#/foobar'
-      };
-      var I13nTestComponent = createI13nNode('a', {
-          follow: true,
-          isLeafNode: true,
-          bindClickEvent: true,
-          scanLinks: {enable: true}
-      }, {
-          refToWrappedComponent: 'wrappedElement'
-      });
-      mockData.reactI13n.execute = function () {};
-      var container = document.createElement('div');
-      var component = ReactDOM.render(React.createElement(I13nTestComponent, props), container);
-      expect(findProps(component.refs.wrappedElement)).to.eql({href: '#/foobar', children: undefined});
+        var props = {
+            i13nModel: {sec: 'foo'},
+            href: '#/foobar'
+        };
+        var I13nTestComponent = createI13nNode('a', {
+            follow: true,
+            isLeafNode: true,
+            bindClickEvent: true,
+            scanLinks: {enable: true}
+        }, {
+            refToWrappedComponent: 'wrappedElement'
+        });
+        mockData.reactI13n.execute = function () {};
+        var container = document.createElement('div');
+        var component = ReactDOM.render(React.createElement(I13nTestComponent, props), container);
+        expect(findProps(component.refs.wrappedElement)).to.eql({href: '#/foobar', children: undefined});
     });
 });

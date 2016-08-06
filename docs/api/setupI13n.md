@@ -29,6 +29,15 @@ var I13nDempApp = setupI13n(DemoApp, {
 // then you could use I13nDemoApp to render you app
 ```
 
+### Create and access the ReactI13n instance
+
+What we do with `setupI13n` is that we will create the `ReactI13n` instance, along with a root node of the I13nTree, passing them via component context to the children. 
+
+It's designed to work within React components, you should be able to just use [utilFuctions](https://github.com/yahoo/react-i13n/blob/master/docs/guides/utilFunctions.md) and trigger i13n events. In case you want to do this out of React components, you can access `window._reactI13nInstance` directly.
+
+If you have multiple React trees in one page, we will create multiple i13n trees based on how many React tree you have. On client side the [utilFuctions](https://github.com/yahoo/react-i13n/blob/master/docs/guides/utilFunctions.md) still work based on the global instance object, while on server side, only the children under `setupI13n` can get the React i13n instance as we don't have a proper way to share the ReactI13n instance without causing [memory leak](https://github.com/yahoo/react-i13n/pull/100).
+
+
 ### Util Functions
 
 You will get i13n util functions automatically via `this.props.i13n` by using `setupI13n`, more detail please refer to [util functions](../guides/utilFunctions.md).

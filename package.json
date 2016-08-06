@@ -46,6 +46,7 @@
     "promise": "^7.0.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
+    "webpack": "^1.13.1",
     "xunit-file": "~0.0.7"
   },
   "keywords": [

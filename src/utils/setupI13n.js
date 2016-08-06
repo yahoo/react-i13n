@@ -7,6 +7,7 @@
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
 var I13nUtils = require('../mixins/I13nUtils');
+var IS_CLIENT = typeof window !== 'undefined';
 
 /**
  * Create an app level component with i13n setup
@@ -25,11 +26,6 @@ module.exports = function setupI13n (Component, options, plugins) {
     var RootI13nComponent;
     var componentName = Component.displayName || Component.name;
 
-    var reactI13n = new ReactI13n(options);
-    plugins.forEach(function setPlugin(plugin) {
-        reactI13n.plug(plugin);
-    });
-
     RootI13nComponent = React.createClass({
 
         mixins: [I13nUtils],
@@ -43,7 +39,16 @@ module.exports = function setupI13n (Component, options, plugins) {
          * @method componentWillMount
          */
         componentWillMount: function () {
-            var reactI13n = ReactI13n.getInstance();
+            var reactI13n = new ReactI13n(options);
+            this._reactI13nInstance = reactI13n;
+            // we might have case to access reactI13n instance to execute event outside react components
+            // assign reactI13n to window
+            if (IS_CLIENT) {
+                window._reactI13nInstance = reactI13n;
+            }
+            plugins.forEach(function setPlugin(plugin) {
+                reactI13n.plug(plugin);
+            });
             reactI13n.createRootI13nNode();
         },
 
@@ -51,7 +56,8 @@ module.exports = function setupI13n (Component, options, plugins) {
             var props = Object.assign({}, {
                 i13n: {
                     executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode
+                    getI13nNode: this.getI13nNode,
+                    reactI13nInstance: this._reactI13nInstance
                 }
             }, this.props);
             return React.createElement(

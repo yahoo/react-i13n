@@ -10,7 +10,6 @@ var debug = debugLib('ReactI13n');
 var EventsQueue = require('./EventsQueue');
 var I13nNode = require('./I13nNode');
 var DEFAULT_HANDLER_TIMEOUT = 1000;
-var GLOBAL_OBJECT = ('client' === ENVIRONMENT) ? window : global;
 var ENVIRONMENT = (typeof window !== 'undefined') ? 'client' : 'server';
 
 // export the debug lib in client side
@@ -35,16 +34,12 @@ var ReactI13n = function ReactI13n (options) {
     debug('init', options);
     options = options || {};
     this._i13nNodeClass = 'function' === typeof options.i13nNodeClass ? options.i13nNodeClass : I13nNode;
-
     this._plugins = {};
     this._eventsQueues = {};
     this._isViewportEnabled = options.isViewportEnabled || false;
     this._rootModelData = options.rootModelData || {};
     this._handlerTimeout = options.handlerTimeout || DEFAULT_HANDLER_TIMEOUT;
     this._scrollableContainerId = options.scrollableContainerId || undefined;
-
-    // set itself to the global object so that we can get it anywhere by the static function getInstance
-    GLOBAL_OBJECT.reactI13n = this;
 };
 
 /**
@@ -54,7 +49,12 @@ var ReactI13n = function ReactI13n (options) {
  * @static
  */
 ReactI13n.getInstance = function getInstance () {
-    return GLOBAL_OBJECT.reactI13n;
+    if ('client' === ENVIRONMENT) {
+        return window._reactI13nInstance;
+    } else if ('production' !== process.env.NODE_ENV) {
+        console.warn('ReactI13n instance is not avaialble on server side with ReactI13n.getInstance, ' + 
+            'please use this.props.i13n or this.context.i13n to access ReactI13n utils');
+    }
 };
 
 /**
@@ -63,11 +63,11 @@ ReactI13n.getInstance = function getInstance () {
  */
 ReactI13n.prototype.createRootI13nNode = function createRootI13nNode () {
     var I13nNodeClass = this.getI13nNodeClass();
-    GLOBAL_OBJECT.rootI13nNode = new I13nNodeClass(null, this._rootModelData, false);
+    this._rootI13nNode = new I13nNodeClass(null, this._rootModelData, false);
     if ('client' === ENVIRONMENT) {
-        GLOBAL_OBJECT.rootI13nNode.setDOMNode(document.body);
+        this._rootI13nNode.setDOMNode(document.body);
     }
-    return GLOBAL_OBJECT.rootI13nNode;
+    return this._rootI13nNode;
 };
 
 /**
@@ -191,7 +191,7 @@ ReactI13n.prototype.getScrollableContainerDOMNode = function getScrollableContai
  * @return {Object} root react i13n node
  */
 ReactI13n.prototype.getRootI13nNode = function getRootI13nNode () {
-    return GLOBAL_OBJECT.rootI13nNode;
+    return this._rootI13nNode;
 };
 
 /**
