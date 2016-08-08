@@ -5,6 +5,7 @@
 /* global document, window*/
 var listen = require('subscribe-ui-event').listen;
 
+var supportClassList = false;
 var uniqueId = 0;
 
 function checkHidden (DOMNode) {
@@ -73,6 +74,9 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     var dashboard = document.createElement('div');
     var model = i13nNode.getMergedModel(true);
 
+    // check if browser support classList API
+    supportClassList = 'classList' in container;
+
     self.modelItemsListener = [];
 
     // compose model data
@@ -133,7 +137,7 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     dashboard.style['z-index'] = '1';
     dashboard.style['border-radius'] = '2px';
     dashboard.appendChild(dashboardContainer);
-    
+
     // generate trigger node
     triggerNode.innerHTML = '&#8964;';
     triggerNode.style.background = '#673ab7';
@@ -144,9 +148,15 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
         if ('none' === dashboard.style.display) {
             dashboard.style.display = 'block';
             container.style['z-index'] = '11';
+            if (supportClassList) {
+              container.classList.add('active');
+            }
         } else {
             dashboard.style.display = 'none';
             container.style['z-index'] = '10';
+            if (supportClassList) {
+              container.classList.remove('active');
+            }
         }
     });
 
@@ -164,6 +174,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     document.body.appendChild(container);
     uniqueId++;
     self.container = container;
+
+    if (supportClassList) {
+      document.documentElement.classList.add('i13n-debug-enabled');
+    }
 };
 
 DebugDashboard.prototype.destroy = function () {
