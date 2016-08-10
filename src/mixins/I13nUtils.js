@@ -1,5 +1,6 @@
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
+var IS_CLIENT = typeof window !== 'undefined';
 
 /**
  * React.js I13n Utils Mixin
@@ -12,7 +13,8 @@ var I13nUtils = {
         i13n: React.PropTypes.shape({
             executeEvent: React.PropTypes.func,
             getI13nNode: React.PropTypes.func,
-            parentI13nNode: React.PropTypes.object
+            parentI13nNode: React.PropTypes.object,
+            _reactI13nInstance: React.PropTypes.object
         })
     },
     
@@ -20,9 +22,11 @@ var I13nUtils = {
         i13n: React.PropTypes.shape({
             executeEvent: React.PropTypes.func,
             getI13nNode: React.PropTypes.func,
-            parentI13nNode: React.PropTypes.object
+            parentI13nNode: React.PropTypes.object,
+            _reactI13nInstance: React.PropTypes.object
         })
     },
+    
     
     /**
      * getChildContext
@@ -33,7 +37,8 @@ var I13nUtils = {
             i13n: {
                 executeEvent: this.executeI13nEvent,
                 getI13nNode: this.getI13nNode,
-                parentI13nNode: this._i13nNode
+                parentI13nNode: this._i13nNode,
+                _reactI13nInstance: this._getReactI13n()
             }
         };
     },
@@ -48,11 +53,23 @@ var I13nUtils = {
      */
     executeI13nEvent: function (eventName, payload, callback) {
         var reactI13nInstance = this._getReactI13n();
+        var errorMessage = '';
         payload = payload || {};
         payload.i13nNode = payload.i13nNode || this.getI13nNode();
         if (reactI13nInstance) {
             reactI13nInstance.execute(eventName, payload, callback);
         } else {
+            if ('production' !== process.env.NODE_ENV) {
+                errorMessage = 'ReactI13n instance is not found, ' + 
+                    'please make sure you have setupI13n on the root component. ';
+                if (!IS_CLIENT) {
+                    errorMessage += 'On server side, ' + 
+                        'you can only execute the i13n event on the components under setupI13n, ' + 
+                        'please make sure you are calling executeI13nEvent correctly';
+                }
+                console && console.warn && console.warn(errorMessage);
+                console && console.trace && console.trace();
+            }
             callback && callback();
         }
     },
@@ -63,9 +80,6 @@ var I13nUtils = {
      * @return {Object} i13n node
      */
     getI13nNode: function () {
-        if (!this._getReactI13n()) {
-            return;
-        }
         return this._i13nNode || this._getParentI13nNode();
     },
 
@@ -76,7 +90,13 @@ var I13nUtils = {
      * @return {Object} react i13n instance
      */
     _getReactI13n: function () {
-        return ReactI13n.getInstance();
+        var globalReactI13n;
+        if (IS_CLIENT) {
+            globalReactI13n = window._reactI13nInstance;
+        }
+        return this._reactI13nInstance || 
+            (this.context && this.context.i13n && this.context.i13n._reactI13nInstance) ||
+            globalReactI13n;
     },
 
     /**
@@ -86,9 +106,10 @@ var I13nUtils = {
      * @return {Object} parent i13n node
      */
     _getParentI13nNode: function () {
-        // https://twitter.com/andreypopp/status/578974316483608576, get the context from parent context
+        var reactI13n = this._getReactI13n();
         var context = this.context;
-        return (context && context.i13n && context.i13n.parentI13nNode) || this._getReactI13n().getRootI13nNode();
+        return (context && context.i13n && context.i13n.parentI13nNode) || 
+            (reactI13n && reactI13n.getRootI13nNode());
     }
 }
 

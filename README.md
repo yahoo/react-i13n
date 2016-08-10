@@ -86,7 +86,6 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 
-
 ## I13n Tree
 ![I13n Tree](https://cloud.githubusercontent.com/assets/3829183/7980892/0b38eb70-0a60-11e5-8cc2-712ec42089fc.png)
 
