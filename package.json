@@ -10,7 +10,7 @@
   "scripts": {
     "func": "./tests/functional/saucelabs.sh",
     "lint": "jshint",
-    "test": "grunt unit && grunt cover"
+    "test": "grunt cover"
   },
   "dependencies": {
     "debug": "^2.1.3",
