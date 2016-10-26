@@ -92,7 +92,7 @@ describe('setupI13n', function () {
         expect(I13nTestApp.displayName).to.eql('CustomName');
     });
 
-    it('should get i13n util functions via both props and context', function (done) {
+    it('should get i13n util functions via both props and context when passUtilFunctionsByProps is true', function (done) {
         var TestApp = React.createClass({
             displayName: 'TestApp',
             contextTypes: {
@@ -109,8 +109,8 @@ describe('setupI13n', function () {
                 return React.createElement('div');
             }
         });
-        var I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
+        var I13nTestApp = setupI13n(TestApp, {passUtilFunctionsByProps: true}, [mockData.plugin]);
         var container = document.createElement('div');
-        var component = ReactDOM.render(React.createElement(I13nTestApp, {}), container);
+        var component = ReactDOM.render(React.createElement(I13nTestApp), container);
     });
 });

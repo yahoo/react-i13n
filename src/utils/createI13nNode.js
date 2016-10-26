@@ -14,8 +14,9 @@ var hoistNonReactStatics = require('hoist-non-react-statics');
  * @param {Object|String} Component the component you want to create a i13nNode
  * @param {Object} defaultProps default props
  * @param {Object} options
- * @param {Object} options.displayName display name
- * @param {Object} options.refToWrappedComponent ref name to wrapped component
+ * @param {String} options.displayName display name
+ * @param {String} options.refToWrappedComponent ref name to wrapped component
+ * @param {Boolean} options.passUtilFunctionsByProps true to allow i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, defaultProps, options) {
@@ -56,36 +57,32 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          * @method render
          */
         render: function () {
-            var props = Object.assign({}, {
-                i13n: {
-                    executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode
-                }
-            }, this.props);
+            var self = this;
 
+            // filter props that's only meaningful for I13nComponent
+            var propsToFilter = {
+                i13nModel: true,
+                follow: true,
+                isLeafNode: true,
+                bindClickEvent: true,
+                scanLinks: true
+            };
+            var props = Object.keys(this.props).reduce(function reduceProps(propsMap, propName) {
+                if (!propsToFilter.hasOwnProperty(propName)) {
+                    propsMap[propName] = self.props[propName];
+                }
+                return propsMap;
+            }, {});
+            
             if (options.refToWrappedComponent) {
                 props.ref = options.refToWrappedComponent;
             }
-
-            // delete the props that only used in this level
-            props.i13nModel = undefined;
-
-            if (!componentIsFunction) {
-              // filter props to avoid to pass unknown props to components such <a> or <button>
-              var propsToFilter = {
-                  i13n: true,
-                  i13nModel: true,
-                  follow: true,
-                  isLeafNode: true,
-                  bindClickEvent: true,
-                  scanLinks: true
-              };
-              props = Object.keys(props).reduce(function reduceProps(propsMap, propName) {
-                  if (!propsToFilter.hasOwnProperty(propName)) {
-                    propsMap[propName] = props[propName];
-                  }
-                  return propsMap;
-              }, {});
+            
+            if (options.passUtilFunctionsByProps) {
+                props.i13n = {
+                    executeEvent: this.executeI13nEvent,
+                    getI13nNode: this.getI13nNode
+                };
             }
 
             return React.createElement(
