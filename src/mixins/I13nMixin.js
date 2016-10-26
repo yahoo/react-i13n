@@ -97,10 +97,10 @@ var I13nMixin = {
     componentDidMount: function () {
         var self = this;
 
-        if (!self._getReactI13n()) {
+        var reactI13n = self._getReactI13n();
+        if (!reactI13n) {
             return;
         }
-        var reactI13n = self._getReactI13n();
 
         // bind the click event for i13n component if it's enabled
         if (self.props.bindClickEvent) {
@@ -138,6 +138,9 @@ var I13nMixin = {
      * @method componentWillMount
      */
     componentWillMount: function () {
+        if (!this._getReactI13n()) {
+            return;
+        }
         clearTimeout(pageInitViewportDetectionTimeout);
         this._createI13nNode();
         this._i13nNode.setReactComponent(this);
@@ -188,7 +191,7 @@ var I13nMixin = {
         var foundElements = [];
         var reactI13n = self._getReactI13n();
         var scanTags = (self.props.scanLinks && self.props.scanLinks.tags) || DEFAULT_SCAN_TAGS;
-        if (!DOMNode) {
+        if (!DOMNode || !reactI13n) {
             return;
         }
         self._subI13nComponents = [];
@@ -217,7 +220,7 @@ var I13nMixin = {
                 i13nNode: i13nNode,
                 debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null
             });
-            self._getReactI13n().execute('created', {i13nNode: i13nNode});
+            reactI13n.execute('created', {i13nNode: i13nNode});
         });
     },
 
@@ -329,6 +332,9 @@ var I13nMixin = {
     _pageInitViewportDetection: function () {
         debug('page init viewport detection');
         var reactI13n = this._getReactI13n();
+        if (!reactI13n) {
+            return;
+        }
         var rootI13nNode = reactI13n.getRootI13nNode();
         // we don't have react component for root node, start from it's children
         rootI13nNode.getChildrenNodes().forEach(function detectRootChildrenViewport (childNode) {
