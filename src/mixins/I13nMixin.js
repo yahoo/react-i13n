@@ -97,10 +97,10 @@ var I13nMixin = {
     componentDidMount: function () {
         var self = this;
 
-        if (!self._getReactI13n()) {
+        var reactI13n = self._getReactI13n();
+        if (!reactI13n) {
             return;
         }
-        var reactI13n = self._getReactI13n();
 
         // bind the click event for i13n component if it's enabled
         if (self.props.bindClickEvent) {
@@ -329,7 +329,12 @@ var I13nMixin = {
     _pageInitViewportDetection: function () {
         debug('page init viewport detection');
         var reactI13n = this._getReactI13n();
-        var rootI13nNode = reactI13n.getRootI13nNode();
+        var rootI13nNode = reactI13n && reactI13n.getRootI13nNode && reactI13n.getRootI13nNode();
+        if (!rootI13nNode) {
+            // return if rootI13nNode not found in any case
+            // known issue for unit testing, this happens when the next test already happens
+            return;
+        }
         // we don't have react component for root node, start from it's children
         rootI13nNode.getChildrenNodes().forEach(function detectRootChildrenViewport (childNode) {
             childNode.getReactComponent()._recursiveDetectViewport();
