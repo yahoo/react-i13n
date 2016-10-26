@@ -16,7 +16,7 @@ var hoistNonReactStatics = require('hoist-non-react-statics');
  * @param {Object} options
  * @param {String} options.displayName display name
  * @param {String} options.refToWrappedComponent ref name to wrapped component
- * @param {Boolean} options.passUtilFunctionsByProps true to allow i13n util function to be passed via props.i13n
+ * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, defaultProps, options) {
@@ -78,7 +78,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
                 props.ref = options.refToWrappedComponent;
             }
             
-            if (options.passUtilFunctionsByProps) {
+            if (!options.skipUtilFunctionsByProps && componentIsFunction) {
                 props.i13n = {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode

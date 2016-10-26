@@ -257,7 +257,7 @@ describe('createI13nNode', function () {
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {scanLinks: {enable: true}}), container);
     });
 
-    it('should able to use props.getI13nNode to get the nearest i13n node when passUtilFunctionsByProps is true', function () {
+    it('should able to use props.getI13nNode to get the nearest i13n node', function () {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
             render: function() {
@@ -270,12 +270,12 @@ describe('createI13nNode', function () {
         mockData.reactI13n.execute = function (eventName) {
         };
         mockData.isViewportEnabled = false;
-        var I13nTestComponent = createI13nNode(TestComponent, {}, {passUtilFunctionsByProps: true});
+        var I13nTestComponent = createI13nNode(TestComponent, {});
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {foo: 'bar'}}), container);
     });
 
-    it('should able to use props.executeEvent to execute i13n event when passUtilFunctionsByProps is true', function (done) {
+    it('should able to use props.executeEvent to execute i13n event', function (done) {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
             render: function() {
@@ -292,7 +292,7 @@ describe('createI13nNode', function () {
             }
         };
         mockData.isViewportEnabled = false;
-        var I13nTestComponent = createI13nNode(TestComponent, {}, {passUtilFunctionsByProps: true});
+        var I13nTestComponent = createI13nNode(TestComponent, {});
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {foo: 'bar'}}), container);
     });
@@ -398,7 +398,7 @@ describe('createI13nNode', function () {
         expect(I13nTestComponent).to.eql(undefined);
     });
     
-    it('should not get any i13n related props on wrapped component by default', function (done) {
+    it('should not get any i13n related props on wrapped component if skipUtilFunctionsByProps=true', function (done) {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
             contextTypes: {
@@ -416,13 +416,13 @@ describe('createI13nNode', function () {
             }
         });
 
-        var I13nTestComponent = createI13nNode(TestComponent);
+        var I13nTestComponent = createI13nNode(TestComponent, {}, {skipUtilFunctionsByProps: true});
         mockData.reactI13n.execute = function (eventName) {}
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestComponent, {i13nModel: {sec: 'foo'}}), container);
     });
 
-    it('should get i13n util functions via both props and context when passUtilFunctionsByProps is true', function (done) {
+    it('should get i13n util functions via both props and context', function (done) {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
             contextTypes: {
@@ -441,7 +441,7 @@ describe('createI13nNode', function () {
         });
 
         // check the initial state is correct after render
-        var I13nTestComponent = createI13nNode(TestComponent, {}, {passUtilFunctionsByProps: true});
+        var I13nTestComponent = createI13nNode(TestComponent, {});
         mockData.reactI13n.execute = function (eventName) {
             // should get a created event
             expect(eventName).to.eql('created');
