@@ -96,7 +96,6 @@ var I13nMixin = {
      */
     componentDidMount: function () {
         var self = this;
-
         var reactI13n = self._getReactI13n();
         if (!reactI13n) {
             return;

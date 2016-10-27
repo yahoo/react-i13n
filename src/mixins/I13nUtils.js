@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
-var IS_CLIENT = typeof window !== 'undefined';
 
 /**
  * React.js I13n Utils Mixin
@@ -62,7 +61,7 @@ var I13nUtils = {
             if ('production' !== process.env.NODE_ENV) {
                 errorMessage = 'ReactI13n instance is not found, ' + 
                     'please make sure you have setupI13n on the root component. ';
-                if (!IS_CLIENT) {
+                if (typeof window === 'undefined') {
                     errorMessage += 'On server side, ' + 
                         'you can only execute the i13n event on the components under setupI13n, ' + 
                         'please make sure you are calling executeI13nEvent correctly';
@@ -91,7 +90,7 @@ var I13nUtils = {
      */
     _getReactI13n: function () {
         var globalReactI13n;
-        if (IS_CLIENT) {
+        if (typeof window !== 'undefined') {
             globalReactI13n = window._reactI13nInstance;
         }
         return this._reactI13nInstance || 

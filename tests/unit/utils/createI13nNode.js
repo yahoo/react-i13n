@@ -435,7 +435,6 @@ describe('createI13nNode', function () {
                 expect(this.context.i13n).to.be.an('object');
                 expect(this.context.i13n.executeEvent).to.be.a('function');
                 expect(this.context.i13n.getI13nNode).to.be.a('function');
-                done();
                 return React.createElement('div');
             }
         });
@@ -444,7 +443,9 @@ describe('createI13nNode', function () {
         var I13nTestComponent = createI13nNode(TestComponent, {});
         mockData.reactI13n.execute = function (eventName) {
             // should get a created event
+            console.log(eventName);
             expect(eventName).to.eql('created');
+            done();
         }
         expect(I13nTestComponent.displayName).to.eql('I13nTestComponent');
         var container = document.createElement('div');

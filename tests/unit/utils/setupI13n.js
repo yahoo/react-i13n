@@ -57,6 +57,9 @@ describe('setupI13n', function () {
     });
 
     afterEach(function () {
+        delete global.window;
+        delete global.document;
+        delete global.navigator;
         mockery.disable();
     });
 
