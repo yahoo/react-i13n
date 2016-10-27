@@ -8,6 +8,27 @@
 var React = require('react');
 var I13nMixin = require('../mixins/I13nMixin');
 var hoistNonReactStatics = require('hoist-non-react-statics');
+var PROPS_TO_FILTER = [
+    'bindClickEvent',
+    'follow',
+    'i13nModel',
+    'isLeafNode',
+    'scanLinks'
+];
+
+function objectWithoutProperties(obj, keys) {
+    var target = {};
+    for (var i in obj) {
+        if (keys.indexOf(i) >= 0) {
+            continue;
+        }
+        if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+            continue;
+        }
+        target[i] = obj[i];
+    }
+    return target;
+}
 
 /**
  * createI13nNode higher order function to create a Component with I13nNode functionality
@@ -57,22 +78,8 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          * @method render
          */
         render: function () {
-            var self = this;
-
-            // filter props that's only meaningful for I13nComponent
-            var propsToFilter = {
-                i13nModel: true,
-                follow: true,
-                isLeafNode: true,
-                bindClickEvent: true,
-                scanLinks: true
-            };
-            var props = Object.keys(this.props).reduce(function reduceProps(propsMap, propName) {
-                if (!propsToFilter.hasOwnProperty(propName)) {
-                    propsMap[propName] = self.props[propName];
-                }
-                return propsMap;
-            }, {});
+            // filter i13n related props
+            var props = objectWithoutProperties(this.props, PROPS_TO_FILTER);
             
             if (options.refToWrappedComponent) {
                 props.ref = options.refToWrappedComponent;
