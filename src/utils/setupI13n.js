@@ -17,6 +17,7 @@ var IS_CLIENT = typeof window !== 'undefined';
  * @param {Object} options.rootModelData model data of root i13n node
  * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
  * @param {Object} options.displayName display name of the wrapper component
+ * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @param {Array} plugins plugins
  * @method setupI13n
  */
@@ -53,13 +54,14 @@ module.exports = function setupI13n (Component, options, plugins) {
         },
 
         render: function () {
-            var props = Object.assign({}, {
-                i13n: {
+            var props = Object.assign({}, this.props);
+            if (!options.skipUtilFunctionsByProps) {
+                props.i13n = {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode,
                     reactI13nInstance: this._reactI13nInstance
-                }
-            }, this.props);
+                };
+            }
             return React.createElement(
                 Component,
                 props,

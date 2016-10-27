@@ -57,6 +57,9 @@ describe('setupI13n', function () {
     });
 
     afterEach(function () {
+        delete global.window;
+        delete global.document;
+        delete global.navigator;
         mockery.disable();
     });
 
@@ -109,8 +112,25 @@ describe('setupI13n', function () {
                 return React.createElement('div');
             }
         });
-        var I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
+        var I13nTestApp = setupI13n(TestApp, [mockData.plugin]);
         var container = document.createElement('div');
-        var component = ReactDOM.render(React.createElement(I13nTestApp, {}), container);
+        var component = ReactDOM.render(React.createElement(I13nTestApp), container);
+    });
+    
+    it('should not get i13n util functions via props if skipUtilFunctionsByProps=true', function (done) {
+        var TestApp = React.createClass({
+            displayName: 'TestApp',
+            contextTypes: {
+                i13n: React.PropTypes.object
+            },
+            render: function() {
+                expect(this.props.i13n).to.equal(undefined);
+                done();
+                return React.createElement('div');
+            }
+        });
+        var I13nTestApp = setupI13n(TestApp, {skipUtilFunctionsByProps: true}, [mockData.plugin]);
+        var container = document.createElement('div');
+        var component = ReactDOM.render(React.createElement(I13nTestApp), container);
     });
 });
