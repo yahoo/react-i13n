@@ -85,7 +85,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
                 props.ref = options.refToWrappedComponent;
             }
             
-            if (!options.skipUtilFunctionsByProps && componentIsFunction) {
+            if (!props.i13n && !options.skipUtilFunctionsByProps && componentIsFunction) {
                 props.i13n = {
                     executeEvent: this.executeI13nEvent,
                     getI13nNode: this.getI13nNode
