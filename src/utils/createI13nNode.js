@@ -11,6 +11,7 @@ var hoistNonReactStatics = require('hoist-non-react-statics');
 var PROPS_TO_FILTER = [
     'bindClickEvent',
     'follow',
+    'followLink',
     'i13nModel',
     'isLeafNode',
     'scanLinks'

@@ -472,6 +472,7 @@ describe('createI13nNode', function () {
         };
         var I13nTestComponent = createI13nNode('a', {
             follow: true,
+            followLink: true,
             isLeafNode: true,
             bindClickEvent: true,
             scanLinks: {enable: true}
