@@ -80,6 +80,9 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
          */
         render: function () {
             // filter i13n related props
+            if ('production' !== process.env.NODE_ENV && undefined !== this.props.followLink) {
+                console && console.warn && console.warn('props.followLink support is deprecated, please use props.follow instead.');
+            }
             var props = objectWithoutProperties(this.props, PROPS_TO_FILTER);
             
             if (options.refToWrappedComponent) {

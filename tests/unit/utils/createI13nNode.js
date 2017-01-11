@@ -40,6 +40,8 @@ var mockSubscribe = {
     }
 };
 var mockClickHandler = function () {};
+var oldWarn = console.warn;
+var oldTrace = console.trace;
 
 function findProps(elem) {
     try {
@@ -98,6 +100,8 @@ describe('createI13nNode', function () {
         delete global.document;
         delete global.navigator;
         mockery.disable();
+        console.warn = oldWarn;
+        console.trace = oldTrace;
     });
 
     it('should generate a component with createI13nNode', function (done) {
@@ -469,6 +473,9 @@ describe('createI13nNode', function () {
         var props = {
             i13nModel: {sec: 'foo'},
             href: '#/foobar'
+        };
+        console.warn = function (msg) {
+            expect(msg).to.equal('props.followLink support is deprecated, please use props.follow instead.');
         };
         var I13nTestComponent = createI13nNode('a', {
             follow: true,
