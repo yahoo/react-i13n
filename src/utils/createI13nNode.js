@@ -6,7 +6,6 @@
 'use strict';
 
 var React = require('react');
-var I13nMixin = require('../mixins/I13nMixin');
 var hoistNonReactStatics = require('hoist-non-react-statics');
 var PROPS_TO_FILTER = [
     'bindClickEvent',
@@ -16,6 +15,7 @@ var PROPS_TO_FILTER = [
     'isLeafNode',
     'scanLinks'
 ];
+var ComponentSpecs = require('../libs/ComponentSpecs');
 
 function objectWithoutProperties(obj, keys) {
     var target = {};
@@ -31,6 +31,16 @@ function objectWithoutProperties(obj, keys) {
     return target;
 }
 
+function mixin(target, source) {
+    target = target.prototype;
+    source = source;
+    Object.getOwnPropertyNames(source).forEach(function (name) {
+        if (name !== "constructor") {
+            Object.defineProperty(target, name, Object.getOwnPropertyDescriptor(source, name));
+        }
+    });
+}
+
 /**
  * createI13nNode higher order function to create a Component with I13nNode functionality
  * @param {Object|String} Component the component you want to create a i13nNode
@@ -42,6 +52,7 @@ function objectWithoutProperties(obj, keys) {
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, defaultProps, options) {
+
     if (!Component) {
         if ('production' !== process.env.NODE_ENV) {
             console && console.warn && console.warn('You are passing a null component into createI13nNode');
@@ -51,34 +62,21 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
     }
     var componentName = Component.displayName || Component.name || Component;
     var componentIsFunction = 'function' === typeof Component;
-    defaultProps = defaultProps || {};
+    defaultProps = Object.assign({}, {
+        i13nModel: null,
+        isLeafNode: false,
+        bindClickEvent: false,
+        follow: false,
+        scanLinks: null
+    }, defaultProps);
+
     options = options || {};
 
-    var I13nComponent = React.createClass({
-        displayName: options.displayName || ('I13n' + componentName),
-        mixins: [I13nMixin],
-        autobind: false,
-
-        /**
-         * getDefaultProps
-         * @method getDefaultProps
-         * @return {Object} default props
-         */
-        getDefaultProps: function () {
-            return Object.assign({}, {
-                i13nModel: null,
-                isLeafNode: false,
-                bindClickEvent: false,
-                follow: false,
-                scanLinks: null
-            }, defaultProps);
-        },
-
-        /**
-         * render
-         * @method render
-         */
-        render: function () {
+    class I13nComponent extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+        render () {
             // filter i13n related props
             if ('production' !== process.env.NODE_ENV && undefined !== this.props.followLink) {
                 console && console.warn && console.warn('props.followLink support is deprecated, please use props.follow instead.');
@@ -91,8 +89,8 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
             
             if (!props.i13n && !options.skipUtilFunctionsByProps && componentIsFunction) {
                 props.i13n = {
-                    executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode
+                    executeEvent: this.executeI13nEvent.bind(this),
+                    getI13nNode: this.getI13nNode.bind(this)
                 };
             }
 
@@ -102,7 +100,14 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
                 props.children
             );
         }
-    });
+    }
+    
+    mixin(I13nComponent, ComponentSpecs.pickSpecs());
+
+    I13nComponent.displayName = options.displayName || ('I13n' + componentName);
+    I13nComponent.defaultProps = defaultProps;
+
+    I13nComponent = Object.assign(I13nComponent, ComponentSpecs.staticSpecs);
 
     if (componentIsFunction) {
         hoistNonReactStatics(I13nComponent, Component);

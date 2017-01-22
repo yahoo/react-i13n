@@ -5,7 +5,7 @@
 /* globals describe,it,document,beforeEach,afterEach */
 'use strict';
 
-/* I13nMixin, I13nUtils, ViewportMixin are mainly tested with this higher order component */
+/* All the functionalities are tested with this higher order component */
 var expect = require('expect.js');
 var jsdom = require('jsdom');
 var mockery = require('mockery');
@@ -14,7 +14,6 @@ var rootI13nNode = null;
 var React;
 var ReactDOM;
 var createI13nNode;
-var I13nUtils;
 var mockData = {
     options: {},
     reactI13n: {},
@@ -70,12 +69,12 @@ describe('createI13nNode', function () {
             ReactDOM = require('react-dom');
 
             mockery.registerMock('../libs/ReactI13n', MockReactI13n);
-            mockery.registerMock('subscribe-ui-event', mockSubscribe);
-            mockery.registerMock('../utils/clickHandler', mockClickHandler);
+            mockery.registerMock('subscribe-ui-event/dist/subscribe', mockSubscribe.subscribe);
+            mockery.registerMock('subscribe-ui-event/dist/listen', mockSubscribe.listen);
+            mockery.registerMock('../libs/clickHandler', mockClickHandler);
 
             createI13nNode = require('../../../../dist/utils/createI13nNode');
             I13nNode = require('../../../../dist/libs/I13nNode');
-            I13nUtils = require('../../../../dist/mixins/I13nUtils');
 
             rootI13nNode = new I13nNode(null, {});
             mockData.reactI13n = {

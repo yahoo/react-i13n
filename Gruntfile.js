@@ -280,6 +280,8 @@ module.exports = function (grunt) {
 
     // similar to functional, but don't run protractor, just open the test page
     grunt.registerTask('functional-debug', [
+        'clean:dist',
+        'babel:dist',
         'atomizer:functional',
         'babel:functional',
         'webpack:functional',

@@ -22,7 +22,7 @@ describe('clickHandler', function () {
             global.navigator = window.navigator;
 
             React = require('react');
-            clickHandler = require('../../../../dist/utils/clickHandler');
+            clickHandler = require('../../../../dist/libs/clickHandler');
             mockClickEvent = {
                 target: {
                 },

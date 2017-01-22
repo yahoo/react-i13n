@@ -15,7 +15,7 @@ describe('clickHandler', function () {
             global.window = window;
             global.document = window.document;
             global.navigator = window.navigator;
-            DebugDashboard = require('../../../../dist/utils/DebugDashboard');
+            DebugDashboard = require('../../../../dist/libs/DebugDashboard');
             done();
         });
     });
