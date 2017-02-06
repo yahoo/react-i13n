@@ -146,9 +146,9 @@ $ browserify index.js -t [ envify --NODE_ENV production  ] | uglifyjs -c > bundl
    * `grunt functional-debug`
    * check functional testing result on `http://127.0.0.1:9999/tests/functional/page.html`
 * run functional test on `saucelabs`:
+   * make sure you have a saucelab account setup, get the user id ane the access key
    * setup [sauce-connect](https://docs.saucelabs.com/reference/sauce-connect/)
-   * `grunt functional`
-
+   * `SAUCE_USERNAME={id} SAUCE_ACCESS_KEY={accessKey} grunt functional`
 
 ## License
 

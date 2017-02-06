@@ -190,6 +190,7 @@ var testPlugin = {
         }
     }
 };
+try {
 I13nDemo = setupI13n(I13nDemo,
     {
         isViewportEnabled: true,
@@ -201,3 +202,6 @@ I13nDemo = setupI13n(I13nDemo,
     [testPlugin]
 );
 var Demo = ReactDOM.render(<I13nDemo />, container);
+} catch (e) {
+    alert(e);
+}
