@@ -34,7 +34,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-saucelabs": "^9.0.0",
     "grunt-shell": "^2.0.0",
-    "grunt-webpack": "^1.0.17",
+    "grunt-webpack": "^2.0.1",
     "istanbul": "^0.4.0",
     "jsdom": "^9.8.3",
     "jshint": "^2.9.4",
@@ -46,7 +46,7 @@
     "promise": "^7.0.1",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
-    "webpack": "^1.13.1",
+    "webpack": "^2.2.1",
     "xunit-file": "~1.0.0"
   },
   "keywords": [

@@ -151,7 +151,7 @@ module.exports = function (grunt) {
                     path: './<%= project.functional %>/'
                 },
                 module: {
-                    loaders: [
+                    rules: [
                         { test: /\.css$/, loader: 'style!css' },
                         { test: /\.jsx$/, loader: 'jsx-loader' },
                         { test: /\.json$/, loader: 'json-loader'}
