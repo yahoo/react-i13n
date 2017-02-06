@@ -94,6 +94,19 @@ Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 
 Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
 
+## Performance
+
+The performance has always been a topic we are working on, and yes it's an overhead to create an additional react component wrapping the link, the performance benchmark as below:
+
+```
+link-without-react-component x 131,232 ops/sec ±1.08% (82 runs sampled)
+link-wrapped-with-react-component x 111,056 ops/sec ±1.55% (88 runs sampled)
+link-wrapped-with-react-component-with-i13n-mixin x 54,357 ops/sec ±1.01% (79 runs sampled)
+link-wrapped-with-react-component-with-i13n-high-order-component x 64,422 ops/sec ±1.95% (84 runs sampled)
+```
+
+We recommend to use [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) instead of I13nMixin as it performs better. As the benchmark result, on server side, rendering `64` react components with i13n functionalities takes `1 ms`. Let's say it takes `3 ms` overhead if you have `200` links on the page. That's a trade off if you want to organize i13n implementation better with react-i13n. We are working on performance improvement, if you have any insight or performance benchmark, please let us know!
+
 ## Presentation
 Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608) from a recent React meetup to understand more.
 
