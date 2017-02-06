@@ -7,6 +7,6 @@ tmp/
 dist/
 *.log
 *.tap
-tests/functional/bundle.js
+tests/functional/main.js
 tests/functional/i13n-functional.js
 tests/functional/css/
