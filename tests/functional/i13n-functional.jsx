@@ -18,13 +18,12 @@ function getJsonFromUrl() {
 var container = document.getElementById('container');
 var itemsNumber = getJsonFromUrl().items || 1;
 
-
 var I13nComponentLevel1 = React.createClass({
     render: function () {
         var links = [];
         for (var i = 0; i < itemsNumber; i++) {
             var linkText = 'Button Level1 ' + i;
-            var linkSec = 'level1-' + i
+            var linkSec = 'level1-' + i;
             links.push(
                 <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{sec:linkSec, lv1: 'foo'}}>
                     {linkText}

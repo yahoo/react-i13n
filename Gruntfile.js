@@ -91,6 +91,10 @@ module.exports = function (grunt) {
         },
         // compiles jsx to js
         babel: {
+            options: {
+                plugins: ['transform-react-jsx'],
+                presets: ['es2015', 'react']
+            },
             dist: {
                 files: [
                     {
