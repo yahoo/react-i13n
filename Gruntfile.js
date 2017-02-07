@@ -70,7 +70,7 @@ module.exports = function (grunt) {
                     {
                         dot: true,
                         src: [
-                            '<%= project.functional %>/bundle.js',
+                            '<%= project.functional %>/main.js',
                             '<%= project.functional %>/css/atomic.css',
                             '<%= project.functional %>/console.js',
                             '<%= project.functional %>/*-functional.js'
@@ -174,7 +174,7 @@ module.exports = function (grunt) {
                     base: ['<%= project.functional %>', '.']
                 }
             },
-            functionalOpen: {
+       functionalOpen: {
                 options: {
                     port: 9999,
                     base: ['<%= project.functional %>', '.'],
@@ -227,28 +227,18 @@ module.exports = function (grunt) {
                         },
                         {
                             browserName: 'chrome',
-                            platform: 'Windows 7',
-                            version: '37'
+                            platform: 'Windows 10',
+                            version: '49'
                         },
                         {
                             browserName: 'firefox',
                             platform: 'Windows 7',
-                            version: '32'
-                        },
-                        {
-                            browserName: 'iphone',
-                            platform: 'OS X 10.9',
-                            version: '7.1'
-                        },
-                        {
-                            browserName: 'android',
-                            platform: 'Linux',
-                            version: '4.4'
+                            version: '50'
                         },
                         {
                             browserName: 'safari',
-                            platform: 'OS X 10.9',
-                            version: '7'
+                            platform: 'OS X 10.11',
+                            version: '10.0'
                         }
                     ]
                 }
