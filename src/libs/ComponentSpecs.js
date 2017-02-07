@@ -5,23 +5,36 @@
 /* globals location */
 'use strict';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-
 require('setimmediate');
 
 var DebugDashboard = require('./DebugDashboard');
 var I13nNode = require('./I13nNode');
+var React = require('react');
+var ReactDOM = require('react-dom');
 var ReactI13n = require('./ReactI13n');
 var ViewportDetector = require('./ViewportDetector');
 var clickHandler = require('./clickHandler');
 var debug = require('debug')('I13nComponent');
-var subscribe = require('subscribe-ui-event').subscribe;
-var listen = require('subscribe-ui-event').listen;
+var listen = require('subscribe-ui-event/dist/lib/listen');
+var subscribe = require('subscribe-ui-event/dist/subscribe');
 
-var IS_DEBUG_MODE = isDebugMode();
+var IS_DEBUG_MODE = (function isDebugMode () {
+    function getJsonFromUrl() {
+        var query = location.search.substr(1);
+        var result = {};
+        query.split('&').forEach(function(part) {
+            var item = part.split('=');
+            result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+    }
+
+    if ('undefined' === typeof location) {
+        return false;
+    }
+    return (getJsonFromUrl().i13n_debug === '1') ? true : false;
+})();
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
-
 var pageInitViewportDetectionTimeout = null;
 var pageInitViewportDetected = false;
 
@@ -39,24 +52,6 @@ function convertToArray (arr) {
         }
         return result;
     }
-}
-
-function isDebugMode () {
-    function getJsonFromUrl() {
-        var query = location.search.substr(1);
-        var result = {};
-        query.split('&').forEach(function(part) {
-            var item = part.split('=');
-            result[item[0]] = decodeURIComponent(item[1]);
-        });
-        return result;
-    }
-
-    if ('undefined' === typeof location) {
-        return false;
-    }
-
-    return (getJsonFromUrl().i13n_debug === '1') ? true : false;
 }
 
 var staticSpecs = {
@@ -99,7 +94,7 @@ var staticSpecs = {
     }
 };
 
-var basicSpecs = {
+var prototypeSpecs = {
     /**
      * getChildContext
      * @method getChildContext
@@ -495,18 +490,40 @@ var basicSpecs = {
     }
 };
 
-var pickSpecs = function (specs) {
-    var pickedSpecs = {};
-    if (!specs) {
-        return basicSpecs;
+/**
+ * Pick prototype and static specs for components, return all if specs is not set
+ * @method pickSpecs
+ * @param (Object) specs picking specs
+ * @param (Object) specs.prototype picking prototype specs
+ * @param (Object) specs.static picking static specs
+ * @returns picked specs
+ */
+var pickSpecs = function pickSpecs (specs) {
+    specs = specs || {};
+    var picked = {
+        prototype: {},
+        static: {}
+    };
+
+    if (!specs.prototype) {
+        picked.prototype = prototypeSpecs;
+    } else {
+        specs.prototype.forEach(function (spec) {
+            picked.prototype[spec] = prototypeSpecs[spec];
+        });
     }
-    specs.forEach(function (spec) {
-        pickedSpecs[spec] = basicSpecs[spec];
-    });
-    return pickedSpecs;
+
+    if (!specs.static) {
+        picked.static = staticSpecs;
+    } else {
+        specs.static.forEach(function (spec) {
+            picked.static[spec] = staticSpecs[spec];
+        });
+    }
+
+    return picked;
 }
 
 module.exports = {
-    pickSpecs: pickSpecs,
-    staticSpecs: staticSpecs
+    pickSpecs: pickSpecs
 };

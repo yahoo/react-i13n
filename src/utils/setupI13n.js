@@ -5,9 +5,9 @@
 'use strict';
 
 var ComponentSpecs = require('../libs/ComponentSpecs');
-var componentMixin = require('./componentMixin');
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
+var augmentComponent = require('./augmentComponent');
 var hoistNonReactStatics = require('hoist-non-react-statics');
 var IS_CLIENT = typeof window !== 'undefined';
 
@@ -63,21 +63,25 @@ module.exports = function setupI13n (Component, options, plugins) {
         }
     }
     
-    componentMixin(RootI13nComponent, ComponentSpecs.pickSpecs([
-        'getChildContext',
-        'executeI13nEvent',
-        'getI13nNode',
-        '_getReactI13n',
-        '_getParentI13nNode',
-    ]));
-    
-    RootI13nComponent = Object.assign(RootI13nComponent, {
-        contextTypes: ComponentSpecs.staticSpecs.contextTypes,
-        childContextTypes: ComponentSpecs.staticSpecs.childContextTypes
+    var specs = ComponentSpecs.pickSpecs({
+        prototype: [
+            'getChildContext',
+            'executeI13nEvent',
+            'getI13nNode',
+            '_getReactI13n',
+            '_getParentI13nNode',
+        ],
+        static: [
+            'contextTypes',
+            'childContextTypes'
+        ]
     });
-    
+
     var componentName = Component.displayName || Component.name;
-    RootI13nComponent.displayName = options.displayName || ('RootI13n' + componentName);
+    augmentComponent(RootI13nComponent, specs.prototype, Object.assign({}, specs.static, {
+        displayName: options.displayName || ('RootI13n' + componentName)
+    }));
+ 
     hoistNonReactStatics(RootI13nComponent, Component);
 
     return RootI13nComponent;

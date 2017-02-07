@@ -5,9 +5,10 @@
  */
 'use strict';
 
+var ComponentSpecs = require('../libs/ComponentSpecs');
 var React = require('react');
 var hoistNonReactStatics = require('hoist-non-react-statics');
-var componentMixin = require('./componentMixin');
+var augmentComponent = require('./augmentComponent');
 var PROPS_TO_FILTER = [
     'bindClickEvent',
     'follow',
@@ -16,7 +17,6 @@ var PROPS_TO_FILTER = [
     'isLeafNode',
     'scanLinks'
 ];
-var ComponentSpecs = require('../libs/ComponentSpecs');
 
 function objectWithoutProperties(obj, keys) {
     var target = {};
@@ -92,13 +92,13 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
             );
         }
     }
-    
-    componentMixin(I13nComponent, ComponentSpecs.pickSpecs());
 
-    I13nComponent.displayName = options.displayName || ('I13n' + componentName);
-    I13nComponent.defaultProps = defaultProps;
+    var specs = ComponentSpecs.pickSpecs();
 
-    I13nComponent = Object.assign(I13nComponent, ComponentSpecs.staticSpecs);
+    augmentComponent(I13nComponent, specs.prototype, Object.assign({}, specs.static, {
+        displayName: options.displayName || ('I13n' + componentName),
+        defaultProps: defaultProps
+    }));
 
     if (componentIsFunction) {
         hoistNonReactStatics(I13nComponent, Component);

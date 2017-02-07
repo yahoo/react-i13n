@@ -4,6 +4,7 @@
  */
 'use strict';
 var ComponentSpecs = require('../libs/ComponentSpecs');
+var specs = ComponentSpecs.pickSpecs();
 
-// export I13nMixin for BC, will recommend to get spec from ComponentSpecs directly instead of using mixin
-module.exports = Object.assign({}, ComponentSpecs.pickSpecs(), ComponentSpecs.staticSpecs);
+// export I13nMixin for BC, will recommend to use createI13nNode instead of using mixin
+module.exports = Object.assign({}, specs.prototype, specs.static);
