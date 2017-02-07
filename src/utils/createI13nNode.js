@@ -7,6 +7,7 @@
 
 var React = require('react');
 var hoistNonReactStatics = require('hoist-non-react-statics');
+var componentMixin = require('./componentMixin');
 var PROPS_TO_FILTER = [
     'bindClickEvent',
     'follow',
@@ -29,16 +30,6 @@ function objectWithoutProperties(obj, keys) {
         target[i] = obj[i];
     }
     return target;
-}
-
-function mixin(target, source) {
-    target = target.prototype;
-    source = source;
-    Object.getOwnPropertyNames(source).forEach(function (name) {
-        if (name !== "constructor") {
-            Object.defineProperty(target, name, Object.getOwnPropertyDescriptor(source, name));
-        }
-    });
 }
 
 /**
@@ -102,7 +93,7 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
         }
     }
     
-    mixin(I13nComponent, ComponentSpecs.pickSpecs());
+    componentMixin(I13nComponent, ComponentSpecs.pickSpecs());
 
     I13nComponent.displayName = options.displayName || ('I13n' + componentName);
     I13nComponent.defaultProps = defaultProps;

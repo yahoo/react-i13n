@@ -5,20 +5,11 @@
 'use strict';
 
 var ComponentSpecs = require('../libs/ComponentSpecs');
+var componentMixin = require('./componentMixin');
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
 var hoistNonReactStatics = require('hoist-non-react-statics');
 var IS_CLIENT = typeof window !== 'undefined';
-
-function mixin(target, source) {
-    target = target.prototype;
-    source = source;
-    Object.getOwnPropertyNames(source).forEach(function (name) {
-        if (name !== "constructor") {
-            Object.defineProperty(target, name, Object.getOwnPropertyDescriptor(source, name));
-        }
-    });
-}
 
 /**
  * Create an app level component with i13n setup
@@ -72,7 +63,7 @@ module.exports = function setupI13n (Component, options, plugins) {
         }
     }
     
-    mixin(RootI13nComponent, ComponentSpecs.pickSpecs([
+    componentMixin(RootI13nComponent, ComponentSpecs.pickSpecs([
         'getChildContext',
         'executeI13nEvent',
         'getI13nNode',
