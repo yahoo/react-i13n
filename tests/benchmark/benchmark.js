@@ -20,6 +20,8 @@ const { renderToString } = require('react-dom/server');
 const { createElement, createClass, PropTypes } = require('react');
 const createI13nNode = require('../../dist/utils/createI13nNode');
 const I13nMixin = require('../../dist/mixins/I13nMixin');
+const I13nAnchor = require('../../dist/components/I13nAnchor');
+const I13nButton = require('../../dist/components/I13nButton');
 
 var PureReactComponent = createClass({
     autobind: false,
@@ -61,6 +63,12 @@ new Suite()
 })
 .add('link-wrapped-with-react-component-with-i13n-high-order-component', () => {
     renderToString(createLinkChildren(I13nA, 1));
+})
+.add('i13nAnchor', () => {
+    renderToString(createLinkChildren(I13nAnchor, 1));
+})
+.add('i13nButton', () => {
+    renderToString(createLinkChildren(I13nButton, 1));
 })
 // add listeners
 .on('cycle', (event) => {
