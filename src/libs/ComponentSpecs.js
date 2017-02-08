@@ -102,8 +102,8 @@ var prototypeSpecs = {
     getChildContext: function () {
         return {
             i13n: {
-                executeEvent: this.executeI13nEvent.bind,
-                getI13nNode: this.getI13nNode.bind,
+                executeEvent: this.executeI13nEvent,
+                getI13nNode: this.getI13nNode,
                 parentI13nNode: this._i13nNode,
                 _reactI13nInstance: this._getReactI13n()
             }
@@ -143,7 +143,9 @@ var prototypeSpecs = {
 
         // enable viewport checking if enabled
         if (reactI13n.isViewportEnabled()) {
-            self._viewportDetector = new ViewportDetector(domNode, self._getViewportOptions(), self._handleEnterViewport.bind(self));
+            self._viewportDetector = new ViewportDetector(domNode, self._getViewportOptions(), function onEnterViewport() {
+                self._handleEnterViewport();
+            });
             if (pageInitViewportDetected) {
                 self._viewportDetector.init();
             } else {
