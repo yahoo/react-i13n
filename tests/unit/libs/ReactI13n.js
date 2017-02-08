@@ -7,7 +7,7 @@
 'use strict';
 
 var expect = require('expect.js');
-var ReactI13n = require('../../../../dist/libs/ReactI13n');
+var ReactI13n = require('../../../src/libs/ReactI13n');
 
 describe('ReactI13n', function () {
 

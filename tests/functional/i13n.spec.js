@@ -3,7 +3,7 @@
 
 describe('React I13n test', function () {
     it('should init correctly and give the rootI13nNode the correct default model value', function () {
-        var result = window.rootI13nNode.getMergedModel();
+        var result = window._reactI13nInstance.getRootI13nNode().getMergedModel();
         expect(result).to.eql({sec: 'default-section-name', page: 'test-page'});
     });
     

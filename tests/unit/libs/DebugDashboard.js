@@ -8,14 +8,14 @@
 var expect = require('expect.js');
 var jsdom = require('jsdom');
 var DebugDashboard;
-var I13nNode = require('../../../../dist/libs/I13nNode');
+var I13nNode = require('../../../src/libs/I13nNode');
 describe('clickHandler', function () {
     beforeEach(function (done) {
         jsdom.env('<html><body><div id="testnode"></div></body></html>', [], function (err, window) {
             global.window = window;
             global.document = window.document;
             global.navigator = window.navigator;
-            DebugDashboard = require('../../../../dist/utils/DebugDashboard');
+            DebugDashboard = require('../../../src/libs/DebugDashboard');
             done();
         });
     });

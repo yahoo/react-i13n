@@ -13,7 +13,7 @@ var mockData = {
 };
 var mockClickEvent;
 var mockComponent;
-var I13nNode = require('../../../../dist/libs/I13nNode');
+var I13nNode = require('../../../src/libs/I13nNode');
 describe('clickHandler', function () {
     beforeEach(function (done) {
         jsdom.env('<html><body></body></html>', [], function (err, window) {
@@ -22,7 +22,7 @@ describe('clickHandler', function () {
             global.navigator = window.navigator;
 
             React = require('react');
-            clickHandler = require('../../../../dist/utils/clickHandler');
+            clickHandler = require('../../../src/libs/clickHandler');
             mockClickEvent = {
                 target: {
                 },

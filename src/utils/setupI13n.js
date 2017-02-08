@@ -4,9 +4,11 @@
  */
 'use strict';
 
+var ComponentSpecs = require('../libs/ComponentSpecs');
 var React = require('react');
 var ReactI13n = require('../libs/ReactI13n');
-var I13nUtils = require('../mixins/I13nUtils');
+var augmentComponent = require('./augmentComponent');
+var hoistNonReactStatics = require('hoist-non-react-statics');
 var IS_CLIENT = typeof window !== 'undefined';
 
 /**
@@ -24,22 +26,13 @@ var IS_CLIENT = typeof window !== 'undefined';
 module.exports = function setupI13n (Component, options, plugins) {
     options = options || {};
     plugins = plugins || [];
-    var RootI13nComponent;
-    var componentName = Component.displayName || Component.name;
 
-    RootI13nComponent = React.createClass({
-
-        mixins: [I13nUtils],
-
-        displayName: options.displayName || ('RootI13n' + componentName),
-
-        autobind: false,
-
-        /**
-         * componentWillMount
-         * @method componentWillMount
-         */
-        componentWillMount: function () {
+    class RootI13nComponent extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+        
+        componentWillMount () {
             var reactI13n = new ReactI13n(options);
             this._reactI13nInstance = reactI13n;
             // we might have case to access reactI13n instance to execute event outside react components
@@ -51,14 +44,14 @@ module.exports = function setupI13n (Component, options, plugins) {
                 reactI13n.plug(plugin);
             });
             reactI13n.createRootI13nNode();
-        },
+        }
 
-        render: function () {
+        render () {
             var props = Object.assign({}, this.props);
             if (!options.skipUtilFunctionsByProps) {
                 props.i13n = {
-                    executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode,
+                    executeEvent: this.executeI13nEvent.bind(this),
+                    getI13nNode: this.getI13nNode.bind(this),
                     reactI13nInstance: this._reactI13nInstance
                 };
             }
@@ -68,7 +61,28 @@ module.exports = function setupI13n (Component, options, plugins) {
                 props.children
             );
         }
+    }
+    
+    var specs = ComponentSpecs.pickSpecs({
+        prototype: [
+            'getChildContext',
+            'executeI13nEvent',
+            'getI13nNode',
+            '_getReactI13n',
+            '_getParentI13nNode',
+        ],
+        static: [
+            'contextTypes',
+            'childContextTypes'
+        ]
     });
+
+    var componentName = Component.displayName || Component.name;
+    augmentComponent(RootI13nComponent, specs.prototype, Object.assign({}, specs.static, {
+        displayName: options.displayName || ('RootI13n' + componentName)
+    }));
+ 
+    hoistNonReactStatics(RootI13nComponent, Component);
 
     return RootI13nComponent;
 };

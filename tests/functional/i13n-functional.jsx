@@ -18,13 +18,12 @@ function getJsonFromUrl() {
 var container = document.getElementById('container');
 var itemsNumber = getJsonFromUrl().items || 1;
 
-
 var I13nComponentLevel1 = React.createClass({
     render: function () {
         var links = [];
         for (var i = 0; i < itemsNumber; i++) {
             var linkText = 'Button Level1 ' + i;
-            var linkSec = 'level1-' + i
+            var linkSec = 'level1-' + i;
             links.push(
                 <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{sec:linkSec, lv1: 'foo'}}>
                     {linkText}
@@ -191,6 +190,7 @@ var testPlugin = {
         }
     }
 };
+try {
 I13nDemo = setupI13n(I13nDemo,
     {
         isViewportEnabled: true,
@@ -202,3 +202,6 @@ I13nDemo = setupI13n(I13nDemo,
     [testPlugin]
 );
 var Demo = ReactDOM.render(<I13nDemo />, container);
+} catch (e) {
+    alert(e);
+}

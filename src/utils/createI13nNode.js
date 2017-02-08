@@ -5,9 +5,10 @@
  */
 'use strict';
 
+var ComponentSpecs = require('../libs/ComponentSpecs');
 var React = require('react');
-var I13nMixin = require('../mixins/I13nMixin');
 var hoistNonReactStatics = require('hoist-non-react-statics');
+var augmentComponent = require('./augmentComponent');
 var PROPS_TO_FILTER = [
     'bindClickEvent',
     'follow',
@@ -42,6 +43,7 @@ function objectWithoutProperties(obj, keys) {
  * @method createI13nNode
  */
 module.exports = function createI13nNode (Component, defaultProps, options) {
+
     if (!Component) {
         if ('production' !== process.env.NODE_ENV) {
             console && console.warn && console.warn('You are passing a null component into createI13nNode');
@@ -51,34 +53,21 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
     }
     var componentName = Component.displayName || Component.name || Component;
     var componentIsFunction = 'function' === typeof Component;
-    defaultProps = defaultProps || {};
+    defaultProps = Object.assign({}, {
+        i13nModel: null,
+        isLeafNode: false,
+        bindClickEvent: false,
+        follow: false,
+        scanLinks: null
+    }, defaultProps);
+
     options = options || {};
 
-    var I13nComponent = React.createClass({
-        displayName: options.displayName || ('I13n' + componentName),
-        mixins: [I13nMixin],
-        autobind: false,
-
-        /**
-         * getDefaultProps
-         * @method getDefaultProps
-         * @return {Object} default props
-         */
-        getDefaultProps: function () {
-            return Object.assign({}, {
-                i13nModel: null,
-                isLeafNode: false,
-                bindClickEvent: false,
-                follow: false,
-                scanLinks: null
-            }, defaultProps);
-        },
-
-        /**
-         * render
-         * @method render
-         */
-        render: function () {
+    class I13nComponent extends React.Component {
+        constructor(props) {
+            super(props);
+        }
+        render () {
             // filter i13n related props
             if ('production' !== process.env.NODE_ENV && undefined !== this.props.followLink) {
                 console && console.warn && console.warn('props.followLink support is deprecated, please use props.follow instead.');
@@ -91,8 +80,8 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
             
             if (!props.i13n && !options.skipUtilFunctionsByProps && componentIsFunction) {
                 props.i13n = {
-                    executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode
+                    executeEvent: this.executeI13nEvent.bind(this),
+                    getI13nNode: this.getI13nNode.bind(this)
                 };
             }
 
@@ -102,7 +91,14 @@ module.exports = function createI13nNode (Component, defaultProps, options) {
                 props.children
             );
         }
-    });
+    }
+
+    var specs = ComponentSpecs.pickSpecs();
+
+    augmentComponent(I13nComponent, specs.prototype, Object.assign({}, specs.static, {
+        displayName: options.displayName || ('I13n' + componentName),
+        defaultProps: defaultProps
+    }));
 
     if (componentIsFunction) {
         hoistNonReactStatics(I13nComponent, Component);
