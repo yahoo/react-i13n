@@ -50,8 +50,8 @@ module.exports = function setupI13n (Component, options, plugins) {
             var props = Object.assign({}, this.props);
             if (!options.skipUtilFunctionsByProps) {
                 props.i13n = {
-                    executeEvent: this.executeI13nEvent,
-                    getI13nNode: this.getI13nNode,
+                    executeEvent: this.executeI13nEvent.bind(this),
+                    getI13nNode: this.getI13nNode.bind(this),
                     reactI13nInstance: this._reactI13nInstance
                 };
             }

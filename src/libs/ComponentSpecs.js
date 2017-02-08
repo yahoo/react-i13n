@@ -100,10 +100,17 @@ var prototypeSpecs = {
      * @method getChildContext
      */
     getChildContext: function () {
+        var self = this;
+        // create a wrapper function and use apply here
+        // to make sure this works with/without autobind, without generating warning msg
         return {
             i13n: {
-                executeEvent: this.executeI13nEvent,
-                getI13nNode: this.getI13nNode,
+                executeEvent: function executeEvent () {
+                    self.executeI13nEvent.apply(self, arguments);
+                },
+                getI13nNode: function getI13nNode () {
+                    self.getI13nNode.apply(self, arguments);
+                },
                 parentI13nNode: this._i13nNode,
                 _reactI13nInstance: this._getReactI13n()
             }
