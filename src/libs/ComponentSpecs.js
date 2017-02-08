@@ -219,6 +219,7 @@ var prototypeSpecs = {
         if (reactI13nInstance) {
             reactI13nInstance.execute(eventName, payload, callback);
         } else {
+            /* istanbul ignore next */
             if ('production' !== process.env.NODE_ENV) {
                 errorMessage = 'ReactI13n instance is not found, ' + 
                     'please make sure you have setupI13n on the root component. ';

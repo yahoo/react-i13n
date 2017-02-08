@@ -7,7 +7,7 @@
 'use strict';
 
 var expect = require('expect.js');
-var I13nNode = require('../../../../dist/libs/I13nNode');
+var I13nNode = require('../../../src/libs/I13nNode');
 
 describe('I13nNode', function () {
     beforeEach(function () {

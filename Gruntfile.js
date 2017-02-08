@@ -36,7 +36,6 @@ module.exports = function (grunt) {
     var projectConfig = {
         src: 'src',
         dist: 'dist',
-        tmp: 'tmp',
         unit: 'tests/unit',
         functional: 'tests/functional',
         spec: 'tests/spec',
@@ -54,14 +53,6 @@ module.exports = function (grunt) {
                     {
                         dot: true,
                         src: ['<%= project.dist %>']
-                    }
-                ]
-            },
-            tmp: {
-                files: [
-                    {
-                        dot: true,
-                        src: ['<%= project.tmp %>']
                     }
                 ]
             },
@@ -116,34 +107,21 @@ module.exports = function (grunt) {
                         ext: '.js'
                     }
                 ]
-            },
-            unit: {
-                files: [
-                    {
-                        expand: true,
-                        src: [
-                            '<%= project.unit %>/**/*.*'
-                        ],
-                        dest: '<%= project.tmp %>',
-                        extDot: 'last',
-                        ext: '.js'
-                    }
-                ]
             }
         },
         // shell
         // shell commands to run protractor and istanbul
         shell: {
-            istanbul: {
+            cover: {
                 options: {
                     execOptions: {
                         env: env
                     }
                 },
-                command: 'node node_modules/istanbul/lib/cli.js cover --dir <%= project.coverage_dir %> -- ./node_modules/mocha/bin/_mocha <%= project.tmp %>/<%= project.unit %> --require ./tests/setup --recursive --reporter spec'
+                command: 'NODE_ENV=test nyc --report-dir <%= project.coverage_dir %> --reporter lcov mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec'
             },
-            mocha: {
-                command: 'node ./node_modules/mocha/bin/mocha <%= project.tmp %>/<%= project.unit %> --require ./tests/setup --recursive --reporter spec'
+            unit: {
+                command: 'NODE_ENV=test nyc --reporter text --reporter text-summary mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec'
             }
         },
         // webpack
@@ -278,33 +256,23 @@ module.exports = function (grunt) {
         'watch:functional'
     ]);
 
-    // cover
-    // 1. clean tmp/
-    // 2. compile jsx to js in tmp/
-    // 3. run istanbul cover in tmp/ using mocha command
-    // 4. clean tmp/
     grunt.registerTask('cover', [
-        'clean:tmp',
         'clean:dist',
-        'babel:unit',
         'babel:dist',
-        'shell:istanbul',
-        'clean:tmp'
+        'shell:cover',
     ]);
 
     grunt.registerTask('unit', [
-        'clean:tmp',
         'clean:dist',
-        'babel:unit',
         'babel:dist',
-        'shell:mocha'
+        'shell:unit'
     ]);
 
     // dist
     // 1. clean dist/
     // 2. compile jsx to js in dist/
     grunt.registerTask('dist', ['clean:dist', 'babel:dist']);
-    grunt.registerTask('test', ['clean:dist', 'babel:dist', 'clean:tmp', 'babel:unit']);
+    grunt.registerTask('test', ['clean:dist', 'babel:dist', 'babel:unit']);
 
     // default
     grunt.registerTask('default', ['dist']);

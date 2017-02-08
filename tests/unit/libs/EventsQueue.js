@@ -7,7 +7,7 @@
 'use strict';
 
 var expect = require('expect.js');
-var EventsQueue = require('../../../../dist/libs/EventsQueue');
+var EventsQueue = require('../../../src/libs/EventsQueue');
 
 describe('EventsQueue', function () {
     it('should be created correctly', function () {

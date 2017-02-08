@@ -51,7 +51,7 @@ describe('setupI13n', function () {
 
             mockery.registerMock('../libs/ReactI13n', MockReactI13n);
 
-            setupI13n = require('../../../../dist/utils/setupI13n');
+            setupI13n = require('../../../src/utils/setupI13n');
             done();
         });
     });

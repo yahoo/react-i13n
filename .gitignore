@@ -3,10 +3,10 @@ build/
 results/
 coverage/
 node_modules/
-tmp/
 dist/
 *.log
 *.tap
 tests/functional/main.js
 tests/functional/i13n-functional.js
 tests/functional/css/
+/.nyc_output/
