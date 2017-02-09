@@ -1,4 +1,5 @@
 .editorconfig
+.nyc_output
 /artifacts/
 /bin/
 /build/
