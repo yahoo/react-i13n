@@ -5,5 +5,4 @@ node_js:
   - 6
 after_success:
   - "npm run func"
-  - "cat artifacts/lcov.info"
   - "cat artifacts/lcov.info | ./node_modules/coveralls/bin/coveralls.js" 
