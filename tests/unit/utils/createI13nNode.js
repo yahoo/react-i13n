@@ -209,7 +209,7 @@ describe('createI13nNode', function () {
         ReactDOM.unmountComponentAtNode(container); // unmount should remove the child from root
         expect(rootI13nNode.getChildrenNodes()[0]).to.eql(undefined);
     });
-
+    
     it('should be able to bind click handler', function (done) {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
@@ -362,7 +362,7 @@ describe('createI13nNode', function () {
         var TestComponent = React.createClass({
             displayName: 'TestComponent',
             render: function() {
-                return React.createElement("div", null,
+                return React.createElement("div", {},
                     React.createElement("a", {href: "/foo"}, "foo"),
                     React.createElement("button", null, "bar")
                 );
@@ -384,6 +384,37 @@ describe('createI13nNode', function () {
             expect(executedArray[3]).to.be.equal('enterViewport');
             expect(executedArray[4]).to.be.equal('enterViewport');
             expect(executedArray[5]).to.be.equal('enterViewport');
+            ReactDOM.unmountComponentAtNode(container);
+            done();
+        }, 1000);
+    });
+    
+    it('should stop scanned nodes\' viewport detection if parent is not in viewport', function (done) {
+        mockData.isViewportEnabled = true;
+        window.innerHeight = -30; // we can't change the rect of the nodes, fake innerHeight to fail the viewport detection
+        var TestComponent = React.createClass({
+            displayName: 'TestComponent',
+            render: function() {
+                return React.createElement("div", {},
+                    React.createElement("a", {href: "/foo"}, "foo"),
+                    React.createElement("button", null, "bar")
+                );
+            }
+        });
+        var I13nTestComponent = createI13nNode(TestComponent);
+        var container = document.createElement('div');
+        // should get three created events
+        var executedArray = [];
+        mockData.reactI13n.execute = function (eventName) {
+            executedArray.push(eventName);
+        };
+        var component = ReactDOM.render(React.createElement(I13nTestComponent, {scanLinks: {enable: true}}), container);
+        // we wait 500ms and batch the viewport detection, wait 1000ms here util it's finished
+        setTimeout(function () {
+            expect(executedArray[0]).to.be.equal('created');
+            expect(executedArray[1]).to.be.equal('created');
+            expect(executedArray[2]).to.be.equal('created');
+            expect(executedArray[3]).to.be.equal(undefined); // no enterViewport should happen here
             ReactDOM.unmountComponentAtNode(container);
             done();
         }, 1000);
