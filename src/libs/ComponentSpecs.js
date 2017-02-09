@@ -400,7 +400,9 @@ var prototypeSpecs = {
         if (self._subI13nComponents && 0 < self._subI13nComponents.length) {
             self._subI13nComponents.forEach(function forEachSubI13nComponent(subI13nComponent) {
                 subI13nComponent.componentClickListener.remove();
-                subI13nComponent.viewportDetector.unsubscribeAll();
+                if (subI13nComponent.viewportDetector) {
+                    subI13nComponent.viewportDetector.unsubscribeAll();
+                }
                 if (subI13nComponent.debugDashboard) {
                     subI13nComponent.debugDashboard.destroy();
                 }
