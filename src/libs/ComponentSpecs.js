@@ -422,7 +422,7 @@ var prototypeSpecs = {
     },
 
     /**
-     * Debouncely trigger the page-init viewport detection
+     * Debounce and trigger the page-init viewport detection
      * @method _triggerPageInitViewportDetection
      * @private
      */
