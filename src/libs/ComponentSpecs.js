@@ -422,7 +422,7 @@ var prototypeSpecs = {
     },
 
     /**
-     * trigger the page-init viewport detection
+     * Debouncely trigger the page-init viewport detection
      * @method _triggerPageInitViewportDetection
      * @private
      */
@@ -452,7 +452,7 @@ var prototypeSpecs = {
         }
         // we don't have react component for root node, start from it's children
         rootI13nNode.getChildrenNodes().forEach(function detectRootChildrenViewport (childNode) {
-            childNode.getReactComponent().recursiveDetectViewport();
+            childNode.getReactComponent().recursiveDetectViewport(true);
         });
     },
 
@@ -478,18 +478,17 @@ var prototypeSpecs = {
     /**
      * recursively detect viewport
      * @method recursiveDetectViewport
+     * @params {Boolean} parentInViewport
      */
-    recursiveDetectViewport: function () {
+    recursiveDetectViewport: function (parentInViewport) {
         var self = this;
-        self._viewportDetector.init();
-        if (self._viewportDetector.isEnteredViewport()) {
-            self._i13nNode.getChildrenNodes().forEach(function detectChildrenViewport (childNode) {
-                var reactComponent = childNode.getReactComponent();
-                if (reactComponent) {
-                    reactComponent.recursiveDetectViewport();
-                }
-            });
-        }
+        self._viewportDetector.init(!parentInViewport);
+        self._i13nNode.getChildrenNodes().forEach(function detectChildrenViewport (childNode) {
+            var reactComponent = childNode.getReactComponent();
+            if (reactComponent) {
+                reactComponent.recursiveDetectViewport(self._viewportDetector.isEnteredViewport());
+            }
+        });
     },
 
     /**

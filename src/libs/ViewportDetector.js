@@ -69,11 +69,15 @@ ViewportDetector.prototype._detectViewport = function () {
 /**
  * Initialize the viewport detection
  * @method init
+ * @param {Boolean} skipInitDetection skip the init detection
  * @returns {void}
  */
-ViewportDetector.prototype.init = function () {
+ViewportDetector.prototype.init = function (skipInitDetection) {
     // detect viewport and execute handler if it's initially in the viewport
-    this._detectViewport();
+    if (!skipInitDetection) {
+        this._detectViewport();
+    }
+
     if (!this._enteredViewport) {
         this._subscribers = [
             subscribe('scrollEnd', this._detectViewport.bind(this), this._options)
