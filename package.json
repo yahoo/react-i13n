@@ -13,7 +13,7 @@
     "test": "grunt cover"
   },
   "dependencies": {
-    "debug": "^2.5.0",
+    "debug": "^2.6.3",
     "hoist-non-react-statics": "^1.0.0",
     "setimmediate": "^1.0.2",
     "subscribe-ui-event": "^1.0.14"
