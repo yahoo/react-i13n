@@ -48,7 +48,7 @@
     "minimist": "^1.2.0",
     "mocha": "^3.1.1",
     "mockery": "^2.0.0",
-    "nyc": "^7.1.0",
+    "nyc": "^10.1.2",
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
     "promise": "^7.0.1",
