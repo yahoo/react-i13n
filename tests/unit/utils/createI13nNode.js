@@ -14,6 +14,7 @@ var I13nNode;
 var rootI13nNode = null;
 var React;
 var ReactDOM;
+var createReactClass;
 var createI13nNode;
 var mockData = {
     options: {},
@@ -72,6 +73,7 @@ describe('createI13nNode', function () {
 
             React = require('react');
             ReactDOM = require('react-dom');
+            createReactClass = require('create-react-class');
 
             mockery.registerMock('../libs/ReactI13n', MockReactI13n);
             mockery.registerMock('subscribe-ui-event/dist/subscribe', mockSubscribe.subscribe);
@@ -110,7 +112,7 @@ describe('createI13nNode', function () {
     });
 
     it('should generate a component with createI13nNode', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -131,7 +133,7 @@ describe('createI13nNode', function () {
     });
 
     it('should generate a component with createI13nNode and custome name', function () {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -144,7 +146,7 @@ describe('createI13nNode', function () {
     });
 
     it('should generate a component with createI13nNode and BC for users passing data as model', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -165,7 +167,7 @@ describe('createI13nNode', function () {
     });
 
     it('should generate a component with createI13nNode with statics', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             statics: {
                 foo: 'bar'
@@ -183,7 +185,7 @@ describe('createI13nNode', function () {
 
 
     it('should handle the case if reactI13n doesn\'t inititalized', function () {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -197,7 +199,7 @@ describe('createI13nNode', function () {
     });
 
     it('should handle the case of unmount', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -217,7 +219,7 @@ describe('createI13nNode', function () {
     });
 
     it('should be able to bind click handler', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement('div');
@@ -239,7 +241,7 @@ describe('createI13nNode', function () {
 
     it('should handle scan the links inside if autoScanLinks is enable', function (done) {
         mockData.isViewportEnabled = false;
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement("div", null,
@@ -267,7 +269,7 @@ describe('createI13nNode', function () {
     });
 
     it('should able to use props.getI13nNode to get the nearest i13n node', function () {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 // should able to get the I13nNode we just create by createI13nNode
@@ -285,7 +287,7 @@ describe('createI13nNode', function () {
     });
 
     it('should able to use props.executeEvent to execute i13n event', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 this.props.i13n.executeEvent('foo', {});
@@ -308,7 +310,7 @@ describe('createI13nNode', function () {
 
     it('should update the i13n model when component updates', function () {
         var i13nModel = {sec: 'foo'};
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             contextTypes: {
                 i13n: PropTypes.object
@@ -332,14 +334,14 @@ describe('createI13nNode', function () {
     });
 
     it('should handle the case if we enable viewport checking', function (done) {
-        var TestSubComponent = React.createClass({
+        var TestSubComponent = createReactClass({
             displayName: 'TestSubComponent',
             render: function() {
                 return React.createElement('div');
             }
         });
         var I13nTestSubComponent = createI13nNode(TestSubComponent);
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement(I13nTestSubComponent);
@@ -367,7 +369,7 @@ describe('createI13nNode', function () {
         mockData.isViewportEnabled = true;
         window.innerHeight = -30; // we can't change the rect of the nodes, fake innerHeight to fail the viewport detection
 
-        var TestSubComponent = React.createClass({
+        var TestSubComponent = createReactClass({
             displayName: 'TestSubComponent',
             render: function() {
                 return React.createElement("div", {}, null);
@@ -375,7 +377,7 @@ describe('createI13nNode', function () {
         });
         var I13nTestSubComponent = createI13nNode(TestSubComponent);
 
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement(I13nTestSubComponent, {});
@@ -406,7 +408,7 @@ describe('createI13nNode', function () {
 
     it('should handle the case if we enable viewport checking with subComponents generated by scanLinks', function (done) {
         mockData.isViewportEnabled = true;
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement("div", {},
@@ -439,7 +441,7 @@ describe('createI13nNode', function () {
     it('should stop scanned nodes\' viewport detection if parent is not in viewport', function (done) {
         mockData.isViewportEnabled = true;
         window.innerHeight = -30; // we can't change the rect of the nodes, fake innerHeight to fail the viewport detection
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             render: function() {
                 return React.createElement("div", {},
@@ -481,7 +483,7 @@ describe('createI13nNode', function () {
     });
 
     it('should not get any i13n related props on wrapped component if skipUtilFunctionsByProps=true', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             contextTypes: {
                 i13n: PropTypes.object
@@ -505,7 +507,7 @@ describe('createI13nNode', function () {
     });
 
     it('should get i13n util functions via both props and context', function (done) {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             displayName: 'TestComponent',
             contextTypes: {
                 i13n: PropTypes.object
@@ -535,7 +537,7 @@ describe('createI13nNode', function () {
     });
 
     it('should expose the wrapped component as refs.wrappedElement', function () {
-        var TestComponent = React.createClass({
+        var TestComponent = createReactClass({
             render: function() {
                 return React.createElement('div');
             }
