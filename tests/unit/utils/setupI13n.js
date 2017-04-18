@@ -8,6 +8,7 @@
 var expect = require('expect.js');
 var jsdom = require('jsdom');
 var mockery = require('mockery');
+var PropTypes = require('prop-types');
 var React;
 var ReactDOM;
 var setupI13n;
@@ -81,7 +82,7 @@ describe('setupI13n', function () {
         expect(mockData.reactI13n._rootI13nNode).to.be.an('object');
         done();
     });
-    
+
     it('should generate a component with setupI13n and custom display name', function () {
         var TestApp = React.createClass({
             displayName: 'TestApp',
@@ -99,7 +100,7 @@ describe('setupI13n', function () {
         var TestApp = React.createClass({
             displayName: 'TestApp',
             contextTypes: {
-                i13n: React.PropTypes.object
+                i13n: PropTypes.object
             },
             render: function() {
                 expect(this.props.i13n).to.be.an('object');
@@ -116,12 +117,12 @@ describe('setupI13n', function () {
         var container = document.createElement('div');
         var component = ReactDOM.render(React.createElement(I13nTestApp), container);
     });
-    
+
     it('should not get i13n util functions via props if skipUtilFunctionsByProps=true', function (done) {
         var TestApp = React.createClass({
             displayName: 'TestApp',
             contextTypes: {
-                i13n: React.PropTypes.object
+                i13n: PropTypes.object
             },
             render: function() {
                 expect(this.props.i13n).to.equal(undefined);

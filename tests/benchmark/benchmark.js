@@ -17,7 +17,7 @@ require.cache[reactDomPath] = require.cache[reactDistDomPath];
 /* start with benchmark */
 const { Suite } = require('benchmark');
 const { renderToString } = require('react-dom/server');
-const { createElement, createClass, PropTypes } = require('react');
+const { createElement, createClass } = require('react');
 const createI13nNode = require('../../dist/utils/createI13nNode');
 const I13nMixin = require('../../dist/mixins/I13nMixin');
 const I13nAnchor = require('../../dist/components/I13nAnchor');

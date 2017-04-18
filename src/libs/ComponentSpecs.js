@@ -9,6 +9,7 @@ require('setimmediate');
 
 var DebugDashboard = require('./DebugDashboard');
 var I13nNode = require('./I13nNode');
+var PropTypes = require('prop-types');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var ReactI13n = require('./ReactI13n');
@@ -56,40 +57,40 @@ function convertToArray (arr) {
 
 var staticSpecs = {
     propTypes: {
-        component: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.func]),
-        model: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
-        i13nModel: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.func]),
-        isLeafNode: React.PropTypes.bool,
-        bindClickEvent: React.PropTypes.bool,
-        follow: React.PropTypes.bool,
-        scanLinks: React.PropTypes.shape({
-            enable: React.PropTypes.bool,
-            tags: React.PropTypes.array
+        component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+        model: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        i13nModel: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        isLeafNode: PropTypes.bool,
+        bindClickEvent: PropTypes.bool,
+        follow: PropTypes.bool,
+        scanLinks: PropTypes.shape({
+            enable: PropTypes.bool,
+            tags: PropTypes.array
         }),
-        viewport: React.PropTypes.shape({
-            margins: React.PropTypes.shape({
-                usePercent: React.PropTypes.bool,
-                top: React.PropTypes.number,
-                bottom: React.PropTypes.number
+        viewport: PropTypes.shape({
+            margins: PropTypes.shape({
+                usePercent: PropTypes.bool,
+                top: PropTypes.number,
+                bottom: PropTypes.number
             })
         })
     },
-    
+
     contextTypes: {
-        i13n: React.PropTypes.shape({
-            executeEvent: React.PropTypes.func,
-            getI13nNode: React.PropTypes.func,
-            parentI13nNode: React.PropTypes.object,
-            _reactI13nInstance: React.PropTypes.object
+        i13n: PropTypes.shape({
+            executeEvent: PropTypes.func,
+            getI13nNode: PropTypes.func,
+            parentI13nNode: PropTypes.object,
+            _reactI13nInstance: PropTypes.object
         })
     },
-    
+
     childContextTypes: {
-        i13n: React.PropTypes.shape({
-            executeEvent: React.PropTypes.func,
-            getI13nNode: React.PropTypes.func,
-            parentI13nNode: React.PropTypes.object,
-            _reactI13nInstance: React.PropTypes.object
+        i13n: PropTypes.shape({
+            executeEvent: PropTypes.func,
+            getI13nNode: PropTypes.func,
+            parentI13nNode: PropTypes.object,
+            _reactI13nInstance: PropTypes.object
         })
     }
 };
@@ -116,7 +117,7 @@ var prototypeSpecs = {
             }
         };
     },
-    
+
     /**
      * componentWillUpdate
      * @method componentWillUpdate
@@ -209,7 +210,7 @@ var prototypeSpecs = {
 
         this._removeSubComponentsListenersAndDebugDashboards();
     },
-    
+
     /**
      * execute the i13n event
      * @method executeI13nEvent
@@ -228,11 +229,11 @@ var prototypeSpecs = {
         } else {
             /* istanbul ignore next */
             if ('production' !== process.env.NODE_ENV) {
-                errorMessage = 'ReactI13n instance is not found, ' + 
+                errorMessage = 'ReactI13n instance is not found, ' +
                     'please make sure you have setupI13n on the root component. ';
                 if (typeof window === 'undefined') {
-                    errorMessage += 'On server side, ' + 
-                        'you can only execute the i13n event on the components under setupI13n, ' + 
+                    errorMessage += 'On server side, ' +
+                        'you can only execute the i13n event on the components under setupI13n, ' +
                         'please make sure you are calling executeI13nEvent correctly';
                 }
                 console && console.warn && console.warn(errorMessage);
@@ -278,7 +279,7 @@ var prototypeSpecs = {
         if (typeof window !== 'undefined') {
             globalReactI13n = window._reactI13nInstance;
         }
-        return this._reactI13nInstance || 
+        return this._reactI13nInstance ||
             (this.context && this.context.i13n && this.context.i13n._reactI13nInstance) ||
             globalReactI13n;
     },
@@ -292,10 +293,10 @@ var prototypeSpecs = {
     _getParentI13nNode: function () {
         var reactI13n = this._getReactI13n();
         var context = this.context;
-        return (context && context.i13n && context.i13n.parentI13nNode) || 
+        return (context && context.i13n && context.i13n.parentI13nNode) ||
             (reactI13n && reactI13n.getRootI13nNode());
     },
-    
+
     /**
      * scan links, if user enable it, scan the links(users can define the tags they want) with componentDidMount,
      * and this function will find all the elements by getElementsByTagName, then
@@ -357,7 +358,7 @@ var prototypeSpecs = {
 
     /**
      * _shouldFollowLink, provide a hook to check followLink.
-     * It check if component implement its own shouldFollowLink() method, 
+     * It check if component implement its own shouldFollowLink() method,
      * otherwise return props.followLink or props.follow
      * @method _shouldFollowLink
      * @private
@@ -378,7 +379,7 @@ var prototypeSpecs = {
         var self = this;
         if (self._subI13nComponents && 0 < self._subI13nComponents.length) {
             self._subI13nComponents.forEach(function forEachSubI13nComponent(subI13nComponent) {
-                subI13nComponent.viewportDetector = new ViewportDetector(subI13nComponent.domElement, 
+                subI13nComponent.viewportDetector = new ViewportDetector(subI13nComponent.domElement,
                     self._getViewportOptions(), function onSubComponentEnterViewport() {
                     subI13nComponent.i13nNode.setIsInViewport(true);
                     self._getReactI13n().execute('enterViewport', {
@@ -474,7 +475,7 @@ var prototypeSpecs = {
             self.isLeafNode(),
             reactI13n && reactI13n.isViewportEnabled());
     },
-    
+
     /**
      * recursively detect viewport
      * @method recursiveDetectViewport
