@@ -29,7 +29,7 @@ module.exports = function setupI13n (Component, options, plugins) {
     options = options || {};
     plugins = plugins || [];
     
-    if(!plugins.length) {
+    if (!plugins.length) {
         debug('no plugins provided');
     }
 
