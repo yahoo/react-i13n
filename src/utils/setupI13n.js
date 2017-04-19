@@ -10,6 +10,8 @@ var ReactI13n = require('../libs/ReactI13n');
 var augmentComponent = require('./augmentComponent');
 var hoistNonReactStatics = require('hoist-non-react-statics');
 var IS_CLIENT = typeof window !== 'undefined';
+var debugLib = require('debug');
+var debug = debugLib('ReactI13n');
 
 /**
  * Create an app level component with i13n setup
@@ -26,6 +28,10 @@ var IS_CLIENT = typeof window !== 'undefined';
 module.exports = function setupI13n (Component, options, plugins) {
     options = options || {};
     plugins = plugins || [];
+    
+    if (!plugins.length) {
+        debug('no plugins provided');
+    }
 
     class RootI13nComponent extends React.Component {
         constructor(props) {
