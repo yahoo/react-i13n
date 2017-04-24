@@ -6,38 +6,35 @@
 'use strict';
 
 var expect = require('expect.js');
-var jsdom = require('jsdom');
+var JSDOM = require('jsdom').JSDOM;
 var clickHandler;
 var React;
-var mockData = {
-};
+var mockData = {};
 var mockClickEvent;
 var mockComponent;
 var I13nNode = require('../../../src/libs/I13nNode');
 describe('clickHandler', function () {
-    beforeEach(function (done) {
-        jsdom.env('<html><body></body></html>', [], function (err, window) {
-            global.window = window;
-            global.document = window.document;
-            global.navigator = window.navigator;
+    beforeEach(function () {
+        var jsdom = new JSDOM('<html><body></body></html>');
+        global.window = jsdom.window;
+        global.document = jsdom.window.document;
+        global.navigator = jsdom.window.navigator;
 
-            React = require('react');
-            clickHandler = require('../../../src/libs/clickHandler');
-            mockClickEvent = {
-                target: {
-                },
-                button: 0
+        React = require('react');
+        clickHandler = require('../../../src/libs/clickHandler');
+        mockClickEvent = {
+            target: {
+            },
+            button: 0
+        }
+        mockComponent = {
+            props: {
+                href: 'foo'
+            },
+            _shouldFollowLink: function() {
+                return (undefined !== this.props.followLink) ? this.props.followLink : this.props.follow;
             }
-            mockComponent = {
-                props: {
-                    href: 'foo'
-                },
-                _shouldFollowLink: function() {
-                    return (undefined !== this.props.followLink) ? this.props.followLink : this.props.follow;
-                }
-            };
-            done();
-        });
+        };
     });
 
     afterEach(function () {

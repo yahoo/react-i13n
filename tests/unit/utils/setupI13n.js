@@ -6,7 +6,7 @@
 'use strict';
 
 var expect = require('expect.js');
-var jsdom = require('jsdom');
+var JSDOM = require('jsdom').JSDOM;
 var mockery = require('mockery');
 var PropTypes = require('prop-types');
 var createReactClass;
@@ -36,27 +36,25 @@ MockReactI13n.prototype.createRootI13nNode = function () {
 };
 
 describe('setupI13n', function () {
-    beforeEach(function (done) {
-        jsdom.env('<html><body></body></html>', [], function (err, window) {
-            global.window = window;
-            global.document = window.document;
-            global.navigator = window.navigator;
+    beforeEach(function () {
+        var jsdom = new JSDOM('<html><body></body></html>');
+        global.window = jsdom.window;
+        global.document = jsdom.window.document;
+        global.navigator = jsdom.window.navigator;
 
-            mockery.enable({
-                warnOnReplace: false,
-                warnOnUnregistered: false,
-                useCleanCache: true
-            });
-
-            React = require('react');
-            ReactDOM = require('react-dom');
-            createReactClass = require('create-react-class');
-
-            mockery.registerMock('../libs/ReactI13n', MockReactI13n);
-
-            setupI13n = require('../../../src/utils/setupI13n');
-            done();
+        mockery.enable({
+            warnOnReplace: false,
+            warnOnUnregistered: false,
+            useCleanCache: true
         });
+
+        React = require('react');
+        ReactDOM = require('react-dom');
+        createReactClass = require('create-react-class');
+
+        mockery.registerMock('../libs/ReactI13n', MockReactI13n);
+
+        setupI13n = require('../../../src/utils/setupI13n');
     });
 
     afterEach(function () {

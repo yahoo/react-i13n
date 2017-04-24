@@ -7,7 +7,7 @@
 
 /* All the functionalities are tested with this higher order component */
 var expect = require('expect.js');
-var jsdom = require('jsdom');
+var JSDOM = require('jsdom').JSDOM;
 var mockery = require('mockery');
 var PropTypes = require('prop-types');
 var I13nNode;
@@ -58,48 +58,45 @@ function findProps(elem) {
 }
 
 describe('createI13nNode', function () {
-    beforeEach(function (done) {
-        jsdom.env('<html><body></body></html>', [], function (err, window) {
-            global.window = window;
-            global.document = window.document;
-            global.navigator = window.navigator;
-            global.location = window.location;
+    beforeEach(function () {
+        var jsdom = new JSDOM('<html><body></body></html>');
+        global.window = jsdom.window;
+        global.document = jsdom.window.document;
+        global.navigator = jsdom.window.navigator;
+        global.location = window.location;
 
-            mockery.enable({
-                warnOnReplace: false,
-                warnOnUnregistered: false,
-                useCleanCache: true
-            });
-
-            React = require('react');
-            ReactDOM = require('react-dom');
-            createReactClass = require('create-react-class');
-
-            mockery.registerMock('../libs/ReactI13n', MockReactI13n);
-            mockery.registerMock('subscribe-ui-event/dist/subscribe', mockSubscribe.subscribe);
-            mockery.registerMock('subscribe-ui-event/dist/listen', mockSubscribe.listen);
-            mockery.registerMock('../libs/clickHandler', mockClickHandler);
-
-            createI13nNode = require('../../../src/utils/createI13nNode');
-            I13nNode = require('../../../src/libs/I13nNode');
-
-            rootI13nNode = new I13nNode(null, {});
-            mockData.reactI13n = {
-                getI13nNodeClass: function () {
-                    return I13nNode;
-                },
-                getRootI13nNode: function () {
-                    return rootI13nNode;
-                },
-                isViewportEnabled: function () {
-                    return mockData.isViewportEnabled;
-                }
-            };
-            global.window._reactI13nInstance = mockData.reactI13n;
-            subscribers = [];
-
-            done();
+        mockery.enable({
+            warnOnReplace: false,
+            warnOnUnregistered: false,
+            useCleanCache: true
         });
+
+        React = require('react');
+        ReactDOM = require('react-dom');
+        createReactClass = require('create-react-class');
+
+        mockery.registerMock('../libs/ReactI13n', MockReactI13n);
+        mockery.registerMock('subscribe-ui-event/dist/subscribe', mockSubscribe.subscribe);
+        mockery.registerMock('subscribe-ui-event/dist/listen', mockSubscribe.listen);
+        mockery.registerMock('../libs/clickHandler', mockClickHandler);
+
+        createI13nNode = require('../../../src/utils/createI13nNode');
+        I13nNode = require('../../../src/libs/I13nNode');
+
+        rootI13nNode = new I13nNode(null, {});
+        mockData.reactI13n = {
+            getI13nNodeClass: function () {
+                return I13nNode;
+            },
+            getRootI13nNode: function () {
+                return rootI13nNode;
+            },
+            isViewportEnabled: function () {
+                return mockData.isViewportEnabled;
+            }
+        };
+        global.window._reactI13nInstance = mockData.reactI13n;
+        subscribers = [];
     });
 
     afterEach(function () {

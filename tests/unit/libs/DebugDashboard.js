@@ -6,18 +6,16 @@
 'use strict';
 
 var expect = require('expect.js');
-var jsdom = require('jsdom');
+var JSDOM = require('jsdom').JSDOM;
 var DebugDashboard;
 var I13nNode = require('../../../src/libs/I13nNode');
 describe('clickHandler', function () {
-    beforeEach(function (done) {
-        jsdom.env('<html><body><div id="testnode"></div></body></html>', [], function (err, window) {
-            global.window = window;
-            global.document = window.document;
-            global.navigator = window.navigator;
-            DebugDashboard = require('../../../src/libs/DebugDashboard');
-            done();
-        });
+    beforeEach(function () {
+        var jsdom = new JSDOM('<html><body><div id="testnode"></div></body></html>');
+        global.window = jsdom.window;
+        global.document = jsdom.window.document;
+        global.navigator = jsdom.window.navigator;
+        DebugDashboard = require('../../../src/libs/DebugDashboard');
     });
 
     afterEach(function () {
