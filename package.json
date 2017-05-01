@@ -46,7 +46,7 @@
     "grunt-shell": "^2.0.0",
     "grunt-webpack": "^2.0.1",
     "istanbul": "^0.4.0",
-    "jsdom": "^10.0.0",
+    "jsdom": "^10.1.0",
     "jshint": "^2.9.4",
     "minimist": "^1.2.0",
     "mocha": "^3.1.1",
