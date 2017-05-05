@@ -44,7 +44,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-saucelabs": "^9.0.0",
     "grunt-shell": "^2.0.0",
-    "grunt-webpack": "^2.0.1",
+    "grunt-webpack": "^3.0.0",
     "istanbul": "^0.4.0",
     "jsdom": "^10.1.0",
     "jshint": "^2.9.4",
