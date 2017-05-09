@@ -177,7 +177,9 @@ var prototypeSpecs = {
      * @method componentWillMount
      */
     componentWillMount: function () {
-        clearTimeout(pageInitViewportDetectionTimeout);
+        if (pageInitViewportDetectionTimeout) {
+            clearTimeout(pageInitViewportDetectionTimeout);
+        }
         this._createI13nNode();
         this._i13nNode.setReactComponent(this);
     },
