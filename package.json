@@ -16,7 +16,7 @@
   "dependencies": {
     "debug": "^2.6.3",
     "hoist-non-react-statics": "^1.0.0",
-    "prop-types": "^15.5.8",
+    "prop-types": "^15.5.10",
     "setimmediate": "^1.0.2",
     "subscribe-ui-event": "^1.0.14"
   },
