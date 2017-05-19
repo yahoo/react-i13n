@@ -193,7 +193,7 @@ var testPlugin = {
 try {
 I13nDemo = setupI13n(I13nDemo,
     {
-        isViewportEnabled: false,
+        isViewportEnabled: true,
         rootModelData: {
             sec: 'default-section-name',
             page: 'test-page'
