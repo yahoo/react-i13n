@@ -5,6 +5,7 @@ window.Object.assign = require('object-assign');
 
 window.React = require('react');
 window.ReactDOM = require('react-dom');
+window.createClass = require('create-react-class');
 
 window.I13nMixin = require('../../dist/mixins/I13nMixin');
 window.ReactI13n = require('../../dist/libs/ReactI13n');
