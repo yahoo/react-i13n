@@ -132,7 +132,7 @@ module.exports = function (grunt) {
                     main: './<%= project.functional %>/bootstrap.js'
                 },
                 output: {
-                    path: './<%= project.functional %>/'
+                    path: path.resolve('<%= project.functional %>')
                 },
                 module: {
                     rules: [

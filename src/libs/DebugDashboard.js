@@ -8,6 +8,15 @@ var listen = require('subscribe-ui-event').listen;
 var supportClassList = false;
 var uniqueId = 0;
 
+var textColor = 'rgba(255,255,255,.87)';
+var baseItemStyle = {
+    color: textColor,
+    padding: '8px',
+    'white-space': 'nowrap',
+    overflow: 'hidden',
+    'text-overflow': 'ellipsis'
+};
+
 function checkHidden (DOMNode) {
     if (DOMNode !== document) {
         var styles = window.getComputedStyle(DOMNode) || {};
@@ -23,21 +32,32 @@ function checkHidden (DOMNode) {
     }
 }
 
+function addStylesToNode (DOMNode, styles) {
+    Object.keys(styles).forEach(function addStyle(key) {
+        DOMNode.style[key] = styles[key];
+    });
+}
+
+function createNode (tag) {
+    return document.createElement(tag);
+}
+
 function setupContainerPosition (DOMNode, container, dashboard) {
     var offset = cumulativeOffset(DOMNode);
     var left = offset.left + DOMNode.offsetWidth - 15;
 
-    container.style.position = 'absolute';
-    container.style['max-width'] = '300px';
-    container.style.top = offset.top + 'px';
+    addStylesToNode(container, {
+        position: 'absolute',
+        'max-width': '300px',
+        top: offset.top + 'px',
+        'z-index': '10'
+    });
 
     // adjust layout if dashboard is out of the viewport
     if (left + 305 > window.innerWidth) {
         dashboard.style.left = (window.innerWidth - (left + 300) - 5) + 'px';
     }
-
     container.style.left = (offset.left + DOMNode.offsetWidth - 15) + 'px';
-    container.style['z-index'] = '10';
 }
 
 function cumulativeOffset (DOMNode) {
@@ -68,10 +88,10 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
     if (checkHidden(DOMNode)) {
         return;
     }
-    var container = document.createElement('div');
+    var container = createNode('div');
     container.id = 'i13n-debug-' + uniqueId;
-    var triggerNode = document.createElement('span');
-    var dashboard = document.createElement('div');
+    var triggerNode = createNode('span');
+    var dashboard = createNode('div');
     var model = i13nNode.getMergedModel(true);
 
     // check if browser support classList API
@@ -86,74 +106,84 @@ var DebugDashboard = function DebugDashboard (i13nNode) {
             DOMNode: DOMNode
         };
     }
-    var dashboardContainer = document.createElement('ul');
-    dashboardContainer.style.margin = 0;
-    dashboardContainer.style['padding-left'] = 0;
-    dashboardContainer.style['box-shadow'] = '0 1px 4px 0 rgba(0,0,0,.28)';
+    var dashboardContainer = createNode('ul');
+    addStylesToNode(dashboardContainer, {
+        margin: 0,
+        'padding-left': 0,
+        'box-shadow': '0 1px 4px 0 rgba(0,0,0,.28)'
+    });
 
     // compose title
-    var dashboardTitle = document.createElement('li');
-    dashboardTitle.style.background = '#673ab7';
-    dashboardTitle.style.color = 'rgba(255,255,255,.87)';
-    dashboardTitle.style.padding = '8px';
-    dashboardTitle.style['white-space'] = 'nowrap';
-    dashboardTitle.style['overflow'] = 'hidden';
-    dashboardTitle.style['text-overflow'] = 'ellipsis';
+    var dashboardTitle = createNode('li');
+
+    addStylesToNode(dashboardTitle, Object.assign({ background: '#673ab7' }, baseItemStyle));
+
     dashboardTitle.innerHTML = i13nNode.getText();
     dashboardContainer.appendChild(dashboardTitle);
 
     // compose model items
     Object.keys(model).forEach(function generateModelInfo(key) {
-        var dashboardItem = document.createElement('li');
-        dashboardItem.style.background = '#d1c4e9';
-        dashboardItem.style.color = 'rgba(0,0,0,.87)';
-        dashboardItem.style['border-top'] = 'rgba(0,0,0,.12) 1px solid';
-        dashboardItem.style.padding = '8px';
-        dashboardItem.style['white-space'] = 'nowrap';
-        dashboardItem.style['overflow'] = 'hidden';
-        dashboardItem.style['text-overflow'] = 'ellipsis';
-        dashboardItem.innerHTML = key + ' : ' + model[key].value + (model[key].DOMNode !== DOMNode ? ' (inherited)' : '');
+        var dashboardItem = createNode('li');
+        var node = model[key].DOMNode;
+
+        addStylesToNode(dashboardItem, Object.assign({
+            background: '#d1c4e9',
+            'border-top': '1px solid rgba(0,0,0,.12)',
+        }, baseItemStyle));
+
+        dashboardItem.innerHTML = key + ' : ' + model[key].value + (node !== DOMNode ? ' (inherited)' : '');
 
         // set up scroll listener to show where the model data comes from
-        if (model[key].DOMNode) {
-            model[key].DOMNode.style.transition = 'border 0.05s';
+        if (node) {
+            node.style.transition = 'border 0.05s';
             self.modelItemsListener.push(listen(dashboardItem, 'mouseover', function mouseover() {
-                model[key].DOMNode.style.border = '4px solid #b39ddb';
+                node.style.border = '4px solid #b39ddb';
             }));
             self.modelItemsListener.push(listen(dashboardItem, 'mouseout', function mouseout() {
-                model[key].DOMNode.style.border = null;
+                node.style.border = null;
             }));
         }
         dashboardContainer.appendChild(dashboardItem);
     });
 
     // generate dashboard
-    dashboard.style.position = 'relative';
-    dashboard.style.display = 'none';
-    dashboard.style.color = 'rgba(255,255,255,.87)';
-    dashboard.style.fontsize = '14px';
-    dashboard.style.width = '100%';
-    dashboard.style['margin-top'] = '2px';
-    dashboard.style['z-index'] = '1';
-    dashboard.style['border-radius'] = '2px';
+    addStylesToNode(dashboard, {
+        position: 'relative',
+        display: 'none',
+        color: textColor,
+        fontsize: '14px',
+        width: '100%',
+        'margin-top': '2px',
+        'z-index': '1',
+        'border-radius': '2px'
+    });
+
     dashboard.appendChild(dashboardContainer);
 
     // generate trigger node
     triggerNode.innerHTML = '&#8964;';
-    triggerNode.style.background = '#673ab7';
-    triggerNode.style.color = 'rgba(255,255,255,.87)';
-    triggerNode.style.padding = '0 3px';
-    triggerNode.style.cursor = 'pointer';
+
+    addStylesToNode(triggerNode, {
+        background: '#673ab7',
+        color: textColor,
+        padding: '0 3px',
+        cursor: 'pointer'
+    });
+
     self.clickListener = listen(triggerNode, 'click', function onClick() {
         if ('none' === dashboard.style.display) {
-            dashboard.style.display = 'block';
-            container.style['z-index'] = '11';
+            addStylesToNode(dashboard, {
+                display: 'block',
+                'z-index': '12'
+            });
             if (supportClassList) {
               container.classList.add('active');
             }
         } else {
-            dashboard.style.display = 'none';
-            container.style['z-index'] = '10';
+            addStylesToNode(dashboard, {
+                display: 'none',
+                'z-index': '10'
+            });
             if (supportClassList) {
               container.classList.remove('active');
             }
