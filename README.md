@@ -1,5 +1,7 @@
 # react-i13n
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/yahoo/react-i13n.svg)](https://greenkeeper.io/)
+
 [![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n)
 [![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
 [![Coverage Status](https://coveralls.io/repos/yahoo/react-i13n/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/react-i13n?branch=master)
