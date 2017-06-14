@@ -2,7 +2,7 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals document */
+/* globals document, window */
 
 function isLeftClickEvent (e) {
     return e.button === 0;
@@ -12,8 +12,12 @@ function isModifiedEvent (e) {
     return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 }
 
+function getLinkTarget (target, props) {
+    return props.target || (target && target.target) || '_self';
+}
+
 function isNewWindow (target, props) {
-    return props.target === '_blank' || (target && target.target && '_blank' === target.target);
+    return getLinkTarget(target, props) === '_blank';
 }
 
 function isDefaultRedirectLink (target) {
@@ -98,7 +102,14 @@ module.exports = function clickHandler (e) {
                 // if the button has no form linked, then do nothing
                 target.form && target.form.submit();
             } else {
-                document.location.assign(href);
+                var linkTarget = getLinkTarget(target, props);
+                if (linkTarget === '_top') {
+                    window.top.location.href = href;
+                } else if (linkTarget === '_parent') {
+                    window.parent.location.href = href;
+                } else {
+                    document.location.assign(href);
+                }
             }
         }
     });

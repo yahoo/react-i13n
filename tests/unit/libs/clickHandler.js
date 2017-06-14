@@ -6,7 +6,6 @@
 'use strict';
 
 var expect = require('expect.js');
-var JSDOM = require('jsdom').JSDOM;
 var clickHandler;
 var React;
 var mockData = {};
@@ -15,10 +14,26 @@ var mockComponent;
 var I13nNode = require('../../../src/libs/I13nNode');
 describe('clickHandler', function () {
     beforeEach(function () {
-        var jsdom = new JSDOM('<html><body></body></html>');
-        global.window = jsdom.window;
-        global.document = jsdom.window.document;
-        global.navigator = jsdom.window.navigator;
+        global.window = {
+            parent: {
+                location: {
+                    href: 'about:blank'
+                }
+            },
+            top: {
+                location: {
+                    href: 'about:blank'
+                }
+            }
+        };
+        global.document = {
+            location: {
+                assign: function (href) {
+                    this.href = href;
+                },
+                href: 'about:blank'
+            }
+        };
 
         React = require('react');
         clickHandler = require('../../../src/libs/clickHandler');
@@ -40,7 +55,6 @@ describe('clickHandler', function () {
     afterEach(function () {
         delete global.window;
         delete global.document;
-        delete global.navigator;
     });
 
     it('should run click handler correctly', function (done) {
@@ -261,6 +275,56 @@ describe('clickHandler', function () {
         };
         mockComponent.executeI13nEvent = function (eventName, payload, callback) {
             expect(executedActions).to.eql([]);
+            done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
+        };
+        clickHandler.apply(mockComponent, [mockClickEvent]);
+    });
+
+    it('should execute event with prevent default and redirection if props.target=_top', function (done) {
+        var i13nNode = new I13nNode(null, {});
+        var executedActions = [];
+        mockClickEvent.target = {
+            tagName: 'A'
+        };
+        mockComponent.props.target = '_top';
+        mockClickEvent.preventDefault = function () {
+            executedActions.push('preventDefault');
+        };
+        document.location.assign = function () {
+            executedActions.push('assign');
+        };
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+            callback();
+            expect(executedActions).to.eql(['preventDefault']);
+            expect(global.window.top.location.href).to.eql('foo');
+            done();
+        };
+        mockComponent.getI13nNode = function () {
+            return i13nNode;
+        };
+        clickHandler.apply(mockComponent, [mockClickEvent]);
+    });
+
+    it('should execute event with prevent default and redirection if props.target=_parent', function (done) {
+        var i13nNode = new I13nNode(null, {});
+        var executedActions = [];
+        mockClickEvent.target = {
+            tagName: 'A'
+        };
+        mockComponent.props.target = '_parent';
+        mockClickEvent.preventDefault = function () {
+            executedActions.push('preventDefault');
+        };
+        document.location.assign = function () {
+            executedActions.push('assign');
+        };
+        mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+            callback();
+            expect(executedActions).to.eql(['preventDefault']);
+            expect(global.window.parent.location.href).to.eql('foo');
             done();
         };
         mockComponent.getI13nNode = function () {
