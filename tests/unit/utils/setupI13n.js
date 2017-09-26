@@ -42,6 +42,11 @@ describe('setupI13n', function () {
         global.document = jsdom.window.document;
         global.navigator = jsdom.window.navigator;
 
+        // http://fb.me/react-polyfills
+        global.requestAnimationFrame = function(callback) {
+          setTimeout(callback, 0);
+        };
+
         mockery.enable({
             warnOnReplace: false,
             warnOnUnregistered: false,
