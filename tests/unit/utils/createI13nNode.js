@@ -53,7 +53,7 @@ function findProps(elem) {
         return elem[Object.keys(elem).find(function (key) {
             return key.indexOf('__reactInternalInstance') === 0 ||
                 key.indexOf('_reactInternalComponent') === 0;
-        })]._currentElement.props;
+        })].memoizedProps;
     } catch (e) {}
 }
 
@@ -64,6 +64,10 @@ describe('createI13nNode', function () {
         global.document = jsdom.window.document;
         global.navigator = jsdom.window.navigator;
         global.location = window.location;
+        // http://fb.me/react-polyfills
+        global.requestAnimationFrame = function(callback) {
+          setTimeout(callback, 0);
+        };
 
         mockery.enable({
             warnOnReplace: false,

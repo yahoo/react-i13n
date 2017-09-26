@@ -55,8 +55,8 @@
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
     "promise": "^8.0.0",
-    "react": "^15.0.0",
-    "react-dom": "^15.0.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.3.0",
     "xunit-file": "^1.0.0"
@@ -68,8 +68,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0"
+    "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
+    "react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0"
   },
   "precommit": [
     "lint",
