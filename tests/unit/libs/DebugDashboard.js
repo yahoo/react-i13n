@@ -15,6 +15,10 @@ describe('clickHandler', function () {
         global.window = jsdom.window;
         global.document = jsdom.window.document;
         global.navigator = jsdom.window.navigator;
+        // http://fb.me/react-polyfills
+        global.requestAnimationFrame = function(callback) {
+          setTimeout(callback, 0);
+        };
         DebugDashboard = require('../../../src/libs/DebugDashboard');
     });
 
