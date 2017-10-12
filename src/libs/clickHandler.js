@@ -67,7 +67,7 @@ module.exports = function clickHandler (e) {
         return;
     }
 
-    href = props.href || target.href;
+    href = props.href;
 
     // if users disable the redirect by follow, force set it as false
     if (undefined !== followLink) {
