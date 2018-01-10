@@ -174,7 +174,7 @@ var prototypeSpecs = {
 
     /**
      * componentDidUpdate
-     * @method componentWillMount
+     * @method componentDidUpdate
      */
     componentDidUpdate() {
       if (IS_DEBUG_MODE) {
