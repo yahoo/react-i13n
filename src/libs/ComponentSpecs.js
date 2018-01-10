@@ -173,6 +173,17 @@ var prototypeSpecs = {
     },
 
     /**
+     * componentDidUpdate
+     * @method componentWillMount
+     */
+    componentDidUpdate() {
+      if (IS_DEBUG_MODE) {
+        this._debugDashboard && this._debugDashboard.destroy();
+        this._debugDashboard = new DebugDashboard(this._i13nNode);
+      }
+    },
+
+    /**
      * componentWillMount
      * @method componentWillMount
      */
