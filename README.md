@@ -113,6 +113,8 @@ Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins2
 ## Debugging
 Add `i13n_debug=1` to the request url, you will get the i13n model for each `i13n node` directly shown on the page. It shows the information for each model data and where the data inherits from.
 
+By default, i13n dashboard will be created on next thread (setTimeout 0), you could pass a query param `i13n_debug_delay={time in ms}` to specify the initialization delay (In case your UI component is mounted after i13n library initialized).
+
 ## Examples
 * [react-i13n-flux-examples](https://github.com/kaesonho/react-i13n-flux-examples) - we forked the [flux examples](https://github.com/facebook/flux/tree/master/examples) and integrated `react-i13n` with it.
 * [fluxible.io](http://fluxible.io/) - [fluxible](https://github.com/yahoo/fluxible) site integrating `react-i13n` and [react-i13n-ga](https://github.com/kaesonho/react-i13n-ga).
