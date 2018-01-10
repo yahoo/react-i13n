@@ -5,6 +5,8 @@
 /* globals location */
 'use strict';
 
+require('setimmediate');
+
 var DebugDashboard = require('./DebugDashboard');
 var I13nNode = require('./I13nNode');
 var PropTypes = require('prop-types');
@@ -17,7 +19,7 @@ var debug = require('debug')('I13nComponent');
 var listen = require('subscribe-ui-event/dist/lib/listen');
 var subscribe = require('subscribe-ui-event/dist/subscribe');
 
-var DEBUG_INFO = (function getDebugInfo () {
+var IS_DEBUG_MODE = (function isDebugMode () {
     function getJsonFromUrl() {
         var query = location.search.substr(1);
         var result = {};
@@ -31,13 +33,8 @@ var DEBUG_INFO = (function getDebugInfo () {
     if ('undefined' === typeof location) {
         return false;
     }
-    var queryObject = getJsonFromUrl();
-    return {
-      enabled: queryObject.i13n_debug === '1' ? true : false,
-      delay: queryObject.i13n_debug_delay || 0
-    }
+    return (getJsonFromUrl().i13n_debug === '1') ? true : false;
 })();
-
 var DEFAULT_SCAN_TAGS = ['a', 'button'];
 var pageInitViewportDetectionTimeout = null;
 var pageInitViewportDetected = false;
@@ -168,11 +165,22 @@ var prototypeSpecs = {
             self._scanLinks();
         }
 
-        if (DEBUG_INFO.enabled) {
-            setTimeout(function asyncShowDebugDashboard() {
+        if (IS_DEBUG_MODE) {
+            setImmediate(function asyncShowDebugDashboard() {
                 self._debugDashboard = new DebugDashboard(self._i13nNode);
-            }, DEBUG_INFO.delay);
+            });
         }
+    },
+
+    /**
+     * componentDidUpdate
+     * @method componentWillMount
+     */
+    componentDidUpdate() {
+      if (IS_DEBUG_MODE) {
+        this._debugDashboard && this._debugDashboard.destroy();
+        this._debugDashboard = new DebugDashboard(this._i13nNode);
+      }
     },
 
     /**
@@ -209,7 +217,7 @@ var prototypeSpecs = {
         }
 
         // remove debug dashboard
-        if (DEBUG_INFO.enabled) {
+        if (IS_DEBUG_MODE) {
             this._debugDashboard && this._debugDashboard.destroy();
         }
 
@@ -353,7 +361,7 @@ var prototypeSpecs = {
             subThis.executeI13nEvent = self.executeI13nEvent.bind(self);
             self._subI13nComponents.push({
                 componentClickListener: listen(element, 'click', clickHandler.bind(subThis)),
-                debugDashboard: DEBUG_INFO.enabled ? new DebugDashboard(i13nNode) : null,
+                debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
                 domElement: element,
                 i13nNode: i13nNode
             });
