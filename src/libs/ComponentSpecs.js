@@ -5,8 +5,6 @@
 /* globals location */
 'use strict';
 
-require('setimmediate');
-
 var DebugDashboard = require('./DebugDashboard');
 var I13nNode = require('./I13nNode');
 var PropTypes = require('prop-types');
@@ -166,10 +164,19 @@ var prototypeSpecs = {
         }
 
         if (IS_DEBUG_MODE) {
-            setImmediate(function asyncShowDebugDashboard() {
-                self._debugDashboard = new DebugDashboard(self._i13nNode);
-            });
+            self._debugDashboard = new DebugDashboard(self._i13nNode);
         }
+    },
+
+    /**
+     * componentDidUpdate
+     * @method componentDidUpdate
+     */
+    componentDidUpdate() {
+      if (IS_DEBUG_MODE) {
+        this._debugDashboard && this._debugDashboard.destroy();
+        this._debugDashboard = new DebugDashboard(this._i13nNode);
+      }
     },
 
     /**
