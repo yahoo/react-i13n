@@ -17,7 +17,7 @@
     "debug": "^3.1.0",
     "hoist-non-react-statics": "^2.0.0",
     "prop-types": "^15.5.10",
-    "subscribe-ui-event": "^1.0.14"
+    "subscribe-ui-event": "^2.0.1"
   },
   "devDependencies": {
     "babel": "^6.5.2",
