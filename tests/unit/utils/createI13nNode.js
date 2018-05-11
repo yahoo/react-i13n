@@ -80,8 +80,7 @@ describe('createI13nNode', function () {
         createReactClass = require('create-react-class');
 
         mockery.registerMock('../libs/ReactI13n', MockReactI13n);
-        mockery.registerMock('subscribe-ui-event/dist/subscribe', mockSubscribe.subscribe);
-        mockery.registerMock('subscribe-ui-event/dist/listen', mockSubscribe.listen);
+        mockery.registerMock('subscribe-ui-event', mockSubscribe);
         mockery.registerMock('../libs/clickHandler', mockClickHandler);
 
         createI13nNode = require('../../../src/utils/createI13nNode');
