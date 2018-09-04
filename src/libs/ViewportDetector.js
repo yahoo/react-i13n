@@ -2,13 +2,13 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-var subscribe = require('subscribe-ui-event/dist/subscribe');
+var subscribe = require('subscribe-ui-event').subscribe;
 
-var SUBSCRIBE_OPTIONS = { 
+var SUBSCRIBE_OPTIONS = {
     enableScrollInfo: true
 };
 
-var DEFAULT_VIEWPORT_MARGINS = { 
+var DEFAULT_VIEWPORT_MARGINS = {
     usePercent: false,
     top: 20,
     bottom: 20
@@ -19,8 +19,8 @@ var DEFAULT_VIEWPORT_MARGINS = {
  * @param {Object} element DOM element to detect
  * @param {Object} [options] options object
  * @param {Object} [options.margins] viewport detection margin setting
- * @param {Object} [options.margins.top] viewport top margin setting 
- * @param {Object} [options.margins.bottom] viewport bottom margin setting 
+ * @param {Object} [options.margins.top] viewport top margin setting
+ * @param {Object} [options.margins.bottom] viewport bottom margin setting
  * @param {Object} [options.margins.usePercent] true to use top and bottom as percentage instead of pixel
  * @param {Object} [options.target] target of ui events, should be a dom element
  * @param {Function} onEnterViewport callback when the DOM element enters the viewport
@@ -32,9 +32,9 @@ var ViewportDetector = function ViewportDetector(element, options, onEnterViewpo
 
     this._element = element;
     this._onEnterViewport = onEnterViewport;
-    this._subscribers = []; 
+    this._subscribers = [];
     this._rect;
-    this._margins = { 
+    this._margins = {
         top: marginOptions.usePercent ? marginOptions.top * clientHeight : marginOptions.top,
         bottom: marginOptions.usePercent ? marginOptions.bottom * clientHeight : marginOptions.bottom
     };

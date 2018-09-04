@@ -14,8 +14,8 @@ var ReactI13n = require('./ReactI13n');
 var ViewportDetector = require('./ViewportDetector');
 var clickHandler = require('./clickHandler');
 var debug = require('debug')('I13nComponent');
-var listen = require('subscribe-ui-event/dist/lib/listen');
-var subscribe = require('subscribe-ui-event/dist/subscribe');
+var listen = require('subscribe-ui-event').listen;
+var subscribe = require('subscribe-ui-event').subscribe;
 
 var IS_DEBUG_MODE = (function isDebugMode () {
     function getJsonFromUrl() {
