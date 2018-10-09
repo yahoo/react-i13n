@@ -39,7 +39,7 @@
     "grunt-cli": "^1.0.0",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-connect": "^2.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-jshint": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-saucelabs": "^9.0.0",
     "grunt-shell": "^2.0.0",
