@@ -5,7 +5,7 @@
 /* globals describe, it, beforeEach, afterEach */
 
 
-const expect = require('expect.js');
+import expect from 'expect.js';
 const EventsQueue = require('../../../src/libs/EventsQueue');
 
 describe('EventsQueue', () => {

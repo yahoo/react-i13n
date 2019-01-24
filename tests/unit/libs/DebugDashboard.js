@@ -5,8 +5,8 @@
 /* globals describe,it,document,beforeEach,afterEach */
 
 
-const expect = require('expect.js');
-const JSDOM = require('jsdom').JSDOM;
+import expect from 'expect.js';
+import { JSDOM } from 'jsdom';
 
 let DebugDashboard;
 const I13nNode = require('../../../src/libs/I13nNode');

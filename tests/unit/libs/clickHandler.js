@@ -5,7 +5,7 @@
 /* globals describe,it,document,beforeEach,afterEach */
 
 
-const expect = require('expect.js');
+import expect from 'expect.js';
 
 let clickHandler;
 let React;

@@ -5,7 +5,7 @@
 /* globals describe, it, beforeEach, afterEach */
 
 
-const expect = require('expect.js');
+import expect from 'expect.js';
 const I13nNode = require('../../../src/libs/I13nNode');
 
 describe('I13nNode', () => {

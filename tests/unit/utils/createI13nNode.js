@@ -6,10 +6,10 @@
 
 
 /* All the functionalities are tested with this higher order component */
-const expect = require('expect.js');
-const JSDOM = require('jsdom').JSDOM;
-const mockery = require('mockery');
-const PropTypes = require('prop-types');
+import expect from 'expect.js';
+import { JSDOM } from 'jsdom';
+import mockery from 'mockery';
+import PropTypes from 'prop-types';
 
 let I13nNode;
 let rootI13nNode = null;

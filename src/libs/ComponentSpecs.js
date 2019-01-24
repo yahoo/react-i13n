@@ -4,13 +4,14 @@
  */
 /* globals location */
 
-const PropTypes = require('prop-types');
-const React = require('react');
-const ReactDOM = require('react-dom');
-const ReactI13n = require('./ReactI13n');
-const ViewportDetector = require('./ViewportDetector');
+import PropTypes from 'prop-types';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+import ReactI13n from './ReactI13n';
 import clickHandler from './clickHandler';
 
+const ViewportDetector = require('./ViewportDetector');
 const debug = require('debug')('I13nComponent');
 const listen = require('subscribe-ui-event').listen;
 const subscribe = require('subscribe-ui-event').subscribe;

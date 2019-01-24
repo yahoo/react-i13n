@@ -5,10 +5,10 @@
 /* globals describe,it,document,beforeEach,afterEach */
 
 
-const expect = require('expect.js');
-const JSDOM = require('jsdom').JSDOM;
-const mockery = require('mockery');
-const PropTypes = require('prop-types');
+import expect from 'expect.js';
+import { JSDOM } from 'jsdom';
+import mockery from 'mockery';
+import PropTypes from 'prop-types';
 
 let createReactClass;
 let React;
@@ -60,7 +60,7 @@ describe('setupI13n', () => {
 
     mockery.registerMock('../libs/ReactI13n', MockReactI13n);
 
-    setupI13n = require('../../../src/utils/setupI13n');
+    setupI13n = require('../../../src/utils/setupI13n').default;
   });
 
   afterEach(() => {

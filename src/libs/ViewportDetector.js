@@ -2,7 +2,7 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-const subscribe = require('subscribe-ui-event').subscribe;
+import { subscribe } from 'subscribe-ui-event';
 
 const SUBSCRIBE_OPTIONS = {
   enableScrollInfo: true

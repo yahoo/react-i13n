@@ -5,8 +5,8 @@
 /* globals describe, it, beforeEach, afterEach */
 
 
-const expect = require('expect.js');
-const ReactI13n = require('../../../src/libs/ReactI13n');
+import expect from 'expect.js';
+import ReactI13n from '../../../src/libs/ReactI13n';
 
 describe('ReactI13n', () => {
   it('should be created correctly', () => {

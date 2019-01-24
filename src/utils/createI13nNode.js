@@ -4,7 +4,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { Component as ReactComponent } from 'react';
+import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import { warnAndPrintTrace } from '../libs/utils';
@@ -70,7 +70,7 @@ function createI13nNode(Component, defaultProps, options) {
 
   options = options || {};
 
-  class I13nComponent extends ReactComponent {
+  class I13nComponent extends React.Component {
     render() {
       // filter i13n related props
       // TODO, we could probably just drop this in this version

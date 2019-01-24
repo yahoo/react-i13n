@@ -4,11 +4,11 @@
  */
 
 import augmentComponent from './augmentComponent';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+import React from 'react';
+import ReactI13n from '../libs/ReactI13n';
 
-const React = require('react');
-const hoistNonReactStatics = require('hoist-non-react-statics');
 const ComponentSpecs = require('../libs/ComponentSpecs');
-const ReactI13n = require('../libs/ReactI13n');
 
 const IS_CLIENT = typeof window !== 'undefined';
 const debugLib = require('debug');
@@ -27,7 +27,7 @@ const debug = debugLib('ReactI13n');
  * @param {Array} plugins plugins
  * @method setupI13n
  */
-module.exports = function setupI13n(Component, options, plugins) {
+function setupI13n(Component, options, plugins) {
   options = options || {};
   plugins = plugins || [];
 
@@ -36,10 +36,6 @@ module.exports = function setupI13n(Component, options, plugins) {
   }
 
   class RootI13nComponent extends React.Component {
-    constructor(props) {
-      super(props);
-    }
-
     componentWillMount() {
       const reactI13n = new ReactI13n(options);
       this._reactI13nInstance = reactI13n;
@@ -91,3 +87,5 @@ module.exports = function setupI13n(Component, options, plugins) {
 
   return RootI13nComponent;
 };
+
+export default setupI13n;
