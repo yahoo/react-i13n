@@ -25,6 +25,6 @@ function augmentComponent(target, prototypeProps, staticProps) {
   });
   Object.assign(target, staticProps);
   return target;
-};
+}
 
 export default augmentComponent;

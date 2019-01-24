@@ -54,7 +54,7 @@ function createI13nNode(Component, defaultProps, options) {
   }
 
   const componentName = Component.displayName || Component.name || Component;
-  const componentIsFunction = 'function' === typeof Component;
+  const componentIsFunction = typeof Component === 'function';
 
   defaultProps = Object.assign(
     {},
@@ -112,6 +112,6 @@ function createI13nNode(Component, defaultProps, options) {
   }
 
   return I13nComponent;
-};
+}
 
 export default createI13nNode;

@@ -55,7 +55,7 @@ function isFormSubmit(target) {
  * @param {Object} e the click event
  * @method ClickHandler
  */
-module.exports = function clickHandler(e) {
+function clickHandler(e) {
   const self = this;
   const target = e.target || e.srcElement;
   let isRedirectLink = isDefaultRedirectLink(target);
@@ -116,3 +116,5 @@ module.exports = function clickHandler(e) {
     }
   });
 };
+
+export default clickHandler;

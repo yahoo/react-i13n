@@ -38,7 +38,7 @@ describe('clickHandler', () => {
     };
 
     React = require('react');
-    clickHandler = require('../../../src/libs/clickHandler');
+    clickHandler = require('../../../src/libs/clickHandler').default;
     mockClickEvent = {
       target: {},
       button: 0

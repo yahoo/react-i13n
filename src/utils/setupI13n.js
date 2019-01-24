@@ -3,11 +3,12 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
+import augmentComponent from './augmentComponent';
+
 const React = require('react');
 const hoistNonReactStatics = require('hoist-non-react-statics');
 const ComponentSpecs = require('../libs/ComponentSpecs');
 const ReactI13n = require('../libs/ReactI13n');
-import augmentComponent from './augmentComponent';
 
 const IS_CLIENT = typeof window !== 'undefined';
 const debugLib = require('debug');
