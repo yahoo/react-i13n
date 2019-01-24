@@ -11,7 +11,7 @@
  * @param {Object} prototypeProps the prototype source to augment target
  * @param {Object} staticProps the static source to augment target
  */
-module.exports = function augmentComponent(target, prototypeProps, staticProps) {
+function augmentComponent(target, prototypeProps, staticProps) {
   prototypeProps = prototypeProps || {};
   staticProps = staticProps || {};
   Object.getOwnPropertyNames(prototypeProps).forEach((name) => {
@@ -26,3 +26,5 @@ module.exports = function augmentComponent(target, prototypeProps, staticProps) 
   Object.assign(target, staticProps);
   return target;
 };
+
+export default augmentComponent;

@@ -4,10 +4,12 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-const React = require('react');
-const hoistNonReactStatics = require('hoist-non-react-statics');
-const ComponentSpecs = require('../libs/ComponentSpecs');
-const augmentComponent = require('./augmentComponent');
+import React, { Component as ReactComponent } from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+
+import { warnAndPrintTrace } from '../libs/utils';
+import ComponentSpecs from '../libs/ComponentSpecs';
+import augmentComponent from './augmentComponent';
 
 const PROPS_TO_FILTER = [
   'bindClickEvent',
@@ -18,10 +20,13 @@ const PROPS_TO_FILTER = [
   'scanLinks'
 ];
 
-function objectWithoutProperties(obj, keys) {
+const isStatelessComponent = TargetComponent => typeof TargetComponent === 'function'
+  && !(TargetComponent.prototype && TargetComponent.prototype.isReactComponent);
+
+function omit(obj, keys) {
   const target = {};
   for (const i in obj) {
-    if (keys.indexOf(i) >= 0) {
+    if (PROPS_TO_FILTER.indexOf(i) >= 0) {
       continue;
     }
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {
@@ -42,18 +47,15 @@ function objectWithoutProperties(obj, keys) {
  * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
-module.exports = function createI13nNode(Component, defaultProps, options) {
+function createI13nNode(Component, defaultProps, options) {
   if (!Component) {
-    if (process.env.NODE_ENV !== 'production') {
-      console
-        && console.warn
-        && console.warn('You are passing a null component into createI13nNode');
-      console && console.trace && console.trace();
-    }
+    warnAndPrintTrace('You are passing a null component into createI13nNode');
     return;
   }
+
   const componentName = Component.displayName || Component.name || Component;
-  const componentIsFunction = typeof Component === 'function';
+  const componentIsFunction = 'function' === typeof Component;
+
   defaultProps = Object.assign(
     {},
     {
@@ -68,20 +70,17 @@ module.exports = function createI13nNode(Component, defaultProps, options) {
 
   options = options || {};
 
-  class I13nComponent extends React.Component {
-    constructor(props) {
-      super(props);
-    }
-
+  class I13nComponent extends ReactComponent {
     render() {
       // filter i13n related props
-      if (process.env.NODE_ENV !== 'production' && undefined !== this.props.followLink) {
-        console
-          && console.warn
-          && console.warn('props.followLink support is deprecated, please use props.follow instead.');
+      // TODO, we could probably just drop this in this version
+      if (undefined !== this.props.followLink) {
+        warnAndPrintTrace('props.followLink support is deprecated, please use props.follow instead.');
       }
-      const props = objectWithoutProperties(this.props, PROPS_TO_FILTER);
 
+      const props = omit(this.props, PROPS_TO_FILTER);
+
+      // TODO, React forward ref
       if (options.refToWrappedComponent) {
         props.ref = options.refToWrappedComponent;
       }
@@ -114,3 +113,5 @@ module.exports = function createI13nNode(Component, defaultProps, options) {
 
   return I13nComponent;
 };
+
+export default createI13nNode;

@@ -7,7 +7,7 @@ const React = require('react');
 const hoistNonReactStatics = require('hoist-non-react-statics');
 const ComponentSpecs = require('../libs/ComponentSpecs');
 const ReactI13n = require('../libs/ReactI13n');
-const augmentComponent = require('./augmentComponent');
+import augmentComponent from './augmentComponent';
 
 const IS_CLIENT = typeof window !== 'undefined';
 const debugLib = require('debug');

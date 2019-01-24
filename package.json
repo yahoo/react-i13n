@@ -13,7 +13,8 @@
     "func": "grunt functional",
     "lint": "eslint src",
     "prepublish": "grunt dist",
-    "test": "grunt cover"
+    "test": "grunt cover",
+    "unit": "grunt unit"
   },
   "dependencies": {
     "debug": "^4.0.0",

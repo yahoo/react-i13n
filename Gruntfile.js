@@ -1,6 +1,5 @@
 // jscs:disable maximumLineLength
 
-
 const fs = require('fs');
 const path = require('path');
 
@@ -122,7 +121,7 @@ module.exports = function (grunt) {
       },
       unit: {
         command:
-          'NODE_ENV=test nyc --reporter text --reporter text-summary _mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec  --timeout 10000'
+          'NODE_ENV=test ./node_modules/mocha/bin/mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec'
       }
     },
     // webpack
