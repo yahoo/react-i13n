@@ -1,9 +1,9 @@
-'use strict';
+
 
 if (!global.Promise) {
-    global.Promise = require('promise');
+  global.Promise = require('promise');
 }
 
 if (!Object.assign) {
-    Object.assign = require('object-assign');
+  Object.assign = require('object-assign');
 }

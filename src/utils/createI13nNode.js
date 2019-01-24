@@ -3,33 +3,33 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-'use strict';
 
-var ComponentSpecs = require('../libs/ComponentSpecs');
-var React = require('react');
-var hoistNonReactStatics = require('hoist-non-react-statics');
-var augmentComponent = require('./augmentComponent');
-var PROPS_TO_FILTER = [
-    'bindClickEvent',
-    'follow',
-    'followLink',
-    'i13nModel',
-    'isLeafNode',
-    'scanLinks'
+const React = require('react');
+const hoistNonReactStatics = require('hoist-non-react-statics');
+const ComponentSpecs = require('../libs/ComponentSpecs');
+const augmentComponent = require('./augmentComponent');
+
+const PROPS_TO_FILTER = [
+  'bindClickEvent',
+  'follow',
+  'followLink',
+  'i13nModel',
+  'isLeafNode',
+  'scanLinks'
 ];
 
 function objectWithoutProperties(obj, keys) {
-    var target = {};
-    for (var i in obj) {
-        if (keys.indexOf(i) >= 0) {
-            continue;
-        }
-        if (!Object.prototype.hasOwnProperty.call(obj, i)) {
-            continue;
-        }
-        target[i] = obj[i];
+  const target = {};
+  for (const i in obj) {
+    if (keys.indexOf(i) >= 0) {
+      continue;
     }
-    return target;
+    if (!Object.prototype.hasOwnProperty.call(obj, i)) {
+      continue;
+    }
+    target[i] = obj[i];
+  }
+  return target;
 }
 
 /**
@@ -42,67 +42,75 @@ function objectWithoutProperties(obj, keys) {
  * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
-module.exports = function createI13nNode (Component, defaultProps, options) {
-
-    if (!Component) {
-        if ('production' !== process.env.NODE_ENV) {
-            console && console.warn && console.warn('You are passing a null component into createI13nNode');
-            console && console.trace && console.trace();
-        }
-        return;
+module.exports = function createI13nNode(Component, defaultProps, options) {
+  if (!Component) {
+    if (process.env.NODE_ENV !== 'production') {
+      console
+        && console.warn
+        && console.warn('You are passing a null component into createI13nNode');
+      console && console.trace && console.trace();
     }
-    var componentName = Component.displayName || Component.name || Component;
-    var componentIsFunction = 'function' === typeof Component;
-    defaultProps = Object.assign({}, {
-        i13nModel: null,
-        isLeafNode: false,
-        bindClickEvent: false,
-        follow: false,
-        scanLinks: null
-    }, defaultProps);
+    return;
+  }
+  const componentName = Component.displayName || Component.name || Component;
+  const componentIsFunction = typeof Component === 'function';
+  defaultProps = Object.assign(
+    {},
+    {
+      i13nModel: null,
+      isLeafNode: false,
+      bindClickEvent: false,
+      follow: false,
+      scanLinks: null
+    },
+    defaultProps
+  );
 
-    options = options || {};
+  options = options || {};
 
-    class I13nComponent extends React.Component {
-        constructor(props) {
-            super(props);
-        }
-        render () {
-            // filter i13n related props
-            if ('production' !== process.env.NODE_ENV && undefined !== this.props.followLink) {
-                console && console.warn && console.warn('props.followLink support is deprecated, please use props.follow instead.');
-            }
-            var props = objectWithoutProperties(this.props, PROPS_TO_FILTER);
-            
-            if (options.refToWrappedComponent) {
-                props.ref = options.refToWrappedComponent;
-            }
-            
-            if (!props.i13n && !options.skipUtilFunctionsByProps && componentIsFunction) {
-                props.i13n = {
-                    executeEvent: this.executeI13nEvent.bind(this),
-                    getI13nNode: this.getI13nNode.bind(this)
-                };
-            }
-
-            return React.createElement(
-                Component,
-                props,
-                props.children
-            );
-        }
+  class I13nComponent extends React.Component {
+    constructor(props) {
+      super(props);
     }
 
-    var specs = ComponentSpecs.pickSpecs();
+    render() {
+      // filter i13n related props
+      if (process.env.NODE_ENV !== 'production' && undefined !== this.props.followLink) {
+        console
+          && console.warn
+          && console.warn('props.followLink support is deprecated, please use props.follow instead.');
+      }
+      const props = objectWithoutProperties(this.props, PROPS_TO_FILTER);
 
-    augmentComponent(I13nComponent, specs.prototype, Object.assign({}, specs.static, {
-        displayName: options.displayName || ('I13n' + componentName),
-        defaultProps: defaultProps
-    }));
+      if (options.refToWrappedComponent) {
+        props.ref = options.refToWrappedComponent;
+      }
 
-    if (componentIsFunction) {
-        hoistNonReactStatics(I13nComponent, Component);
+      if (!props.i13n && !options.skipUtilFunctionsByProps && componentIsFunction) {
+        props.i13n = {
+          executeEvent: this.executeI13nEvent.bind(this),
+          getI13nNode: this.getI13nNode.bind(this)
+        };
+      }
+
+      return React.createElement(Component, props, props.children);
     }
+  }
 
-    return I13nComponent;
+  const specs = ComponentSpecs.pickSpecs();
+
+  augmentComponent(
+    I13nComponent,
+    specs.prototype,
+    Object.assign({}, specs.static, {
+      displayName: options.displayName || `I13n${componentName}`,
+      defaultProps
+    })
+  );
+
+  if (componentIsFunction) {
+    hoistNonReactStatics(I13nComponent, Component);
+  }
+
+  return I13nComponent;
 };

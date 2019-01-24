@@ -1,4 +1,4 @@
-/*global window */
+/* global window */
 
 window.Promise = require('promise');
 window.Object.assign = require('object-assign');
