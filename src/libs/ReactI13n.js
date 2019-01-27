@@ -4,10 +4,11 @@
  */
 /* global window, global, document */
 
+import EventsQueue from './EventsQueue';
+
 const debugLib = require('debug');
 
 const debug = debugLib('ReactI13n');
-const EventsQueue = require('./EventsQueue');
 const I13nNode = require('./I13nNode');
 
 const DEFAULT_HANDLER_TIMEOUT = 1000;

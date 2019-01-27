@@ -3,15 +3,15 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import augmentComponent from './augmentComponent';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import React from 'react';
+import augmentComponent from './augmentComponent';
 import ReactI13n from '../libs/ReactI13n';
 
-const ComponentSpecs = require('../libs/ComponentSpecs');
 
 const IS_CLIENT = typeof window !== 'undefined';
 const debugLib = require('debug');
+const ComponentSpecs = require('../libs/ComponentSpecs');
 
 const debug = debugLib('ReactI13n');
 
@@ -27,10 +27,7 @@ const debug = debugLib('ReactI13n');
  * @param {Array} plugins plugins
  * @method setupI13n
  */
-function setupI13n(Component, options, plugins) {
-  options = options || {};
-  plugins = plugins || [];
-
+function setupI13n(Component, options = {}, plugins = []) {
   if (!plugins.length) {
     debug('no plugins provided');
   }
@@ -78,14 +75,17 @@ function setupI13n(Component, options, plugins) {
   augmentComponent(
     RootI13nComponent,
     specs.prototype,
-    Object.assign({}, specs.static, {
-      displayName: options.displayName || `RootI13n${componentName}`
-    })
+    Object.assign(
+      {
+        displayName: options.displayName || `RootI13n${componentName}`
+      },
+      specs.static
+    )
   );
 
   hoistNonReactStatics(RootI13nComponent, Component);
 
   return RootI13nComponent;
-};
+}
 
 export default setupI13n;

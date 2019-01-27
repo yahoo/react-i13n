@@ -14,66 +14,69 @@ const debug = require('debug')('EventsQueue');
  * @param {Object} plugin the plugin object
  * @constructor
  */
-const EventsQueue = function EventsQueue(plugin) {
-  const self = this;
-  self._plugin = plugin;
-  self._pendingCallbacks = [];
-  self._pendingEventsCount = 0;
-};
-
-/**
- * Check if there's no pending events, if yes execute callback and execute all pending callbacks
- * @method _callbackAndCheckQueue
- * @param {Function} callback callback function
- * @private
- */
-EventsQueue.prototype._callbackAndCheckQueue = function callbackAndCheckQueue(callback) {
-  const self = this;
-  self._pendingEventsCount--;
-  // if there's no pending events, execute callback and pending-callbacks
-  if (self._pendingEventsCount === 0) {
-    callback && callback();
-    while (self._pendingCallbacks.length !== 0) {
-      const pendingCallback = self._pendingCallbacks.pop();
-      pendingCallback && pendingCallback();
-    }
-  } else {
-    self._pendingCallbacks.push(callback);
+class EventsQueue {
+  constructor(plugin) {
+    const self = this;
+    self._plugin = plugin;
+    self._pendingCallbacks = [];
+    self._pendingEventsCount = 0;
   }
-};
 
-/**
- * The proxy function of event firing
- * @method executeEvent
- * @param {String} eventName event name
- * @param {Object} payload payload
- * @param {Function} resolve promise resolve callback
- * @param {Function} reject promise reject callback
- */
-EventsQueue.prototype.executeEvent = function executeEvent(eventName, payload, resolve, reject) {
-  const self = this;
-  const eventLog = {
-    pluginName: self._plugin.name,
-    eventName,
-    payload
-  };
-  self._pendingEventsCount++;
-  try {
-    if (self._plugin && self._plugin.eventHandlers && self._plugin.eventHandlers[eventName]) {
-      self._plugin.eventHandlers[eventName].apply(self._plugin, [
-        payload,
-        function eventCallback() {
-          self._callbackAndCheckQueue(resolve);
-        }
-      ]);
+  /**
+   * Check if there's no pending events, if yes execute callback and execute all pending callbacks
+   * @method _callbackAndCheckQueue
+   * @param {Function} callback callback function
+   * @private
+   */
+  _callbackAndCheckQueue(callback) {
+    const self = this;
+    self._pendingEventsCount--;
+    // if there's no pending events, execute callback and pending-callbacks
+    if (self._pendingEventsCount === 0) {
+      callback && callback();
+      while (self._pendingCallbacks.length !== 0) {
+        const pendingCallback = self._pendingCallbacks.pop();
+        pendingCallback && pendingCallback();
+      }
     } else {
-      debug(`Handler ${eventName} is not found: ${self._plugin.name}`, eventLog);
-      self._callbackAndCheckQueue(resolve);
+      self._pendingCallbacks.push(callback);
     }
-  } catch (e) {
-    debug(`Handler ${eventName} throws error: ${self._plugin.name}`, e);
-    self._callbackAndCheckQueue(reject);
   }
-};
 
-module.exports = EventsQueue;
+  /**
+   * The proxy function of event firing
+   * @method executeEvent
+   * @param {String} eventName event name
+   * @param {Object} payload payload
+   * @param {Function} resolve promise resolve callback
+   * @param {Function} reject promise reject callback
+   */
+
+  executeEvent(eventName, payload, resolve, reject) {
+    const self = this;
+    const eventLog = {
+      pluginName: self._plugin.name,
+      eventName,
+      payload
+    };
+    self._pendingEventsCount++;
+    try {
+      if (self._plugin && self._plugin.eventHandlers && self._plugin.eventHandlers[eventName]) {
+        self._plugin.eventHandlers[eventName].apply(self._plugin, [
+          payload,
+          function eventCallback() {
+            self._callbackAndCheckQueue(resolve);
+          }
+        ]);
+      } else {
+        debug(`Handler ${eventName} is not found: ${self._plugin.name}`, eventLog);
+        self._callbackAndCheckQueue(resolve);
+      }
+    } catch (e) {
+      debug(`Handler ${eventName} throws error: ${self._plugin.name}`, e);
+      self._callbackAndCheckQueue(reject);
+    }
+  }
+}
+
+export default EventsQueue;

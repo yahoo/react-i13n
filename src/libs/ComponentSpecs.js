@@ -7,14 +7,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { listen } from 'subscribe-ui-event';
 
-import ReactI13n from './ReactI13n';
 import clickHandler from './clickHandler';
 
 const ViewportDetector = require('./ViewportDetector');
 const debug = require('debug')('I13nComponent');
-const listen = require('subscribe-ui-event').listen;
-const subscribe = require('subscribe-ui-event').subscribe;
 const I13nNode = require('./I13nNode');
 const DebugDashboard = require('./DebugDashboard');
 
@@ -121,7 +119,7 @@ const prototypeSpecs = {
    * componentWillUpdate
    * @method componentWillUpdate
    */
-   // @TODO, UNSAFE_componentWillUpdate()
+  // @TODO, UNSAFE_componentWillUpdate()
   componentWillUpdate(nextProps, nextState) {
     const self = this;
 
@@ -155,13 +153,9 @@ const prototypeSpecs = {
 
     // enable viewport checking if enabled
     if (reactI13n.isViewportEnabled()) {
-      self._viewportDetector = new ViewportDetector(
-        domNode,
-        self._getViewportOptions(),
-        () => {
-          self._handleEnterViewport();
-        }
-      );
+      self._viewportDetector = new ViewportDetector(domNode, self._getViewportOptions(), () => {
+        self._handleEnterViewport();
+      });
       if (pageInitViewportDetected) {
         self._viewportDetector.init();
       } else {
@@ -301,9 +295,7 @@ const prototypeSpecs = {
     }
     return (
       this._reactI13nInstance
-      || (this.context
-        && this.context.i13n
-        && this.context.i13n._reactI13nInstance)
+      || (this.context && this.context.i13n && this.context.i13n._reactI13nInstance)
       || globalReactI13n
     );
   },
@@ -359,12 +351,7 @@ const prototypeSpecs = {
     // 4. (if enabled) create debug node for it
     foundElements.forEach((element) => {
       const I13nNode = reactI13n.getI13nNodeClass();
-      const i13nNode = new I13nNode(
-        self._i13nNode,
-        {},
-        true,
-        reactI13n.isViewportEnabled()
-      );
+      const i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
       i13nNode.setDOMNode(element);
       const subThis = {
         props: {
@@ -378,11 +365,7 @@ const prototypeSpecs = {
       (subThis._shouldFollowLink = self._shouldFollowLink.bind(subThis)),
       (subThis.executeI13nEvent = self.executeI13nEvent.bind(self));
       self._subI13nComponents.push({
-        componentClickListener: listen(
-          element,
-          'click',
-          clickHandler.bind(subThis)
-        ),
+        componentClickListener: listen(element, 'click', clickHandler.bind(subThis)),
         debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
         domElement: element,
         i13nNode
@@ -402,9 +385,7 @@ const prototypeSpecs = {
     if (undefined !== this.shouldFollowLink) {
       return this.shouldFollowLink(this.props);
     }
-    return undefined !== this.props.followLink
-      ? this.props.followLink
-      : this.props.follow;
+    return undefined !== this.props.followLink ? this.props.followLink : this.props.follow;
   },
 
   /**
@@ -528,9 +509,7 @@ const prototypeSpecs = {
     self._i13nNode.getChildrenNodes().forEach((childNode) => {
       const reactComponent = childNode.getReactComponent();
       if (reactComponent) {
-        reactComponent.recursiveDetectViewport(
-          self._viewportDetector.isEnteredViewport()
-        );
+        reactComponent.recursiveDetectViewport(self._viewportDetector.isEnteredViewport());
       }
     });
   },
@@ -553,8 +532,7 @@ const prototypeSpecs = {
  * @param (Object) specs.static picking static specs
  * @returns picked specs
  */
-const pickSpecs = function pickSpecs(specs) {
-  specs = specs || {};
+const pickSpecs = function pickSpecs(specs = {}) {
   const picked = {
     prototype: {},
     static: {}

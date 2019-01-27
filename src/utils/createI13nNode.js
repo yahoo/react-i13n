@@ -26,7 +26,7 @@ const isStatelessComponent = TargetComponent => typeof TargetComponent === 'func
 function omit(obj, keys) {
   const target = {};
   for (const i in obj) {
-    if (PROPS_TO_FILTER.indexOf(i) >= 0) {
+    if (keys.indexOf(i) >= 0) {
       continue;
     }
     if (!Object.prototype.hasOwnProperty.call(obj, i)) {

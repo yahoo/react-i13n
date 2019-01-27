@@ -6,7 +6,7 @@
 
 
 import expect from 'expect.js';
-const EventsQueue = require('../../../src/libs/EventsQueue');
+import EventsQueue from '../../../src/libs/EventsQueue';
 
 describe('EventsQueue', () => {
   it('should be created correctly', () => {

@@ -11,9 +11,7 @@
  * @param {Object} prototypeProps the prototype source to augment target
  * @param {Object} staticProps the static source to augment target
  */
-function augmentComponent(target, prototypeProps, staticProps) {
-  prototypeProps = prototypeProps || {};
-  staticProps = staticProps || {};
+function augmentComponent(target, prototypeProps = {}, staticProps = {}) {
   Object.getOwnPropertyNames(prototypeProps).forEach((name) => {
     if (name !== 'constructor') {
       Object.defineProperty(
