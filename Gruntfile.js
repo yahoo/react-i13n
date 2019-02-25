@@ -118,10 +118,10 @@ module.exports = function (grunt) {
                         env: env
                     }
                 },
-                command: 'NODE_ENV=test nyc --report-dir <%= project.coverage_dir %> --reporter lcov _mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec --timeout 10000'
+                command: 'NODE_ENV=test nyc --report-dir <%= project.coverage_dir %> --reporter lcov _mocha <%= project.unit %> --require babel-register --require babel-polyfill --recursive --reporter spec --timeout 10000'
             },
             unit: {
-                command: 'NODE_ENV=test nyc --reporter text --reporter text-summary _mocha <%= project.unit %> --compilers js:babel-register --require babel-polyfill --recursive --reporter spec  --timeout 10000'
+                command: 'NODE_ENV=test nyc --reporter text --reporter text-summary _mocha <%= project.unit %> --require babel-register --require babel-polyfill --recursive --reporter spec  --timeout 10000'
             }
         },
         // webpack
