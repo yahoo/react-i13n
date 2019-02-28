@@ -56,7 +56,7 @@
     "promise": "^8.0.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "webpack": "^3.12.0",
+    "webpack": "^4.29.6",
     "webpack-dev-server": "^3.2.1",
     "xunit-file": "^1.0.0"
   },
