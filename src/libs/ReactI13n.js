@@ -2,9 +2,10 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* global window, global, document */
+/* global window, document */
 
 import EventsQueue from './EventsQueue';
+import { IS_CLIENT } from '../utils/variables';
 
 const debugLib = require('debug');
 
@@ -12,10 +13,9 @@ const debug = debugLib('ReactI13n');
 const I13nNode = require('./I13nNode');
 
 const DEFAULT_HANDLER_TIMEOUT = 1000;
-const ENVIRONMENT = typeof window !== 'undefined' ? 'client' : 'server';
 
 // export the debug lib in client side
-if (ENVIRONMENT === 'client') {
+if (IS_CLIENT) {
   window.debugLib = debugLib;
 }
 
@@ -51,7 +51,7 @@ class ReactI13n {
    * @return the ReactI13n instance
    */
   getInstance() {
-    if (ENVIRONMENT === 'client') {
+    if (IS_CLIENT) {
       return window._reactI13nInstance;
     }
     if (process.env.NODE_ENV !== 'production') {
@@ -69,7 +69,7 @@ class ReactI13n {
   createRootI13nNode() {
     const I13nNodeClass = this.getI13nNodeClass();
     this._rootI13nNode = new I13nNodeClass(null, this._rootModelData, false);
-    if (ENVIRONMENT === 'client') {
+    if (IS_CLIENT) {
       this._rootI13nNode.setDOMNode(document.body);
     }
     return this._rootI13nNode;

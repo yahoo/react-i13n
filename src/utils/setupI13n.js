@@ -7,8 +7,8 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import React from 'react';
 import augmentComponent from './augmentComponent';
 import ReactI13n from '../libs/ReactI13n';
+import { IS_CLIENT } from './variables';
 
-const IS_CLIENT = typeof window !== 'undefined';
 const debugLib = require('debug');
 const ComponentSpecs = require('../libs/ComponentSpecs');
 

@@ -1,6 +1,4 @@
-const { NODE_ENV } = process.env;
-const IS_PROD = NODE_ENV === 'production';
-const IS_TEST = NODE_ENV === 'test';
+import { IS_PROD, IS_TEST } from './variables';
 
 const warnAndPrintTrace = (errorMessage) => {
   if (!IS_PROD) {

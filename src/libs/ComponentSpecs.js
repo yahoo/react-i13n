@@ -2,7 +2,6 @@
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals location */
 
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
@@ -98,6 +97,7 @@ const prototypeSpecs = {
    * getChildContext
    * @method getChildContext
    */
+  // @TODO, new context API
   getChildContext() {
     const self = this;
     // create a wrapper function and use apply here
@@ -121,7 +121,7 @@ const prototypeSpecs = {
    * @method componentWillUpdate
    */
   // @TODO, UNSAFE_componentWillUpdate()
-  componentWillUpdate(nextProps, nextState) {
+  componentWillUpdate(nextProps) {
     const self = this;
 
     if (nextProps && self._i13nNode) {
