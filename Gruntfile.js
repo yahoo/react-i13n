@@ -83,7 +83,7 @@ module.exports = function (grunt) {
     babel: {
       options: {
         plugins: ['transform-react-jsx'],
-        presets: ['es2015', 'react']
+        presets: ['env', 'react']
       },
       dist: {
         files: [
