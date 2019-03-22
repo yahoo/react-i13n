@@ -5,7 +5,8 @@
 /* global window, document */
 
 import EventsQueue from './EventsQueue';
-import { IS_CLIENT } from '../utils/variables';
+import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
+import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debugLib = require('debug');
 
@@ -54,12 +55,11 @@ class ReactI13n {
     if (IS_CLIENT) {
       return window._reactI13nInstance;
     }
-    if (process.env.NODE_ENV !== 'production') {
-      console.warn(
-        'ReactI13n instance is not avaialble on server side with ReactI13n.getInstance, '
-          + 'please use this.props.i13n or this.context.i13n to access ReactI13n utils'
-      );
-    }
+    warnAndPrintTrace(
+      'ReactI13n instance is not avaialble on server side with ReactI13n.getInstance, '
+      + 'please use this.props.i13n or this.context.i13n to access ReactI13n utils'
+    );
+    return null;
   }
 
   /**
