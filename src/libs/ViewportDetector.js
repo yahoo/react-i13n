@@ -52,7 +52,7 @@ const ViewportDetector = function ViewportDetector(element, options, onEnterView
  * @private
  */
 ViewportDetector.prototype._detectViewport = function () {
-  const innerHeight = window.innerHeight;
+  const { innerHeight } = window;
   if (!this._element) {
     return this._onEnterViewport && this._onEnterViewport();
   }

@@ -1,4 +1,3 @@
-/* global process */
 /**
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
@@ -75,7 +74,9 @@ function createI13nNode(Component, defaultProps, options) {
       // filter i13n related props
       // TODO, we could probably just drop this in this version
       if (undefined !== this.props.followLink) {
-        warnAndPrintTrace('props.followLink support is deprecated, please use props.follow instead.');
+        warnAndPrintTrace(
+          'props.followLink support is deprecated, please use props.follow instead.'
+        );
       }
 
       const props = omit(this.props, PROPS_TO_FILTER);

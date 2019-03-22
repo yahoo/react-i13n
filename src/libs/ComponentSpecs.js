@@ -43,7 +43,7 @@ function convertToArray(arr) {
   } catch (e) {
     // otherwise, manually create the array
     let i;
-    const length = arr.length;
+    const { length } = arr;
     const result = [];
     for (i = 0; i < length; i += 1) {
       result.push(arr[i]);
@@ -308,7 +308,7 @@ const prototypeSpecs = {
    */
   _getParentI13nNode() {
     const reactI13n = this._getReactI13n();
-    const context = this.context;
+    const { context } = this;
     return (
       (context && context.i13n && context.i13n.parentI13nNode)
       || (reactI13n && reactI13n.getRootI13nNode())

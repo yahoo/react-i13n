@@ -5,7 +5,8 @@
 
 /**
  * Add prototype/static properties to the target
- * please note that this is a helper function to generate the i13n component, just assign properties anyways instead of handling the React life cycle
+ * please note that this is a helper function to generate the i13n component,
+ * just assign properties anyways instead of handling the React life cycle
  * @method augmentComponent
  * @param {Object} target React component
  * @param {Object} prototypeProps the prototype source to augment target

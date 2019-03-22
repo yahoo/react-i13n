@@ -60,7 +60,7 @@ function clickHandler(e) {
   const target = e.target || e.srcElement;
   let isRedirectLink = isDefaultRedirectLink(target);
   let isPreventDefault = true;
-  const props = self.props;
+  const { props } = self;
   const followLink = self._shouldFollowLink();
   let href = '';
 
@@ -115,6 +115,6 @@ function clickHandler(e) {
       }
     }
   });
-};
+}
 
 export default clickHandler;
