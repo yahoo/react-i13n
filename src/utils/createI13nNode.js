@@ -6,9 +6,9 @@
 import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import { warnAndPrintTrace } from '../libs/utils';
 import ComponentSpecs from '../libs/ComponentSpecs';
 import augmentComponent from './augmentComponent';
+import warnAndPrintTrace from './warnAndPrintTrace';
 
 const PROPS_TO_FILTER = [
   'bindClickEvent',

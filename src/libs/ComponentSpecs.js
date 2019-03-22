@@ -5,18 +5,19 @@
 /* globals location */
 
 import PropTypes from 'prop-types';
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
 import clickHandler from './clickHandler';
+import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
-const ViewportDetector = require('./ViewportDetector');
 const debug = require('debug')('I13nComponent');
-const I13nNode = require('./I13nNode');
 const DebugDashboard = require('./DebugDashboard');
+const I13nNode = require('./I13nNode');
+const ViewportDetector = require('./ViewportDetector');
 
 const IS_DEBUG_MODE = (function isDebugMode() {
+  const { location } = window;
   function getJsonFromUrl() {
     const query = location.search.substr(1);
     const result = {};
@@ -250,8 +251,7 @@ const prototypeSpecs = {
             + 'you can only execute the i13n event on the components under setupI13n, '
             + 'please make sure you are calling executeI13nEvent correctly';
         }
-        console && console.warn && console.warn(errorMessage);
-        console && console.trace && console.trace();
+        warnAndPrintTrace(errorMessage);
       }
       callback && callback();
     }
