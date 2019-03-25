@@ -3,14 +3,15 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import hoistNonReactStatics from 'hoist-non-react-statics';
 import React from 'react';
-import augmentComponent from './augmentComponent';
-import ReactI13n from '../libs/ReactI13n';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+
 import { IS_CLIENT } from './variables';
+import augmentComponent from './augmentComponent';
+import pickSpecs from '../libs/ComponentSpecs';
+import ReactI13n from '../libs/ReactI13n';
 
 const debugLib = require('debug');
-const ComponentSpecs = require('../libs/ComponentSpecs');
 
 const debug = debugLib('ReactI13n');
 
@@ -59,7 +60,7 @@ function setupI13n(Component, options = {}, plugins = []) {
     }
   }
 
-  const specs = ComponentSpecs.pickSpecs({
+  const specs = pickSpecs({
     prototype: [
       'getChildContext',
       'executeI13nEvent',

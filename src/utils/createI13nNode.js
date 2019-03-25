@@ -7,7 +7,7 @@ import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import augmentComponent from './augmentComponent';
-import ComponentSpecs from '../libs/ComponentSpecs';
+import pickSpecs from '../libs/ComponentSpecs';
 import warnAndPrintTrace from './warnAndPrintTrace';
 
 const PROPS_TO_FILTER = [
@@ -95,7 +95,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
     }
   }
 
-  const specs = ComponentSpecs.pickSpecs();
+  const specs = pickSpecs();
 
   augmentComponent(
     I13nComponent,

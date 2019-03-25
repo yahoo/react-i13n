@@ -557,6 +557,4 @@ const pickSpecs = function pickSpecs(specs = {}) {
   return picked;
 };
 
-module.exports = {
-  pickSpecs
-};
+export default pickSpecs;
