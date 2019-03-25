@@ -7,9 +7,9 @@
 
 import expect from 'expect.js';
 import { JSDOM } from 'jsdom';
+import I13nNode from '../../../src/libs/I13nNode';
 
 let DebugDashboard;
-const I13nNode = require('../../../src/libs/I13nNode');
 
 describe('clickHandler', () => {
   beforeEach(() => {
@@ -21,7 +21,7 @@ describe('clickHandler', () => {
     global.requestAnimationFrame = function (callback) {
       setTimeout(callback, 0);
     };
-    DebugDashboard = require('../../../src/libs/DebugDashboard');
+    DebugDashboard = require('../../../src/libs/DebugDashboard').default;
   });
 
   afterEach(() => {

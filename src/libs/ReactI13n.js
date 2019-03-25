@@ -7,11 +7,10 @@
 import EventsQueue from './EventsQueue';
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
+import I13nNode from './I13nNode';
 
 const debugLib = require('debug');
-
 const debug = debugLib('ReactI13n');
-const I13nNode = require('./I13nNode');
 
 const DEFAULT_HANDLER_TIMEOUT = 1000;
 

@@ -8,10 +8,10 @@ import ReactDOM from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
 import clickHandler from './clickHandler';
+import DebugDashboard from './DebugDashboard';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debug = require('debug')('I13nComponent');
-const DebugDashboard = require('./DebugDashboard');
 const I13nNode = require('./I13nNode');
 const ViewportDetector = require('./ViewportDetector');
 

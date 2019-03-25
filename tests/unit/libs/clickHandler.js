@@ -6,13 +6,13 @@
 
 
 import expect from 'expect.js';
+import I13nNode from '../../../src/libs/I13nNode';
 
 let clickHandler;
 let React;
 const mockData = {};
 let mockClickEvent;
 let mockComponent;
-const I13nNode = require('../../../src/libs/I13nNode');
 
 describe('clickHandler', () => {
   beforeEach(() => {

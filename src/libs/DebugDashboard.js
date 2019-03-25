@@ -196,4 +196,4 @@ DebugDashboard.prototype.destroy = function () {
   }
 };
 
-module.exports = DebugDashboard;
+export default DebugDashboard;

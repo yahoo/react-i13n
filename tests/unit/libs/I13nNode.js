@@ -6,7 +6,7 @@
 
 
 import expect from 'expect.js';
-const I13nNode = require('../../../src/libs/I13nNode');
+import I13nNode from '../../../src/libs/I13nNode';
 
 describe('I13nNode', () => {
   beforeEach(() => {
