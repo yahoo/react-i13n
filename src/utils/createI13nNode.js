@@ -19,8 +19,8 @@ const PROPS_TO_FILTER = [
   'scanLinks'
 ];
 
-const isStatelessComponent = TargetComponent => typeof TargetComponent === 'function'
-  && !(TargetComponent.prototype && TargetComponent.prototype.isReactComponent);
+const isFunctionalComponent = TargetComponent => typeof TargetComponent === 'function';
+// && !(TargetComponent.prototype && TargetComponent.prototype.isReactComponent);
 
 function omit(obj, keys) {
   const target = {};
@@ -53,7 +53,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
   }
 
   const componentName = Component.displayName || Component.name || Component;
-  const componentIsFunction = isStatelessComponent(Component);
+  const componentIsFunction = isFunctionalComponent(Component);
 
   defaultProps = Object.assign(
     {
