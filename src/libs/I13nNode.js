@@ -324,4 +324,4 @@ I13nNode.prototype.sortChildrenNodes = function sortChildrenNodes(propagate) {
   }
 };
 
-module.exports = I13nNode;
+export default I13nNode;

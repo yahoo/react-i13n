@@ -10,6 +10,7 @@ import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 import I13nNode from './I13nNode';
 
 const debugLib = require('debug');
+
 const debug = debugLib('ReactI13n');
 
 const DEFAULT_HANDLER_TIMEOUT = 1000;

@@ -9,10 +9,10 @@ import { listen } from 'subscribe-ui-event';
 
 import clickHandler from './clickHandler';
 import DebugDashboard from './DebugDashboard';
+import I13nNode from './I13nNode';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debug = require('debug')('I13nComponent');
-const I13nNode = require('./I13nNode');
 const ViewportDetector = require('./ViewportDetector');
 
 const IS_DEBUG_MODE = (function isDebugMode() {
@@ -350,8 +350,8 @@ const prototypeSpecs = {
     // 3. fire created event
     // 4. (if enabled) create debug node for it
     foundElements.forEach((element) => {
-      const I13nNode = reactI13n.getI13nNodeClass();
-      const i13nNode = new I13nNode(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
+      const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
+      const i13nNode = new I13nNodeClass(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
       i13nNode.setDOMNode(element);
       const subThis = {
         props: {
@@ -362,8 +362,10 @@ const prototypeSpecs = {
           return i13nNode;
         }
       };
-      (subThis._shouldFollowLink = self._shouldFollowLink.bind(subThis)),
-      (subThis.executeI13nEvent = self.executeI13nEvent.bind(self));
+
+      subThis._shouldFollowLink = self._shouldFollowLink.bind(subThis);
+      subThis.executeI13nEvent = self.executeI13nEvent.bind(self);
+
       self._subI13nComponents.push({
         componentClickListener: listen(element, 'click', clickHandler.bind(subThis)),
         debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
