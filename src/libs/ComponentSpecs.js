@@ -104,11 +104,11 @@ const prototypeSpecs = {
     // to make sure this works with/without autobind, without generating warning msg
     return {
       i13n: {
-        executeEvent: function executeEvent() {
-          return self.executeI13nEvent(...arguments);
+        executeEvent: function executeEvent(...args) {
+          return self.executeI13nEvent(...args);
         },
-        getI13nNode: function getI13nNode() {
-          return self.getI13nNode(...arguments);
+        getI13nNode: function getI13nNode(...args) {
+          return self.getI13nNode(...args);
         },
         parentI13nNode: this._i13nNode,
         _reactI13nInstance: this._getReactI13n()
