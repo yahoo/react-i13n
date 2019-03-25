@@ -72,7 +72,7 @@ function clickHandler(e) {
   href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
-  if (undefined !== followLink) {
+  if (typeof followLink !== 'undefined') {
     isRedirectLink = followLink;
   }
 

@@ -142,11 +142,7 @@ const prototypeSpecs = {
 
     // bind the click event for i13n component if it's enabled
     if (self.props.bindClickEvent) {
-      self.clickEventListener = listen(
-        ReactDOM.findDOMNode(self),
-        'click',
-        clickHandler.bind(self)
-      );
+      self.clickEventListener = listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
     }
 
     const domNode = ReactDOM.findDOMNode(self);
@@ -243,8 +239,7 @@ const prototypeSpecs = {
     } else {
       /* istanbul ignore next */
       if (process.env.NODE_ENV !== 'production') {
-        errorMessage = 'ReactI13n instance is not found, '
-          + 'please make sure you have setupI13n on the root component. ';
+        errorMessage = 'ReactI13n instance is not found, ' + 'please make sure you have setupI13n on the root component. ';
         if (typeof window === 'undefined') {
           errorMessage
             += 'On server side, '
@@ -309,10 +304,7 @@ const prototypeSpecs = {
   _getParentI13nNode() {
     const reactI13n = this._getReactI13n();
     const { context } = this;
-    return (
-      (context && context.i13n && context.i13n.parentI13nNode)
-      || (reactI13n && reactI13n.getRootI13nNode())
-    );
+    return (context && context.i13n && context.i13n.parentI13nNode) || (reactI13n && reactI13n.getRootI13nNode());
   },
 
   /**
@@ -384,10 +376,10 @@ const prototypeSpecs = {
    * @private
    */
   _shouldFollowLink() {
-    if (undefined !== this.shouldFollowLink) {
+    if (typeof this.shouldFollowLink !== 'undefined') {
       return this.shouldFollowLink(this.props);
     }
-    return undefined !== this.props.followLink ? this.props.followLink : this.props.follow;
+    return typeof this.props.followLink !== 'undefined' ? this.props.followLink : this.props.follow;
   },
 
   /**

@@ -56,7 +56,7 @@ class ReactI13n {
     }
     warnAndPrintTrace(
       'ReactI13n instance is not avaialble on server side with ReactI13n.getInstance, '
-      + 'please use this.props.i13n or this.context.i13n to access ReactI13n utils'
+        + 'please use this.props.i13n or this.context.i13n to access ReactI13n utils'
     );
     return null;
   }
@@ -217,7 +217,7 @@ class ReactI13n {
   updateOptions(options = {}) {
     debug('updated', options);
     this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : this._i13nNodeClass;
-    this._isViewportEnabled = undefined !== options.isViewportEnabled ? options.isViewportEnabled : this._isViewportEnabled;
+    this._isViewportEnabled = typeof options.isViewportEnabled !== 'undefined' ? options.isViewportEnabled : this._isViewportEnabled;
     this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
     this._handlerTimeout = options.handlerTimeout ? options.handlerTimeout : this._handlerTimeout;
     this._scrollableContainerId = typeof options.scrollableContainerId === 'undefined'
