@@ -6,8 +6,8 @@
 import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import ComponentSpecs from '../libs/ComponentSpecs';
 import augmentComponent from './augmentComponent';
+import ComponentSpecs from '../libs/ComponentSpecs';
 import warnAndPrintTrace from './warnAndPrintTrace';
 
 const PROPS_TO_FILTER = [
@@ -46,17 +46,16 @@ function omit(obj, keys) {
  * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
-function createI13nNode(Component, defaultProps, options) {
+function createI13nNode(Component, defaultProps, options = {}) {
   if (!Component) {
     warnAndPrintTrace('You are passing a null component into createI13nNode');
     return;
   }
 
   const componentName = Component.displayName || Component.name || Component;
-  const componentIsFunction = typeof Component === 'function';
+  const componentIsFunction = isStatelessComponent(Component);
 
   defaultProps = Object.assign(
-    {},
     {
       i13nModel: null,
       isLeafNode: false,
@@ -67,13 +66,12 @@ function createI13nNode(Component, defaultProps, options) {
     defaultProps
   );
 
-  options = options || {};
-
   class I13nComponent extends React.Component {
     render() {
+      const { followLink } = this.props;
       // filter i13n related props
       // TODO, we could probably just drop this in this version
-      if (undefined !== this.props.followLink) {
+      if (undefined !== followLink) {
         warnAndPrintTrace(
           'props.followLink support is deprecated, please use props.follow instead.'
         );

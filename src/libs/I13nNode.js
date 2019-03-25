@@ -31,9 +31,12 @@ const I13nNode = function I13nNode(parentNode, model, isLeafNode, isViewportEnab
 
   this._childrenNodes = []; // children nodes
   this._DOMNode = null; // DOM node of the i13n node, will use setDOMNode to set it in componentDidMount
-  this._customAttributes = {}; // any custom value want to set in the i13n node, can used to save some status in the handler functions
+  // any custom value want to set in the i13n node, can used to save some status in the handler functions
+  this._customAttributes = {};
 
-  // _isLeafNode indicate if it's a leaf node or not, e.g., an anchor or button. it's used to help users to know if they want to handle it for some cases, e.g., when we want to track links
+  // _isLeafNode indicate if it's a leaf node or not,
+  // e.g., an anchor or button. it's used to help users to know if they want to handle it for some cases,
+  // e.g., when we want to track links
   this._isLeafNode = isLeafNode || false;
 
   // _isOrderDirty used to check if we need to sort children nodes before we get position of one of it child
@@ -41,7 +44,8 @@ const I13nNode = function I13nNode(parentNode, model, isLeafNode, isViewportEnab
   // set to false once we add/remove a child
   this._isOrderDirty = false;
 
-  // _isInViewport save the status if node is already shown in the viewport, if viewport check isn't enabled, then always set to true
+  // _isInViewport save the status if node is already shown in the viewport,
+  // if viewport check isn't enabled, then always set to true
   this._isInViewport = !isViewportEnabled;
 };
 
@@ -174,8 +178,7 @@ I13nNode.prototype.getText = function getText(target) {
   if (!DOMNode && !target) {
     return '';
   }
-  let text = (target && (target.value || target.innerHTML))
-    || (DOMNode && (DOMNode.value || DOMNode.innerHTML));
+  let text = (target && (target.value || target.innerHTML)) || (DOMNode && (DOMNode.value || DOMNode.innerHTML));
   if (text) {
     text = text.replace(TAG_PATTERN, '');
   }
@@ -305,7 +308,7 @@ I13nNode.prototype.sortChildrenNodes = function sortChildrenNodes(propagate) {
     if (domA && domB) {
       if (domB.compareDocumentPosition) {
         const comparison = domB.compareDocumentPosition(domA);
-        if (comparison & Node.DOCUMENT_POSITION_PRECEDING) {
+        if (comparison & Node.DOCUMENT_POSITION_PRECEDING) { // eslint-disable-line no-bitwise
           return -1;
         }
       } else if (domB.sourceIndex) {
