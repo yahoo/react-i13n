@@ -3,6 +3,7 @@
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
   "version": "3.0.0",
   "main": "index.js",
+  "module": "index.es.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:yahoo/react-i13n.git"

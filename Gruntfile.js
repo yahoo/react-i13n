@@ -1,6 +1,5 @@
 // jscs:disable maximumLineLength
 
-
 const fs = require('fs');
 const path = require('path');
 
@@ -33,6 +32,7 @@ module.exports = function (grunt) {
   const projectConfig = {
     src: 'src',
     dist: 'dist',
+    distES: 'dist/es',
     unit: 'tests/unit',
     functional: 'tests/functional',
     spec: 'tests/spec',
@@ -49,7 +49,7 @@ module.exports = function (grunt) {
         files: [
           {
             dot: true,
-            src: ['<%= project.dist %>']
+            src: ['<%= project.dist %>', '<%= project.distES %>']
           }
         ]
       },
@@ -81,17 +81,54 @@ module.exports = function (grunt) {
     },
     // compiles jsx to js
     babel: {
-      options: {
-        plugins: ['transform-react-jsx'],
-        presets: ['env', 'react']
-      },
       dist: {
+        options: {
+          sourceMap: false,
+          plugins: [],
+          presets: [
+            [
+              'env',
+              {
+                loose: true
+              }
+            ],
+            'react'
+          ]
+        },
         files: [
           {
             expand: true,
             cwd: '<%= project.src %>',
             src: ['**/*.*'],
             dest: '<%= project.dist %>/',
+            extDot: 'last',
+            ext: '.js'
+          }
+        ]
+      },
+      'dist-es': {
+        options: {
+          sourceMap: false,
+          presets: [
+            [
+              'env',
+              {
+                useBuiltIns: 'entry',
+                modules: false,
+                targets: {
+                  esmodules: true
+                }
+              }
+            ],
+            'react'
+          ]
+        },
+        files: [
+          {
+            expand: true,
+            cwd: '<%= project.src %>',
+            src: ['**/*.*'],
+            dest: '<%= project.distES %>/',
             extDot: 'last',
             ext: '.js'
           }
@@ -258,8 +295,8 @@ module.exports = function (grunt) {
   // dist
   // 1. clean dist/
   // 2. compile jsx to js in dist/
-  grunt.registerTask('dist', ['clean:dist', 'babel:dist']);
-  grunt.registerTask('test', ['clean:dist', 'babel:dist', 'babel:unit']);
+  grunt.registerTask('dist', ['clean:dist', 'babel:dist', 'babel:dist-es']);
+  grunt.registerTask('test', ['clean:dist', 'babel:dist', 'babel:dist-es', 'babel:unit']);
 
   // default
   grunt.registerTask('default', ['dist']);

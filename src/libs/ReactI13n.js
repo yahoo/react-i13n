@@ -34,9 +34,8 @@ if (IS_CLIENT) {
  * @constructor
  */
 class ReactI13n {
-  constructor(options) {
+  constructor(options = {}) {
     debug('init', options);
-    options = options || {};
     this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : I13nNode;
     this._plugins = {};
     this._eventsQueues = {};
@@ -92,7 +91,7 @@ class ReactI13n {
     if (promiseHandlers && promiseHandlers.length > 0) {
       let handlerTimeout;
       promiseHandlers.push(
-        new Promise((resolve, reject) => {
+        new Promise((resolve) => {
           handlerTimeout = setTimeout(() => {
             debug(`handler timeout in ${self._handlerTimeout}ms.`);
             resolve();
@@ -215,9 +214,8 @@ class ReactI13n {
    * @method updateOptions
    * @param {Object} options
    */
-  updateOptions(options) {
+  updateOptions(options = {}) {
     debug('updated', options);
-    options = options || {};
     this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : this._i13nNodeClass;
     this._isViewportEnabled = undefined !== options.isViewportEnabled ? options.isViewportEnabled : this._isViewportEnabled;
     this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
