@@ -49,7 +49,7 @@ function omit(obj, keys) {
 function createI13nNode(Component, defaultProps, options = {}) {
   if (!Component) {
     warnAndPrintTrace('You are passing a null component into createI13nNode');
-    return;
+    return null;
   }
 
   const componentName = Component.displayName || Component.name || Component;
@@ -107,7 +107,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
   );
 
   if (componentIsFunction) {
-    hoistNonReactStatics(I13nComponent, Component);
+    return hoistNonReactStatics(I13nComponent, Component);
   }
 
   return I13nComponent;

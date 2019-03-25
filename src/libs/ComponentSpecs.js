@@ -233,11 +233,11 @@ const prototypeSpecs = {
    * @param {Function} callback function
    * @async
    */
-  executeI13nEvent(eventName, payload, callback) {
+  executeI13nEvent(eventName, payload = {}, callback) {
     const reactI13nInstance = this._getReactI13n();
     let errorMessage = '';
-    payload = payload || {};
     payload.i13nNode = payload.i13nNode || this.getI13nNode();
+
     if (reactI13nInstance) {
       reactI13nInstance.execute(eventName, payload, callback);
     } else {
