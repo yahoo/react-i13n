@@ -244,7 +244,7 @@ const prototypeSpecs = {
     } else {
       /* istanbul ignore next */
       if (!IS_PROD) {
-        errorMessage = 'ReactI13n instance is not found, ' + 'please make sure you have setupI13n on the root component. ';
+        errorMessage = 'ReactI13n instance is not found, please make sure you have setupI13n on the root component. ';
         if (!IS_CLIENT) {
           errorMessage
             += 'On server side, '
