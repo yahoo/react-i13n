@@ -4,10 +4,11 @@
  */
 /* global window, document */
 
-import EventsQueue from './EventsQueue';
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
-import warnAndPrintTrace from '../utils/warnAndPrintTrace';
+import EventsQueue from './EventsQueue';
 import I13nNode from './I13nNode';
+import isUndefined from '../utils/isUndefined';
+import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debugLib = require('debug');
 
@@ -217,10 +218,12 @@ class ReactI13n {
   updateOptions(options = {}) {
     debug('updated', options);
     this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : this._i13nNodeClass;
-    this._isViewportEnabled = typeof options.isViewportEnabled !== 'undefined' ? options.isViewportEnabled : this._isViewportEnabled;
+    this._isViewportEnabled = !isUndefined(options.isViewportEnabled)
+      ? options.isViewportEnabled
+      : this._isViewportEnabled;
     this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
     this._handlerTimeout = options.handlerTimeout ? options.handlerTimeout : this._handlerTimeout;
-    this._scrollableContainerId = typeof options.scrollableContainerId === 'undefined'
+    this._scrollableContainerId = isUndefined(options.scrollableContainerId)
       ? this._scrollableContainerId
       : options.scrollableContainerId;
   }

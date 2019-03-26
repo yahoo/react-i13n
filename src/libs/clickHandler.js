@@ -1,3 +1,4 @@
+import isUndefined from '../utils/isUndefined';
 /**
  * Copyright 2015, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
@@ -60,6 +61,7 @@ function clickHandler(e) {
   const target = e.target || e.srcElement;
   let isRedirectLink = isDefaultRedirectLink(target);
   let isPreventDefault = true;
+
   const { props } = self;
   const followLink = self._shouldFollowLink();
   let href = '';
@@ -72,7 +74,7 @@ function clickHandler(e) {
   href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
-  if (typeof followLink !== 'undefined') {
+  if (!isUndefined(followLink)) {
     isRedirectLink = followLink;
   }
 

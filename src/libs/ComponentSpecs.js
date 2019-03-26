@@ -11,11 +11,16 @@ import clickHandler from './clickHandler';
 import DebugDashboard from './DebugDashboard';
 import I13nNode from './I13nNode';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
+import isUndefined from '../utils/isUndefined';
+import { IS_CLIENT, IS_PROD } from '../utils/variables';
 
 const debug = require('debug')('I13nComponent');
 const ViewportDetector = require('./ViewportDetector');
 
 const IS_DEBUG_MODE = (function isDebugMode() {
+  if (!IS_CLIENT) {
+    return false;
+  }
   const { location } = window;
   function getJsonFromUrl() {
     const query = location.search.substr(1);
@@ -27,7 +32,7 @@ const IS_DEBUG_MODE = (function isDebugMode() {
     return result;
   }
 
-  if (typeof location === 'undefined') {
+  if (isUndefined(location)) {
     return false;
   }
   return getJsonFromUrl().i13n_debug === '1';
@@ -238,9 +243,9 @@ const prototypeSpecs = {
       reactI13nInstance.execute(eventName, payload, callback);
     } else {
       /* istanbul ignore next */
-      if (process.env.NODE_ENV !== 'production') {
+      if (!IS_PROD) {
         errorMessage = 'ReactI13n instance is not found, ' + 'please make sure you have setupI13n on the root component. ';
-        if (typeof window === 'undefined') {
+        if (!IS_CLIENT) {
           errorMessage
             += 'On server side, '
             + 'you can only execute the i13n event on the components under setupI13n, '
@@ -376,10 +381,10 @@ const prototypeSpecs = {
    * @private
    */
   _shouldFollowLink() {
-    if (typeof this.shouldFollowLink !== 'undefined') {
+    if (!isUndefined(this.shouldFollowLink)) {
       return this.shouldFollowLink(this.props);
     }
-    return typeof this.props.followLink !== 'undefined' ? this.props.followLink : this.props.follow;
+    return !isUndefined(this.props.followLink) ? this.props.followLink : this.props.follow;
   },
 
   /**
