@@ -48,7 +48,7 @@ describe('clickHandler', () => {
         href: 'foo'
       },
       _shouldFollowLink() {
-        return undefined !== this.props.followLink ? this.props.followLink : this.props.follow;
+        return this.props.follow;
       }
     };
   });
@@ -162,10 +162,10 @@ describe('clickHandler', () => {
     clickHandler.apply(mockComponent, [mockClickEvent]);
   });
 
-  it('should not follow it if followLink is set to false', (done) => {
+  it('should not follow it if follow is set to false', (done) => {
     const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockComponent.props.followLink = false;
+    mockComponent.props.follow = false;
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
@@ -182,30 +182,7 @@ describe('clickHandler', () => {
   it('should follow it while follow is set to true', (done) => {
     const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockComponent.props.followLink = undefined;
     mockComponent.props.follow = true;
-    mockClickEvent.preventDefault = function () {
-      executedActions.push('preventDefault');
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      callback();
-    };
-    document.location.assign = function () {
-      executedActions.push('assign');
-      expect(executedActions).to.eql(['preventDefault', 'assign']);
-      done();
-    };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
-  });
-
-  it('should follow it while followLink is set to true', (done) => {
-    const i13nNode = new I13nNode(null, {});
-    const executedActions = [];
-    mockComponent.props.followLink = true;
-    mockComponent.props.follow = false; // should not take follow
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };

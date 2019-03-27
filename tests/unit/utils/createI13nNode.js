@@ -596,16 +596,11 @@ describe('createI13nNode', () => {
       i13nModel: { sec: 'foo' },
       href: '#/foobar'
     };
-    console.warn = function (msg) {
-      expect(msg).to.equal(
-        'props.followLink support is deprecated, please use props.follow instead.'
-      );
-    };
+
     const I13nTestComponent = createI13nNode(
       'a',
       {
         follow: true,
-        followLink: true,
         isLeafNode: true,
         bindClickEvent: true,
         scanLinks: { enable: true }

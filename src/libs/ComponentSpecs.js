@@ -376,7 +376,7 @@ const prototypeSpecs = {
   /**
    * _shouldFollowLink, provide a hook to check followLink.
    * It check if component implement its own shouldFollowLink() method,
-   * otherwise return props.followLink or props.follow
+   * otherwise return props.follow
    * @method _shouldFollowLink
    * @private
    */
@@ -384,7 +384,7 @@ const prototypeSpecs = {
     if (!isUndefined(this.shouldFollowLink)) {
       return this.shouldFollowLink(this.props);
     }
-    return !isUndefined(this.props.followLink) ? this.props.followLink : this.props.follow;
+    return this.props.follow;
   },
 
   /**

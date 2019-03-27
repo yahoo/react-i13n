@@ -9,12 +9,10 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import augmentComponent from './augmentComponent';
 import pickSpecs from '../libs/ComponentSpecs';
 import warnAndPrintTrace from './warnAndPrintTrace';
-import isUndefined from './isUndefined';
 
 const PROPS_TO_FILTER = [
   'bindClickEvent',
   'follow',
-  'followLink',
   'i13nModel',
   'isLeafNode',
   'scanLinks'
@@ -69,13 +67,6 @@ function createI13nNode(Component, defaultProps, options = {}) {
 
   class I13nComponent extends React.Component {
     render() {
-      const { followLink } = this.props;
-      // filter i13n related props
-      // TODO, we could probably just drop this in this version
-      if (!isUndefined(followLink)) {
-        warnAndPrintTrace('props.followLink support is deprecated, please use props.follow instead.');
-      }
-
       const props = omit(this.props, PROPS_TO_FILTER);
 
       // TODO, React forward ref
