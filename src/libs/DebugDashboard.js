@@ -4,7 +4,7 @@
  */
 /* global document, window */
 import React, { Suspense, lazy } from 'react';
-import { render } from 'react-dom';
+import { render, unmountComponentAtNode } from 'react-dom';
 import { subscribe } from 'subscribe-ui-event';
 
 // Dashboard only used in client side, could safely defered load
@@ -142,6 +142,7 @@ DebugDashboard.prototype.destroy = function () {
     this.resizeHandler.unsubscribe();
   }
   if (this.container) {
+    unmountComponentAtNode(this.container);
     document.body.removeChild(this.container);
   }
 };

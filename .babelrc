@@ -1,6 +1,7 @@
 {
   "env": {
     "plugins": [
+      "dynamic-import-node",
       "syntax-dynamic-import"
     ],
     "test": {
