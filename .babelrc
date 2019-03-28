@@ -1,5 +1,8 @@
 {
   "env": {
+    "plugins": [
+      "syntax-dynamic-import"
+    ],
     "test": {
       "presets": [
         "env",

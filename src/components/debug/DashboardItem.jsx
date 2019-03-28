@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DashboardItem = (props) => {
   const { text } = props;
@@ -12,7 +13,17 @@ const DashboardItem = (props) => {
     textOverflow: 'ellipsis'
   };
 
-  return <li style={style}>{text}</li>;
+  return (
+    <li
+      style={style}
+    >
+      {text}
+    </li>
+  );
+};
+
+DashboardItem.propTypes = {
+  text: PropTypes.string.isRequired
 };
 
 export default DashboardItem;

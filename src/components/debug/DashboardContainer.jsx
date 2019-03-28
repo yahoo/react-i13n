@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import DashboardTitle from './DashboardTitle';
 import DashboardItem from './DashboardItem';
@@ -15,12 +16,24 @@ const DashboardContainer = (props) => {
   return (
     <ul style={style}>
       <DashboardTitle title={title} />
-      {Object.keys(model).map((key, index) => {
-        const text = `${key} : ${model[key].value}${model[key].DOMNode !== DOMNode ? ' (inherited)' : ''}`;
-        return <DashboardItem key={index} text={text} />;
+      {Object.keys(model).map((key) => {
+        const modelItem = model[key];
+        const text = `${key} : ${modelItem.value}${modelItem.DOMNode !== DOMNode ? ' (inherited)' : ''}`;
+        return (
+          <DashboardItem
+            key={text}
+            text={text}
+          />
+        );
       })}
     </ul>
   );
+};
+
+DashboardContainer.propTypes = {
+  title: PropTypes.string.isRequired,
+  model: PropTypes.shape().isRequired,
+  DOMNode: PropTypes.node.isRequired
 };
 
 export default DashboardContainer;
