@@ -8,7 +8,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { subscribe } from 'subscribe-ui-event';
 
 // Dashboard only used in client side, could safely defered load
-const Dashboard = lazy(() => import('../components/debug/Dashboard'));
+const Dashboard = lazy(() => import(/* webpackChunkName: "i13n-debug-dashboard" */ '../components/debug/Dashboard'));
 
 let supportClassList = false;
 let uniqueId = 0;
