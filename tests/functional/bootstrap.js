@@ -7,6 +7,7 @@ window.Object.assign = require('object-assign');
 
 window.React = require('react');
 window.ReactDOM = require('react-dom');
+// TODO, this should be deprecated
 window.createClass = require('create-react-class');
 
 window.I13nAnchor = require('../../dist/components/I13nAnchor').default;

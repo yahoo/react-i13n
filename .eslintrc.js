@@ -1,10 +1,7 @@
 module.exports = {
   extends: [
-    'eslint-config-airbnb-base',
-    'eslint-config-airbnb-base/rules/strict'
-  ].map(
-    require.resolve
-  ),
+    'eslint-config-airbnb'
+  ],
   rules: {
     'comma-dangle': 0,
     'func-names': 0,

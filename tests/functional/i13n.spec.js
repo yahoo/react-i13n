@@ -1,5 +1,4 @@
-/* global describe, it, document, before, browser, expect */
-
+/* global describe, it, document, expect */
 
 describe('React I13n test', () => {
   it('should init correctly and give the rootI13nNode the correct default model value', () => {

@@ -3,7 +3,9 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 /* global document, window */
+import { render } from 'react-dom';
 import { listen } from 'subscribe-ui-event';
+import DashboardContainer from '../components/debug/DashboardContainer';
 
 let supportClassList = false;
 let uniqueId = 0;
@@ -82,52 +84,28 @@ const DebugDashboard = function DebugDashboard(i13nNode) {
       DOMNode
     };
   }
-  const dashboardContainer = document.createElement('ul');
-  dashboardContainer.style.margin = 0;
-  dashboardContainer.style['padding-left'] = 0;
-  dashboardContainer.style['box-shadow'] = '0 1px 4px 0 rgba(0,0,0,.28)';
 
   // compose title
-  const dashboardTitle = document.createElement('li');
-  dashboardTitle.style.background = '#673ab7';
-  dashboardTitle.style.color = 'rgba(255,255,255,.87)';
-  dashboardTitle.style.padding = '8px';
-  dashboardTitle.style['white-space'] = 'nowrap';
-  dashboardTitle.style.overflow = 'hidden';
-  dashboardTitle.style['text-overflow'] = 'ellipsis';
-  dashboardTitle.innerHTML = i13nNode.getText();
-  dashboardContainer.appendChild(dashboardTitle);
+  render(<DashboardContainer title={i13nNode.getText()} model={model} DOMNode={DOMNode} />, dashboard);
 
   // compose model items
-  Object.keys(model).forEach((key) => {
-    const dashboardItem = document.createElement('li');
-    dashboardItem.style.background = '#d1c4e9';
-    dashboardItem.style.color = 'rgba(0,0,0,.87)';
-    dashboardItem.style['border-top'] = 'rgba(0,0,0,.12) 1px solid';
-    dashboardItem.style.padding = '8px';
-    dashboardItem.style['white-space'] = 'nowrap';
-    dashboardItem.style.overflow = 'hidden';
-    dashboardItem.style['text-overflow'] = 'ellipsis';
-    dashboardItem.innerHTML = `${key} : ${model[key].value}${
-      model[key].DOMNode !== DOMNode ? ' (inherited)' : ''
-    }`;
-
-    // set up scroll listener to show where the model data comes from
-    if (model[key].DOMNode) {
-      model[key].DOMNode.style.transition = 'border 0.05s';
-      self.modelItemsListener.push(
-        listen(dashboardItem, 'mouseover', () => {
-          model[key].DOMNode.style.border = '4px solid #b39ddb';
-        })
-      );
-      self.modelItemsListener.push(
-        listen(dashboardItem, 'mouseout', () => {
-          model[key].DOMNode.style.border = null;
-        })
-      );
-    }
-    dashboardContainer.appendChild(dashboardItem);
-  });
+  // Object.keys(model).forEach((key) => {  //
+  //   // set up scroll listener to show where the model data comes from
+  //   if (model[key].DOMNode) {
+  //     model[key].DOMNode.style.transition = 'border 0.05s';
+  //     self.modelItemsListener.push(
+  //       listen(dashboardItem, 'mouseover', () => {
+  //         model[key].DOMNode.style.border = '4px solid #b39ddb';
+  //       })
+  //     );
+  //     self.modelItemsListener.push(
+  //       listen(dashboardItem, 'mouseout', () => {
+  //         model[key].DOMNode.style.border = null;
+  //       })
+  //     );
+  //   }
+  //   dashboardContainer.appendChild(dashboardItem);
+  // });
 
   // generate dashboard
   dashboard.style.position = 'relative';
@@ -138,7 +116,7 @@ const DebugDashboard = function DebugDashboard(i13nNode) {
   dashboard.style['margin-top'] = '2px';
   dashboard.style['z-index'] = '1';
   dashboard.style['border-radius'] = '2px';
-  dashboard.appendChild(dashboardContainer);
+  // dashboard.appendChild(dashboardContainer);
 
   // generate trigger node
   triggerNode.innerHTML = '&#8964;';
