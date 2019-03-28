@@ -1,20 +1,27 @@
 {
   "name": "react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "2.7.3",
+  "version": "3.0.0-alpha.0",
   "main": "index.js",
+  "module": "index.es.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
-    "func": "./tests/functional/saucelabs.sh",
-    "lint": "jshint",
+    "dev": "grunt functional-debug",
+    "dist": "grunt dist",
+    "func": "grunt functional",
+    "lint": "eslint src",
     "prepublish": "grunt dist",
-    "test": "grunt cover"
+    "test": "grunt cover",
+    "unit": "grunt unit"
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "eslint": "^5.15.3",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.16.0",
     "hoist-non-react-statics": "^3.3.0",
     "prop-types": "^15.7.2",
     "subscribe-ui-event": "^2.0.5"
@@ -22,10 +29,9 @@
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-loader": "^8.0.5",
-    "babel-plugin-istanbul": "^5.1.1",
     "babel-plugin-transform-react-jsx": "^6.22.0",
     "babel-polyfill": "^6.9.1",
-    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.9.0",
     "benchmark": "^2.1.3",
@@ -33,30 +39,27 @@
     "create-react-class": "^15.6.3",
     "es5-shim": "^4.5.12",
     "expect.js": "^0.3.1",
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-atomizer": "^3.1.3",
     "grunt-babel": "^7.0.0",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-connect": "^2.0.0",
-    "grunt-contrib-jshint": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-saucelabs": "^9.0.1",
     "grunt-shell": "^3.0.1",
     "grunt-webpack": "^3.1.3",
-    "istanbul": "^0.4.0",
     "jsdom": "^12.2.0",
-    "jshint": "^2.10.1",
     "minimist": "^1.2.0",
     "mocha": "^6.0.2",
     "mockery": "^2.0.0",
-    "nyc": "^13.3.0",
+    "nyc": "^13.0.0",
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
     "promise": "^8.0.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
-    "webpack": "^3.12.0",
+    "webpack": "^4.0.0",
     "webpack-dev-server": "^3.2.1",
     "xunit-file": "^1.0.0"
   },
@@ -79,9 +82,6 @@
       "/dist/",
       "/tests/"
     ]
-  },
-  "jshintConfig": {
-    "node": true
   },
   "licenses": [
     {

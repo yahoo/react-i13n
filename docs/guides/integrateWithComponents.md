@@ -18,7 +18,7 @@ var Player = React.createClass({
             // typically you will redirect users to the destination page after beaconing
             beacon(category, action, function onBeaconFinish() {
                 document.location = url;
-            }); 
+            });
         },
         return (
             <div>
@@ -38,8 +38,6 @@ var Player = React.createClass({
 ### Replace with I13n Components
 
 A better approach might be to remove the `onClick` hooks everywhere and use the [createI13nNode](../api/createI13nNode.md) component to create i13n components to do the same thing.
-
-Note, that you can also leverage the [i13nMixin](../api/createI13nNode.md#i13nmixin) to enhance an existing component with i13n functionality.
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
@@ -112,7 +110,7 @@ Player = createI13nNode(Player);
 The player component is now an i13nNode and you can pass i13nModel here, all the links inside will apply this model data.
 
 
-### Dynamic I13n Model 
+### Dynamic I13n Model
 
 If you need to pass video title as `label`, instead of static data, you will need to dynamically generate label value, here you can pass in a `function` as `i13nModel`.
 
