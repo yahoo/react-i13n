@@ -135,10 +135,24 @@ module.exports = function (grunt) {
         ]
       },
       functional: {
+        options: {
+          sourceMap: false,
+          presets: [
+            [
+              'env',
+              {
+                loose: true
+              }
+            ],
+            'react'
+          ]
+        },
         files: [
           {
             expand: true,
-            src: ['<%= project.functional %>/**/*.jsx'],
+            cwd: '<%= project.functional %>',
+            src: ['**/*.jsx'],
+            dest: '<%= project.functional %>/',
             extDot: 'last',
             ext: '.js'
           }
@@ -170,7 +184,7 @@ module.exports = function (grunt) {
           main: './<%= project.functional %>/bootstrap.js'
         },
         output: {
-          path: './<%= project.functional %>/'
+          path: path.resolve(process.cwd(), projectConfig.functional)
         },
         module: {
           rules: [

@@ -1,3 +1,5 @@
+'use strict';
+
 /* global window */
 
 window.Promise = require('promise');
@@ -5,8 +7,7 @@ window.Object.assign = require('object-assign');
 
 window.React = require('react');
 window.ReactDOM = require('react-dom');
-
-window.ReactI13n = require('../../dist/libs/ReactI13n').default;
+window.createClass = require('create-react-class');
 
 window.I13nAnchor = require('../../dist/components/I13nAnchor').default;
 window.I13nButton = require('../../dist/components/I13nButton').default;

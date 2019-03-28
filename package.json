@@ -1,7 +1,7 @@
 {
   "name": "react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.1",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {
@@ -70,8 +70,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0"
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3"
   },
   "precommit": [
     "lint",

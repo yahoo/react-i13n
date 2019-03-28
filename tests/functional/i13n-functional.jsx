@@ -18,7 +18,7 @@ function getJsonFromUrl() {
 var container = document.getElementById('container');
 var itemsNumber = getJsonFromUrl().items || 1;
 
-var I13nComponentLevel1 = React.createClass({
+var I13nComponentLevel1 = createClass({
   render: function() {
     var links = [];
     for (var i = 0; i < itemsNumber; i++) {
@@ -116,7 +116,7 @@ var I13nComponentLevel1 = React.createClass({
 
 I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
-var I13nComponentLevel2 = React.createClass({
+var I13nComponentLevel2 = createClass({
   render: function() {
     var links = [];
     for (var i = 0; i < itemsNumber; i++) {
@@ -145,7 +145,7 @@ var I13nComponentLevel2 = React.createClass({
 
 I13nComponentLevel2 = createI13nNode(I13nComponentLevel2);
 
-var I13nComponentLevel2Hidden = React.createClass({
+var I13nComponentLevel2Hidden = createClass({
   getInitialState: function() {
     return {
       expend: false
@@ -186,9 +186,9 @@ var I13nComponentLevel2Hidden = React.createClass({
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-var I13nDemo = React.createClass({
+var I13nDemo = createClass({
   componentWillMount: function() {
-    ReactI13n.getInstance().execute('pageview', {});
+    window._reactI13nInstance.getInstance().execute('pageview', {});
   },
   render: function() {
     return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
