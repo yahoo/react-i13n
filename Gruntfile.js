@@ -238,7 +238,7 @@ module.exports = function (grunt) {
             'capture-html': false,
             'record-screenshots': false
           },
-          throttled: 3,
+          throttled: 1,
           browsers: [
 //             {
 //               browserName: 'edge',
