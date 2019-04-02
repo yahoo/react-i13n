@@ -240,11 +240,11 @@ module.exports = function (grunt) {
           },
           throttled: 3,
           browsers: [
-            {
-              browserName: 'edge',
-              platform: 'Windows 10',
-              version: '16.16299'
-            },
+//             {
+//               browserName: 'edge',
+//               platform: 'Windows 10',
+//               version: '16.16299'
+//             },
 //             {
 //               browserName: 'internet explorer',
 //               platform: 'Windows 10',
