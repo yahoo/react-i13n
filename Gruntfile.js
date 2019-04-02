@@ -238,38 +238,33 @@ module.exports = function (grunt) {
             'capture-html': false,
             'record-screenshots': false
           },
-          throttled: 3,
+          throttled: 2, // sauce lab open source has limited tunnel 
           browsers: [
-//             {
-//               browserName: 'internet explorer',
-//               platform: 'Windows 7',
-//               version: '9'
-//             },
-//             {
-//               browserName: 'internet explorer',
-//               platform: 'Windows 8',
-//               version: '10'
-//             },
-//             {
-//               browserName: 'internet explorer',
-//               platform: 'Windows 8.1',
-//               version: '11'
-//             },
+            {
+              browserName: 'edge',
+              platform: 'Windows 10',
+              version: '16.16299'
+            },
+            {
+              browserName: 'internet explorer',
+              platform: 'Windows 10',
+              version: '11.285'
+            },
             {
               browserName: 'chrome',
               platform: 'Windows 10',
               version: '73'
             },
-//             {
-//               browserName: 'firefox',
-//               platform: 'Windows 7',
-//               version: '50'
-//             },
-//             {
-//               browserName: 'safari',
-//               platform: 'OS X 10.11',
-//               version: '10.0'
-//             }
+            {
+              browserName: 'firefox',
+              platform: 'Windows 7',
+              version: '66'
+            },
+            {
+              browserName: 'safari',
+              platform: 'macOS 10.14',
+              version: '12.0'
+            }
           ]
         }
       }
