@@ -238,7 +238,7 @@ module.exports = function (grunt) {
             'capture-html': false,
             'record-screenshots': false
           },
-          throttled: 1,
+          throttled: 3,
           browsers: [
 //             {
 //               browserName: 'edge',
@@ -260,11 +260,11 @@ module.exports = function (grunt) {
               platform: 'Windows 7',
               version: '66'
             },
-            {
-              browserName: 'safari',
-              platform: 'macOS 10.14',
-              version: '12.0'
-            }
+//             {
+//               browserName: 'safari',
+//               platform: 'macOS 10.14',
+//               version: '12.0'
+//             }
           ]
         }
       }
