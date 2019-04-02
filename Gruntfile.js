@@ -240,36 +240,36 @@ module.exports = function (grunt) {
           },
           throttled: 3,
           browsers: [
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 7',
-              version: '9'
-            },
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 8',
-              version: '10'
-            },
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 8.1',
-              version: '11'
-            },
+//             {
+//               browserName: 'internet explorer',
+//               platform: 'Windows 7',
+//               version: '9'
+//             },
+//             {
+//               browserName: 'internet explorer',
+//               platform: 'Windows 8',
+//               version: '10'
+//             },
+//             {
+//               browserName: 'internet explorer',
+//               platform: 'Windows 8.1',
+//               version: '11'
+//             },
             {
               browserName: 'chrome',
               platform: 'Windows 10',
-              version: '49'
+              version: '73'
             },
-            {
-              browserName: 'firefox',
-              platform: 'Windows 7',
-              version: '50'
-            },
-            {
-              browserName: 'safari',
-              platform: 'OS X 10.11',
-              version: '10.0'
-            }
+//             {
+//               browserName: 'firefox',
+//               platform: 'Windows 7',
+//               version: '50'
+//             },
+//             {
+//               browserName: 'safari',
+//               platform: 'OS X 10.11',
+//               version: '10.0'
+//             }
           ]
         }
       }
