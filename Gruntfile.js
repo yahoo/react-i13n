@@ -84,7 +84,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           sourceMap: false,
-          plugins: [],
+          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
           presets: [
             [
               'env',
@@ -109,6 +109,7 @@ module.exports = function (grunt) {
       'dist-es': {
         options: {
           sourceMap: false,
+          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
           presets: [
             [
               'env',
@@ -135,10 +136,25 @@ module.exports = function (grunt) {
         ]
       },
       functional: {
+        options: {
+          sourceMap: false,
+          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
+          presets: [
+            [
+              'env',
+              {
+                loose: true
+              }
+            ],
+            'react'
+          ]
+        },
         files: [
           {
             expand: true,
-            src: ['<%= project.functional %>/**/*.jsx'],
+            cwd: '<%= project.functional %>',
+            src: ['**/*.jsx'],
+            dest: '<%= project.functional %>/',
             extDot: 'last',
             ext: '.js'
           }
@@ -170,7 +186,7 @@ module.exports = function (grunt) {
           main: './<%= project.functional %>/bootstrap.js'
         },
         output: {
-          path: './<%= project.functional %>/'
+          path: path.resolve(process.cwd(), projectConfig.functional)
         },
         module: {
           rules: [
@@ -209,6 +225,10 @@ module.exports = function (grunt) {
     'saucelabs-mocha': {
       all: {
         options: {
+          // this is apply for open source project https://saucelabs.com/open-source
+          username: 'roderick.hsiao',
+          key: () => 'a7c8994f-a04b-4d04-808f-1090f5148079',
+
           testname: 'react-i13n func test',
           urls: ['http://127.0.0.1:9999/tests/functional/page.html'],
 
@@ -220,36 +240,31 @@ module.exports = function (grunt) {
           },
           throttled: 3,
           browsers: [
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 7',
-              version: '9'
-            },
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 8',
-              version: '10'
-            },
-            {
-              browserName: 'internet explorer',
-              platform: 'Windows 8.1',
-              version: '11'
-            },
+            //             {
+            //               browserName: 'edge',
+            //               platform: 'Windows 10',
+            //               version: '16.16299'
+            //             },
+            //             {
+            //               browserName: 'internet explorer',
+            //               platform: 'Windows 10',
+            //               version: '11.285'
+            //             },
             {
               browserName: 'chrome',
               platform: 'Windows 10',
-              version: '49'
+              version: '73'
             },
             {
               browserName: 'firefox',
               platform: 'Windows 7',
-              version: '50'
-            },
-            {
-              browserName: 'safari',
-              platform: 'OS X 10.11',
-              version: '10.0'
+              version: '66'
             }
+            //             {
+            //               browserName: 'safari',
+            //               platform: 'macOS 10.14',
+            //               version: '12.0'
+            //             }
           ]
         }
       }

@@ -85,8 +85,8 @@ describe('createI13nNode', () => {
     mockery.registerMock('subscribe-ui-event', mockSubscribe);
     mockery.registerMock('../libs/clickHandler', mockClickHandler);
 
-    createI13nNode = require('../../../src/utils/createI13nNode').default;
-    I13nNode = require('../../../src/libs/I13nNode').default;
+    createI13nNode = require('../../../dist/utils/createI13nNode').default;
+    I13nNode = require('../../../dist/libs/I13nNode').default;
 
     rootI13nNode = new I13nNode(null, {});
     mockData.reactI13n = {

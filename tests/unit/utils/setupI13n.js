@@ -60,7 +60,7 @@ describe('setupI13n', () => {
 
     mockery.registerMock('../libs/ReactI13n', MockReactI13n);
 
-    setupI13n = require('../../../src/utils/setupI13n').default;
+    setupI13n = require('../../../dist/utils/setupI13n').default;
   });
 
   afterEach(() => {

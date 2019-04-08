@@ -18,18 +18,14 @@ function getJsonFromUrl() {
 var container = document.getElementById('container');
 var itemsNumber = getJsonFromUrl().items || 1;
 
-var I13nComponentLevel1 = React.createClass({
+var I13nComponentLevel1 = createClass({
   render: function() {
     var links = [];
     for (var i = 0; i < itemsNumber; i++) {
       var linkText = 'Button Level1 ' + i;
       var linkSec = 'level1-' + i;
       links.push(
-        <I13nButton
-          className="P(4px) M(4px) Bgc(#ececec)"
-          key={i}
-          i13nModel={{ sec: linkSec, lv1: 'foo' }}
-        >
+        <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{ sec: linkSec, lv1: 'foo' }}>
           {linkText}
         </I13nButton>
       );
@@ -116,7 +112,7 @@ var I13nComponentLevel1 = React.createClass({
 
 I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
-var I13nComponentLevel2 = React.createClass({
+var I13nComponentLevel2 = createClass({
   render: function() {
     var links = [];
     for (var i = 0; i < itemsNumber; i++) {
@@ -124,11 +120,7 @@ var I13nComponentLevel2 = React.createClass({
       var linkSec = 'level2-' + i;
       links.push(
         <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
-          <I13nAnchor
-            i13nModel={{ sec: linkSec, lv2: 'foo' }}
-            follow={false}
-            href="https://yahoo.com"
-          >
+          <I13nAnchor i13nModel={{ sec: linkSec, lv2: 'foo' }} follow={false} href="https://yahoo.com">
             {linkText}
           </I13nAnchor>
         </div>
@@ -145,7 +137,7 @@ var I13nComponentLevel2 = React.createClass({
 
 I13nComponentLevel2 = createI13nNode(I13nComponentLevel2);
 
-var I13nComponentLevel2Hidden = React.createClass({
+var I13nComponentLevel2Hidden = createClass({
   getInitialState: function() {
     return {
       expend: false
@@ -186,9 +178,9 @@ var I13nComponentLevel2Hidden = React.createClass({
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-var I13nDemo = React.createClass({
+var I13nDemo = createClass({
   componentWillMount: function() {
-    ReactI13n.getInstance().execute('pageview', {});
+    window._reactI13nInstance.getInstance().execute('pageview', {});
   },
   render: function() {
     return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
