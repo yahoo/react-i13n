@@ -1,7 +1,7 @@
 {
   "name": "react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {
@@ -27,6 +27,7 @@
     "babel": "^6.5.2",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
+    "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "babel-plugin-transform-react-jsx": "^6.22.0",
