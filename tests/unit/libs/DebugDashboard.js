@@ -21,7 +21,7 @@ describe('clickHandler', () => {
     global.requestAnimationFrame = function (callback) {
       setTimeout(callback, 0);
     };
-    DebugDashboard = require('../../../dist/libs/DebugDashboard').default;
+    DebugDashboard = require('../../../dist/libs/DebugDashboard');
   });
 
   afterEach(() => {
