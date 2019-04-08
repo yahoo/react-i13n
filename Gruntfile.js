@@ -240,16 +240,16 @@ module.exports = function (grunt) {
           },
           throttled: 3,
           browsers: [
-//             {
-//               browserName: 'edge',
-//               platform: 'Windows 10',
-//               version: '16.16299'
-//             },
-//             {
-//               browserName: 'internet explorer',
-//               platform: 'Windows 10',
-//               version: '11.285'
-//             },
+            //             {
+            //               browserName: 'edge',
+            //               platform: 'Windows 10',
+            //               version: '16.16299'
+            //             },
+            //             {
+            //               browserName: 'internet explorer',
+            //               platform: 'Windows 10',
+            //               version: '11.285'
+            //             },
             {
               browserName: 'chrome',
               platform: 'Windows 10',
@@ -259,12 +259,12 @@ module.exports = function (grunt) {
               browserName: 'firefox',
               platform: 'Windows 7',
               version: '66'
-            },
-//             {
-//               browserName: 'safari',
-//               platform: 'macOS 10.14',
-//               version: '12.0'
-//             }
+            }
+            //             {
+            //               browserName: 'safari',
+            //               platform: 'macOS 10.14',
+            //               version: '12.0'
+            //             }
           ]
         }
       }
