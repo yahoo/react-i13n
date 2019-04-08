@@ -75,8 +75,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3"
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0"
   },
   "precommit": [
     "lint",
