@@ -32,7 +32,7 @@ module.exports = function (grunt) {
   const projectConfig = {
     src: 'src',
     dist: 'dist',
-    distES: 'dist/es',
+    distES: 'dist-es',
     unit: 'tests/unit',
     functional: 'tests/functional',
     spec: 'tests/spec',
@@ -84,7 +84,7 @@ module.exports = function (grunt) {
       dist: {
         options: {
           sourceMap: false,
-          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
+          plugins: ['dynamic-import-node', 'syntax-dynamic-import', 'add-module-exports'],
           presets: [
             [
               'env',
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
       'dist-es': {
         options: {
           sourceMap: false,
-          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
+          plugins: ['dynamic-import-node', 'syntax-dynamic-import', 'add-module-exports'],
           presets: [
             [
               'env',

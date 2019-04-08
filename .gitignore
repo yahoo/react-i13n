@@ -3,6 +3,7 @@ build/
 results/
 node_modules/
 dist/
+dist-es/
 *.log
 *.tap
 tests/functional/main.js
