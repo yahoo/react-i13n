@@ -10,10 +10,10 @@ window.ReactDOM = require('react-dom');
 // TODO, this should be deprecated
 window.createClass = require('create-react-class');
 
-window.I13nAnchor = require('../../dist/components/I13nAnchor');
-window.I13nButton = require('../../dist/components/I13nButton');
-window.I13nDiv = require('../../dist/components/I13nDiv');
+window.I13nAnchor = require('../../index').I13nAnchor;
+window.I13nButton = require('../../index').I13nButton;
+window.I13nDiv = require('../../index').I13nDiv;
 
-window.createI13nNode = require('../../dist/utils/createI13nNode');
+window.createI13nNode = require('../../index').createI13nNode;
+window.setupI13n = require('../../index').setupI13n;
 window.clickHandler = require('../../dist/libs/clickHandler');
-window.setupI13n = require('../../dist/utils/setupI13n');

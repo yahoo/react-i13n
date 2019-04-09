@@ -13,9 +13,9 @@ import I13nNode from './I13nNode';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 import isUndefined from '../utils/isUndefined';
 import { IS_CLIENT, IS_PROD } from '../utils/variables';
+import ViewportDetector from './ViewportDetector';
 
 const debug = require('debug')('I13nComponent');
-const ViewportDetector = require('./ViewportDetector');
 
 const IS_DEBUG_MODE = (function isDebugMode() {
   if (!IS_CLIENT) {

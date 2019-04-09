@@ -103,4 +103,4 @@ ViewportDetector.prototype.isEnteredViewport = function () {
   return this._enteredViewport;
 };
 
-module.exports = ViewportDetector;
+export default ViewportDetector;

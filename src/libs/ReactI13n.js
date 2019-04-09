@@ -51,7 +51,7 @@ class ReactI13n {
    * @method getInstance
    * @return the ReactI13n instance
    */
-  getInstance() {
+  static getInstance() {
     if (IS_CLIENT) {
       return window._reactI13nInstance;
     }
