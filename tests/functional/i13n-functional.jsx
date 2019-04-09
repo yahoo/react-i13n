@@ -1,36 +1,35 @@
 /* global document, React, ReactDOM */
 
-'use strict';
 
 function getJsonFromUrl() {
-  var query = location.search.substr(1);
-  var result = {};
-  var parts = query.split('&');
-  var i = 0;
-  var length = parts.length;
+  const query = location.search.substr(1);
+  const result = {};
+  const parts = query.split('&');
+  let i = 0;
+  const { length } = parts;
   for (i; i < length; i++) {
-    var item = parts[i].split('=');
+    const item = parts[i].split('=');
     result[item[0]] = decodeURIComponent(item[1]);
   }
   return result;
 }
 
-var container = document.getElementById('container');
-var itemsNumber = getJsonFromUrl().items || 1;
+const container = document.getElementById('container');
+const itemsNumber = getJsonFromUrl().items || 1;
 
-var I13nComponentLevel1 = createClass({
-  render: function() {
-    var links = [];
-    for (var i = 0; i < itemsNumber; i++) {
-      var linkText = 'Button Level1 ' + i;
-      var linkSec = 'level1-' + i;
+let I13nComponentLevel1 = createClass({
+  render() {
+    const links = [];
+    for (let i = 0; i < itemsNumber; i++) {
+      const linkText = `Button Level1 ${i}`;
+      var linkSec = `level1-${i}`;
       links.push(
         <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{ sec: linkSec, lv1: 'foo' }}>
           {linkText}
         </I13nButton>
       );
     }
-    var getModelData = function() {
+    const getModelData = function () {
       return {
         sec: 'dynamical-generated'
       };
@@ -112,12 +111,12 @@ var I13nComponentLevel1 = createClass({
 
 I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
-var I13nComponentLevel2 = createClass({
-  render: function() {
-    var links = [];
-    for (var i = 0; i < itemsNumber; i++) {
-      var linkText = 'Link Level2 ' + i;
-      var linkSec = 'level2-' + i;
+let I13nComponentLevel2 = createClass({
+  render() {
+    const links = [];
+    for (let i = 0; i < itemsNumber; i++) {
+      const linkText = `Link Level2 ${i}`;
+      const linkSec = `level2-${i}`;
       links.push(
         <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
           <I13nAnchor i13nModel={{ sec: linkSec, lv2: 'foo' }} follow={false} href="https://yahoo.com">
@@ -137,20 +136,20 @@ var I13nComponentLevel2 = createClass({
 
 I13nComponentLevel2 = createI13nNode(I13nComponentLevel2);
 
-var I13nComponentLevel2Hidden = createClass({
-  getInitialState: function() {
+let I13nComponentLevel2Hidden = createClass({
+  getInitialState() {
     return {
       expend: false
     };
   },
-  clickHandler: function(e) {
+  clickHandler(e) {
     this.setState({ expend: true });
   },
-  render: function() {
-    var links = [];
+  render() {
+    const links = [];
     if (this.state.expend) {
-      for (var i = 0; i < itemsNumber; i++) {
-        var linkText = 'Link Level2 Hidden ' + i;
+      for (let i = 0; i < itemsNumber; i++) {
+        const linkText = `Link Level2 Hidden ${i}`;
         links.push(
           <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
             <I13nAnchor href="/mock-destination-page.html" follow={false}>
@@ -165,7 +164,7 @@ var I13nComponentLevel2Hidden = createClass({
         <I13nDiv
           className="HiddenBtn"
           onClick={this.clickHandler}
-          bindClickEvent={true}
+          bindClickEvent
           i13nModel={{ sec: 'hidden-btn', expend: this.state.expend }}
         >
           Show Hidden Links
@@ -178,21 +177,21 @@ var I13nComponentLevel2Hidden = createClass({
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-var I13nDemo = createClass({
-  componentWillMount: function() {
-    window._reactI13nInstance.getInstance().execute('pageview', {});
+let I13nDemo = createClass({
+  componentWillMount() {
+    ReactI13n.getInstance().execute('pageview', {});
   },
-  render: function() {
+  render() {
     return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
   }
 });
 
 window.firedEvents = [];
 
-var testPlugin = {
+const testPlugin = {
   name: 'test',
   eventHandlers: {
-    click: function(payload, callback) {
+    click(payload, callback) {
       // click handlers
       window.firedEvents.push({
         name: 'click',
@@ -202,15 +201,15 @@ var testPlugin = {
       });
       callback();
     },
-    event: function(payload, callback) {
+    event(payload, callback) {
       // event handlers
       window.firedEvents.push({
         name: 'event'
       });
       callback();
     },
-    pageview: function(payload, callback) {
-      if ('client' === payload.env) {
+    pageview(payload, callback) {
+      if (payload.env === 'client') {
         // client side pageview handlers
         window.firedEvents.push({
           name: 'pageview'
@@ -220,7 +219,7 @@ var testPlugin = {
       }
       callback();
     },
-    created: function(payload, callback) {
+    created(payload, callback) {
       // updated handlers
       window.firedEvents.push({
         name: 'created'
@@ -241,7 +240,7 @@ try {
     },
     [testPlugin]
   );
-  var Demo = ReactDOM.render(<I13nDemo />, container);
+  const Demo = ReactDOM.render(<I13nDemo />, container);
 } catch (e) {
   alert(e);
 }

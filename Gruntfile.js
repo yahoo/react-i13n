@@ -84,7 +84,12 @@ module.exports = function (grunt) {
       dist: {
         options: {
           sourceMap: false,
-          plugins: ['dynamic-import-node', 'syntax-dynamic-import', 'add-module-exports'],
+          plugins: [
+            'dynamic-import-node',
+            'syntax-dynamic-import',
+            'add-module-exports',
+            'transform-object-rest-spread'
+          ],
           presets: [
             [
               'env',
@@ -109,7 +114,12 @@ module.exports = function (grunt) {
       'dist-es': {
         options: {
           sourceMap: false,
-          plugins: ['dynamic-import-node', 'syntax-dynamic-import', 'add-module-exports'],
+          plugins: [
+            'dynamic-import-node',
+            'syntax-dynamic-import',
+            'add-module-exports',
+            'transform-object-rest-spread'
+          ],
           presets: [
             [
               'env',

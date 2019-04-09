@@ -3,7 +3,8 @@
     "plugins": [
       "dynamic-import-node",
       "syntax-dynamic-import",
-      "add-module-exports"
+      "add-module-exports",
+      "transform-object-rest-spread"
     ],
     "test": {
       "presets": [
