@@ -33,13 +33,15 @@ function setupI13n(Component, options = {}, plugins = []) {
   }
 
   class RootI13nComponent extends React.Component {
-    componentWillMount() {
+    constructor(props) {
+      super(props);
       const reactI13n = new ReactI13n(options);
       this._reactI13nInstance = reactI13n;
       // we might have case to access reactI13n instance to execute event outside react components
       // assign reactI13n to window
       if (IS_CLIENT) {
-        window._reactI13nInstance = reactI13n;
+        // put in componentDidMount will be too slow
+        window._reactI13nInstance = this._reactI13nInstance;
       }
       plugins.forEach((plugin) => {
         reactI13n.plug(plugin);
