@@ -16,10 +16,9 @@ const debug = require('debug')('EventsQueue');
  */
 class EventsQueue {
   constructor(plugin) {
-    const self = this;
-    self._plugin = plugin;
-    self._pendingCallbacks = [];
-    self._pendingEventsCount = 0;
+    this._plugin = plugin;
+    this._pendingCallbacks = [];
+    this._pendingEventsCount = 0;
   }
 
   /**
@@ -29,17 +28,16 @@ class EventsQueue {
    * @private
    */
   _callbackAndCheckQueue(callback) {
-    const self = this;
-    self._pendingEventsCount--;
+    this._pendingEventsCount--;
     // if there's no pending events, execute callback and pending-callbacks
-    if (self._pendingEventsCount === 0) {
+    if (this._pendingEventsCount === 0) {
       callback && callback();
-      while (self._pendingCallbacks.length !== 0) {
-        const pendingCallback = self._pendingCallbacks.pop();
+      while (this._pendingCallbacks.length !== 0) {
+        const pendingCallback = this._pendingCallbacks.pop();
         pendingCallback && pendingCallback();
       }
     } else {
-      self._pendingCallbacks.push(callback);
+      this._pendingCallbacks.push(callback);
     }
   }
 
@@ -53,28 +51,27 @@ class EventsQueue {
    */
 
   executeEvent(eventName, payload, resolve, reject) {
-    const self = this;
     const eventLog = {
-      pluginName: self._plugin.name,
+      pluginName: this._plugin.name,
       eventName,
       payload
     };
-    self._pendingEventsCount++;
+    this._pendingEventsCount++;
     try {
-      if (self._plugin && self._plugin.eventHandlers && self._plugin.eventHandlers[eventName]) {
-        self._plugin.eventHandlers[eventName].apply(self._plugin, [
+      if (this._plugin && this._plugin.eventHandlers && this._plugin.eventHandlers[eventName]) {
+        this._plugin.eventHandlers[eventName].apply(this._plugin, [
           payload,
-          function eventCallback() {
-            self._callbackAndCheckQueue(resolve);
+          () => {
+            this._callbackAndCheckQueue(resolve);
           }
         ]);
       } else {
-        debug(`Handler ${eventName} is not found: ${self._plugin.name}`, eventLog);
-        self._callbackAndCheckQueue(resolve);
+        debug(`Handler ${eventName} is not found: ${this._plugin.name}`, eventLog);
+        this._callbackAndCheckQueue(resolve);
       }
     } catch (e) {
-      debug(`Handler ${eventName} throws error: ${self._plugin.name}`, e);
-      self._callbackAndCheckQueue(reject);
+      debug(`Handler ${eventName} throws error: ${this._plugin.name}`, e);
+      this._callbackAndCheckQueue(reject);
     }
   }
 }

@@ -58,25 +58,30 @@ function convertToArray(arr) {
 }
 
 const staticSpecs = {
-  propTypes: {
-    component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-    model: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-    i13nModel: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
-    isLeafNode: PropTypes.bool,
-    bindClickEvent: PropTypes.bool,
-    follow: PropTypes.bool,
-    scanLinks: PropTypes.shape({
-      enable: PropTypes.bool,
-      tags: PropTypes.array
-    }),
-    viewport: PropTypes.shape({
-      margins: PropTypes.shape({
-        usePercent: PropTypes.bool,
-        top: PropTypes.number,
-        bottom: PropTypes.number
-      })
-    })
-  },
+  ...(!IS_PROD
+    ? {
+      // remove propTypes for production build
+      propTypes: {
+        component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
+        model: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        i13nModel: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        isLeafNode: PropTypes.bool,
+        bindClickEvent: PropTypes.bool,
+        follow: PropTypes.bool,
+        scanLinks: PropTypes.shape({
+          enable: PropTypes.bool,
+          tags: PropTypes.array
+        }),
+        viewport: PropTypes.shape({
+          margins: PropTypes.shape({
+            usePercent: PropTypes.bool,
+            top: PropTypes.number,
+            bottom: PropTypes.number
+          })
+        })
+      }
+    }
+    : {}),
 
   contextTypes: {
     i13n: PropTypes.shape({

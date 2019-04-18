@@ -13,6 +13,7 @@ window.createClass = require('create-react-class');
 window.I13nAnchor = require('../../index').I13nAnchor;
 window.I13nButton = require('../../index').I13nButton;
 window.I13nDiv = require('../../index').I13nDiv;
+window.ReactI13n = require('../../index').ReactI13n;
 
 window.createI13nNode = require('../../index').createI13nNode;
 window.setupI13n = require('../../index').setupI13n;
