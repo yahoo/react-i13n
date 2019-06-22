@@ -40,7 +40,7 @@
     "coveralls": "^3.0.3",
     "create-react-class": "^15.6.3",
     "es5-shim": "^4.5.12",
-    "eslint": "^5.15.3",
+    "eslint": "^6.0.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
