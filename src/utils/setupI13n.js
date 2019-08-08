@@ -8,6 +8,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import { IS_CLIENT } from './variables';
 import augmentComponent from './augmentComponent';
+import getDisplayName from './getDisplayName';
 import pickSpecs from '../libs/ComponentSpecs';
 import ReactI13n from '../libs/ReactI13n';
 
@@ -73,7 +74,8 @@ function setupI13n(Component, options = {}, plugins = []) {
     static: ['contextTypes', 'childContextTypes']
   });
 
-  const componentName = Component.displayName || Component.name;
+  const componentName = getDisplayName(Component);
+
   augmentComponent(
     RootI13nComponent,
     specs.prototype,

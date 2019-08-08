@@ -7,13 +7,14 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
+import { IS_CLIENT, IS_PROD } from '../utils/variables';
+import arrayFrom from '../utils/arrayFrom';
 import clickHandler from './clickHandler';
 import DebugDashboard from './DebugDashboard';
 import I13nNode from './I13nNode';
-import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 import isUndefined from '../utils/isUndefined';
-import { IS_CLIENT, IS_PROD } from '../utils/variables';
 import ViewportDetector from './ViewportDetector';
+import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debug = require('debug')('I13nComponent');
 
@@ -40,22 +41,6 @@ const IS_DEBUG_MODE = (function isDebugMode() {
 const DEFAULT_SCAN_TAGS = ['a', 'button'];
 let pageInitViewportDetectionTimeout = null;
 let pageInitViewportDetected = false;
-
-function convertToArray(arr) {
-  try {
-    // try using .slice()
-    return Array.prototype.slice.call(arr);
-  } catch (e) {
-    // otherwise, manually create the array
-    let i;
-    const { length } = arr;
-    const result = [];
-    for (i = 0; i < length; i += 1) {
-      result.push(arr[i]);
-    }
-    return result;
-  }
-}
 
 const staticSpecs = {
   ...(!IS_PROD
@@ -342,7 +327,7 @@ const prototypeSpecs = {
     scanTags.forEach((tagName) => {
       const collections = DOMNode.getElementsByTagName(tagName);
       if (collections) {
-        foundElements = foundElements.concat(convertToArray(collections));
+        foundElements = foundElements.concat(arrayFrom(collections));
       }
     });
 
