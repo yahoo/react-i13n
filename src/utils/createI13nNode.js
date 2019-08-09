@@ -7,6 +7,7 @@ import React from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import augmentComponent from './augmentComponent';
+import getDisplayName from './getDisplayName';
 import pickSpecs from '../libs/ComponentSpecs';
 import warnAndPrintTrace from './warnAndPrintTrace';
 
@@ -51,7 +52,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
     return null;
   }
 
-  const componentName = Component.displayName || Component.name || Component;
+  const componentName = getDisplayName(Component);
   const componentIsFunction = isFunctionalComponent(Component);
 
   defaultProps = Object.assign(
