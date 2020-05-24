@@ -1,11 +1,9 @@
 /**
- * Copyright 2015, Yahoo! Inc.
+ * Copyright 202, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 /* globals describe, it, beforeEach, afterEach */
 
-
-import expect from 'expect.js';
 import EventsQueue from '../../../src/libs/EventsQueue';
 
 describe('EventsQueue', () => {
@@ -15,9 +13,9 @@ describe('EventsQueue', () => {
       eventHandlers: {}
     };
     const eventsQueue = new EventsQueue(testPlugin);
-    expect(eventsQueue._plugin).to.eql(testPlugin);
-    expect(eventsQueue._pendingCallbacks).to.eql([]);
-    expect(eventsQueue._pendingEventsCount).to.eql(0);
+    expect(eventsQueue._plugin).toEqual(testPlugin);
+    expect(eventsQueue._pendingCallbacks).toEqual([]);
+    expect(eventsQueue._pendingEventsCount).toEqual(0);
   });
 
   it('should execute event correctly', (done) => {
@@ -25,7 +23,7 @@ describe('EventsQueue', () => {
       name: 'test',
       eventHandlers: {
         click(payload, callback) {
-          expect(payload).to.be.an('object');
+          expect(typeof payload).toEqual('object');
           callback();
         }
       }
@@ -33,8 +31,8 @@ describe('EventsQueue', () => {
     const eventsQueue = new EventsQueue(testPlugin);
     eventsQueue.executeEvent('click', {}, () => {
       // after events are executed, the pending evnets should be empty
-      expect(eventsQueue._pendingCallbacks.length).to.eql(0);
-      expect(eventsQueue._pendingEventsCount).to.eql(0);
+      expect(eventsQueue._pendingCallbacks.length).toEqual(0);
+      expect(eventsQueue._pendingEventsCount).toEqual(0);
       done();
     });
   });
@@ -54,8 +52,8 @@ describe('EventsQueue', () => {
     // the reject function will be executed
     eventsQueue.executeEvent('click', {}, null, () => {
       // after events are executed, the pending evnets should be empty
-      expect(eventsQueue._pendingCallbacks.length).to.eql(0);
-      expect(eventsQueue._pendingEventsCount).to.eql(0);
+      expect(eventsQueue._pendingCallbacks.length).toEqual(0);
+      expect(eventsQueue._pendingEventsCount).toEqual(0);
       done();
     });
   });
@@ -72,8 +70,8 @@ describe('EventsQueue', () => {
     const eventsQueue = new EventsQueue(testPlugin);
     eventsQueue.executeEvent('pageview', {}, () => {
       // after events are executed, the pending evnets should be empty
-      expect(eventsQueue._pendingCallbacks.length).to.eql(0);
-      expect(eventsQueue._pendingEventsCount).to.eql(0);
+      expect(eventsQueue._pendingCallbacks.length).toEqual(0);
+      expect(eventsQueue._pendingEventsCount).toEqual(0);
       done();
     });
   });
@@ -83,13 +81,13 @@ describe('EventsQueue', () => {
       name: 'test',
       eventHandlers: {
         click(payload, callback) {
-          expect(payload).to.be.an('object');
+          expect(typeof payload).toEqual('object');
           callback();
         },
         updated(payload, callback) {
           setTimeout(() => {
             // the pending events should be executed either
-            expect(payload).to.be.an('object');
+            expect(typeof payload).toEqual('object');
             callback();
           }, 200);
         }
@@ -98,14 +96,14 @@ describe('EventsQueue', () => {
     const eventsQueue = new EventsQueue(testPlugin);
     eventsQueue.executeEvent('updated', {}, () => {
       // after events are executed, the pending evnets should be empty
-      expect(eventsQueue._pendingCallbacks.length).to.eql(1); // should have callback for click not executed yet
-      expect(eventsQueue._pendingEventsCount).to.eql(0);
+      expect(eventsQueue._pendingCallbacks.length).toEqual(1); // should have callback for click not executed yet
+      expect(eventsQueue._pendingEventsCount).toEqual(0);
       done();
     });
     eventsQueue.executeEvent('click', {}, () => {
       // after events are executed, the pending evnets should be empty
-      expect(eventsQueue._pendingCallbacks.length).to.eql(0);
-      expect(eventsQueue._pendingEventsCount).to.eql(0);
+      expect(eventsQueue._pendingCallbacks.length).toEqual(0);
+      expect(eventsQueue._pendingEventsCount).toEqual(0);
     });
   });
 });

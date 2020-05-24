@@ -40,7 +40,6 @@ const IS_DEBUG_MODE = (function isDebugMode() {
 }());
 const DEFAULT_SCAN_TAGS = ['a', 'button'];
 let pageInitViewportDetectionTimeout = null;
-let pageInitViewportDetected = false;
 
 const staticSpecs = {
   ...(!IS_PROD
@@ -148,7 +147,7 @@ const prototypeSpecs = {
       self._viewportDetector = new ViewportDetector(domNode, self._getViewportOptions(), () => {
         self._handleEnterViewport();
       });
-      if (pageInitViewportDetected) {
+      if (this.pageInitViewportDetected) {
         self._viewportDetector.init();
       } else {
         self._triggerPageInitViewportDetection();
@@ -443,7 +442,7 @@ const prototypeSpecs = {
     clearTimeout(pageInitViewportDetectionTimeout);
     pageInitViewportDetectionTimeout = setTimeout(() => {
       self._pageInitViewportDetection();
-      pageInitViewportDetected = true;
+      this.pageInitViewportDetected = true;
     }, 500);
   },
 

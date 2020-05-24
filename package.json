@@ -14,8 +14,8 @@
     "func": "grunt functional",
     "lint": "eslint src",
     "prepublish": "grunt dist",
-    "test": "grunt cover",
-    "unit": "grunt unit"
+    "test": "jest tests/unit --coverage --coverageReporters=lcov",
+    "unit": "jest tests/unit"
   },
   "dependencies": {
     "debug": "^4.1.1",
@@ -24,20 +24,19 @@
     "subscribe-ui-event": "^2.0.5"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-spread": "^7.8.3",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/register": "^7.9.0",
+    "@testing-library/react": "^10.0.4",
     "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.0.5",
-    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-loader": "^8.1.0",
     "babel-plugin-dynamic-import-node": "^2.2.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-react-jsx": "^6.22.0",
-    "babel-polyfill": "^6.9.1",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.9.0",
     "benchmark": "^2.1.3",
-    "coveralls": "^3.0.3",
     "create-react-class": "^15.6.3",
     "es5-shim": "^4.5.12",
     "eslint": "^7.0.0",
@@ -48,21 +47,20 @@
     "expect.js": "^0.3.1",
     "grunt": "^1.0.4",
     "grunt-atomizer": "^3.1.3",
-    "grunt-babel": "^7.0.0",
+    "grunt-babel": "^8.0.0",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-connect": "^2.0.0",
     "grunt-contrib-watch": "^1.1.0",
     "grunt-saucelabs": "^9.0.0",
-    "grunt-shell": "^3.0.1",
     "grunt-webpack": "^3.1.3",
-    "jsdom": "^16.2.2",
+    "jest": "^26.0.1",
+    "jest-junit": "^10.0.0",
     "minimist": "^1.2.0",
     "mocha": "^7.1.2",
-    "mockery": "^2.0.0",
-    "nyc": "^15.0.1",
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
+    "prettier": "^2.0.5",
     "promise": "^8.0.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
@@ -95,12 +93,5 @@
       "type": "BSD",
       "url": "https://github.com/yahoo/react-i13n/blob/master/LICENSE.md"
     }
-  ],
-  "nyc": {
-    "exclude": [
-      "tests/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  }
+  ]
 }

@@ -11,7 +11,6 @@ module.exports = function (grunt) {
     'grunt-contrib-clean',
     'grunt-contrib-connect',
     'grunt-contrib-watch',
-    'grunt-shell',
     'grunt-webpack'
   ].forEach((packageName) => {
     let moduleTasks = path.resolve(__dirname, '..', 'node_modules', packageName, 'tasks');
@@ -33,14 +32,10 @@ module.exports = function (grunt) {
     src: 'src',
     dist: 'dist',
     distES: 'dist-es',
-    unit: 'tests/unit',
     functional: 'tests/functional',
     spec: 'tests/spec',
-    coverage_dir: grunt.option('coverage_dir') || 'artifacts',
     test_results_dir: grunt.option('test_results_dir') || 'artifacts'
   };
-
-  env.XUNIT_FILE = `${projectConfig.test_results_dir}/xunit.xml`;
 
   grunt.initConfig({
     project: projectConfig,
@@ -87,17 +82,17 @@ module.exports = function (grunt) {
           plugins: [
             'dynamic-import-node',
             'syntax-dynamic-import',
-            'add-module-exports',
-            'transform-object-rest-spread'
+            '@babel/plugin-transform-spread',
+            '@babel/plugin-proposal-class-properties'
           ],
           presets: [
             [
-              'env',
+              '@babel/preset-env',
               {
                 loose: true
               }
             ],
-            'react'
+            '@babel/preset-react'
           ]
         },
         files: [
@@ -117,12 +112,12 @@ module.exports = function (grunt) {
           plugins: [
             'dynamic-import-node',
             'syntax-dynamic-import',
-            'add-module-exports',
-            'transform-object-rest-spread'
+            '@babel/plugin-transform-spread',
+            '@babel/plugin-proposal-class-properties'
           ],
           presets: [
             [
-              'env',
+              '@babel/preset-env',
               {
                 useBuiltIns: 'entry',
                 modules: false,
@@ -131,7 +126,7 @@ module.exports = function (grunt) {
                 }
               }
             ],
-            'react'
+            '@babel/preset-react'
           ]
         },
         files: [
@@ -151,12 +146,12 @@ module.exports = function (grunt) {
           plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
           presets: [
             [
-              'env',
+              '@babel/preset-env',
               {
                 loose: true
               }
             ],
-            'react'
+            '@babel/preset-react'
           ]
         },
         files: [
@@ -169,23 +164,6 @@ module.exports = function (grunt) {
             ext: '.js'
           }
         ]
-      }
-    },
-    // shell
-    // shell commands to run protractor and istanbul
-    shell: {
-      cover: {
-        options: {
-          execOptions: {
-            env
-          }
-        },
-        command:
-          'NODE_ENV=test nyc --report-dir <%= project.coverage_dir %> --reporter lcov _mocha <%= project.unit %> --require babel-register --require babel-polyfill --recursive --reporter spec --timeout 10000'
-      },
-      unit: {
-        command:
-          'NODE_ENV=test nyc --reporter text --reporter text-summary _mocha <%= project.unit %> --require babel-register --require babel-polyfill --recursive --reporter spec  --timeout 10000'
       }
     },
     // webpack
@@ -313,15 +291,10 @@ module.exports = function (grunt) {
     'watch:functional'
   ]);
 
-  grunt.registerTask('cover', ['clean:dist', 'babel:dist', 'shell:cover']);
-
-  grunt.registerTask('unit', ['clean:dist', 'babel:dist', 'shell:unit']);
-
   // dist
   // 1. clean dist/
   // 2. compile jsx to js in dist/
   grunt.registerTask('dist', ['clean:dist', 'babel:dist', 'babel:dist-es']);
-  grunt.registerTask('test', ['clean:dist', 'babel:dist', 'babel:dist-es', 'babel:unit']);
 
   // default
   grunt.registerTask('default', ['dist']);
