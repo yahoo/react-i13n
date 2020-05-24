@@ -101,7 +101,6 @@ The performance has always been a topic we are working on, and yes it's an overh
 ```
 link-without-react-component x 131,232 ops/sec ±1.08% (82 runs sampled)
 link-wrapped-with-react-component x 111,056 ops/sec ±1.55% (88 runs sampled)
-link-wrapped-with-react-component-with-i13n-mixin x 54,357 ops/sec ±1.01% (79 runs sampled)
 link-wrapped-with-react-component-with-i13n-high-order-component x 64,422 ops/sec ±1.95% (84 runs sampled)
 ```
 
