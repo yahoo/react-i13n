@@ -9,11 +9,16 @@
     "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
+    "clean": "rm -rf dist/* && rm -rf dist-es/*",
     "dev": "grunt functional-debug",
-    "dist": "grunt dist",
-    "func": "grunt functional",
+    "dist": "npm run clean && npm run dist-cjs && npm run dist-es",
+    "dist-cjs": "BABEL_ENV=dist babel src --out-dir dist",
+    "dist-es": "BABEL_ENV=dist-es babel src --out-dir dist-es",
+    "dist-functional": "BABEL_ENV=dist babel tests/functional/**/*.jsx --out-dir tests/functional",
+    "func": "npm run dist && npm run dist-functional && grunt functional",
+    "func-debug": "npm run dist && npm run dist-functional && grunt functional-debug",
     "lint": "eslint src",
-    "prepublish": "grunt dist",
+    "prepublish": "npm run dist",
     "test": "jest tests/unit --coverage --coverageReporters=lcov",
     "unit": "jest tests/unit"
   },
@@ -47,7 +52,6 @@
     "expect.js": "^0.3.1",
     "grunt": "^1.0.4",
     "grunt-atomizer": "^3.1.3",
-    "grunt-babel": "^8.0.0",
     "grunt-cli": "^1.3.2",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-connect": "^2.0.0",
@@ -82,12 +86,6 @@
     "lint",
     "test"
   ],
-  "yhint": {
-    "excludes": [
-      "/dist/",
-      "/tests/"
-    ]
-  },
   "licenses": [
     {
       "type": "BSD",

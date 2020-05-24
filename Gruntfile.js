@@ -7,7 +7,6 @@ module.exports = function (grunt) {
   // autoload installed tasks
   [
     'grunt-atomizer',
-    'grunt-babel',
     'grunt-contrib-clean',
     'grunt-contrib-connect',
     'grunt-contrib-watch',
@@ -30,8 +29,6 @@ module.exports = function (grunt) {
   const { env } = process;
   const projectConfig = {
     src: 'src',
-    dist: 'dist',
-    distES: 'dist-es',
     functional: 'tests/functional',
     spec: 'tests/spec',
     test_results_dir: grunt.option('test_results_dir') || 'artifacts'
@@ -40,14 +37,6 @@ module.exports = function (grunt) {
   grunt.initConfig({
     project: projectConfig,
     clean: {
-      dist: {
-        files: [
-          {
-            dot: true,
-            src: ['<%= project.dist %>', '<%= project.distES %>']
-          }
-        ]
-      },
       functional: {
         files: [
           {
@@ -74,102 +63,11 @@ module.exports = function (grunt) {
         ]
       }
     },
-    // compiles jsx to js
-    babel: {
-      dist: {
-        options: {
-          sourceMap: false,
-          plugins: [
-            'dynamic-import-node',
-            'syntax-dynamic-import',
-            '@babel/plugin-transform-spread',
-            '@babel/plugin-proposal-class-properties'
-          ],
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                loose: true
-              }
-            ],
-            '@babel/preset-react'
-          ]
-        },
-        files: [
-          {
-            expand: true,
-            cwd: '<%= project.src %>',
-            src: ['**/*.*'],
-            dest: '<%= project.dist %>/',
-            extDot: 'last',
-            ext: '.js'
-          }
-        ]
-      },
-      'dist-es': {
-        options: {
-          sourceMap: false,
-          plugins: [
-            'dynamic-import-node',
-            'syntax-dynamic-import',
-            '@babel/plugin-transform-spread',
-            '@babel/plugin-proposal-class-properties'
-          ],
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                useBuiltIns: 'entry',
-                modules: false,
-                targets: {
-                  esmodules: true
-                }
-              }
-            ],
-            '@babel/preset-react'
-          ]
-        },
-        files: [
-          {
-            expand: true,
-            cwd: '<%= project.src %>',
-            src: ['**/*.*'],
-            dest: '<%= project.distES %>/',
-            extDot: 'last',
-            ext: '.js'
-          }
-        ]
-      },
-      functional: {
-        options: {
-          sourceMap: false,
-          plugins: ['dynamic-import-node', 'syntax-dynamic-import'],
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                loose: true
-              }
-            ],
-            '@babel/preset-react'
-          ]
-        },
-        files: [
-          {
-            expand: true,
-            cwd: '<%= project.functional %>',
-            src: ['**/*.jsx'],
-            dest: '<%= project.functional %>/',
-            extDot: 'last',
-            ext: '.js'
-          }
-        ]
-      }
-    },
     // webpack
     // create js rollup with webpack module loader for functional tests
     webpack: {
       functional: {
+        mode: 'development',
         entry: {
           main: './<%= project.functional %>/bootstrap.js'
         },
@@ -265,15 +163,13 @@ module.exports = function (grunt) {
 
   // functional
   // 2. run atomizer functional
-  // 3. compile jsx to js in tests/functional/
-  // 4. copy files to tests/functional/
-  // 5. use webpack to create a js bundle to tests/functional/
-  // 6. get local ip address and available port then store in grunt config
-  // 7. set up local server to run functional tests
-  // 9. run protractor
+  // 3. copy files to tests/functional/
+  // 4. use webpack to create a js bundle to tests/functional/
+  // 5. get local ip address and available port then store in grunt config
+  // 6. set up local server to run functional tests
+  // 7. run protractor
   grunt.registerTask('functional', [
     'atomizer:functional',
-    'babel:functional',
     'webpack:functional',
     'connect:functional',
     'saucelabs-mocha',
@@ -282,20 +178,9 @@ module.exports = function (grunt) {
 
   // similar to functional, but don't run protractor, just open the test page
   grunt.registerTask('functional-debug', [
-    'clean:dist',
-    'babel:dist',
     'atomizer:functional',
-    'babel:functional',
     'webpack:functional',
     'connect:functionalOpen',
     'watch:functional'
   ]);
-
-  // dist
-  // 1. clean dist/
-  // 2. compile jsx to js in dist/
-  grunt.registerTask('dist', ['clean:dist', 'babel:dist', 'babel:dist-es']);
-
-  // default
-  grunt.registerTask('default', ['dist']);
 };
