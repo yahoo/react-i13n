@@ -3,7 +3,6 @@
 /* global window */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import createClass from 'create-react-class';
 
 import {
   createI13nNode,
@@ -24,8 +23,6 @@ if (!Object.assign) {
 
 window.React = React;
 window.ReactDOM = ReactDOM;
-// TODO, this should be deprecated
-window.createClass = createClass;
 
 window.I13nAnchor = I13nAnchor;
 window.I13nButton = I13nButton;

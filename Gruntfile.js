@@ -105,7 +105,7 @@ module.exports = function (grunt) {
     watch: {
       functional: {
         files: ['<%= project.src%>/*.jsx', '<%= project.functional%>/*.jsx', '<%= project.functional%>/*.html'],
-        tasks: ['dist', 'functional-debug']
+        tasks: ['functional-debug']
       }
     },
     'saucelabs-mocha': {

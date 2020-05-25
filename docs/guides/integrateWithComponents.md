@@ -7,32 +7,38 @@ This guide will show you how to take an existing component and modify it to leve
 Say you have a video player component and you want to track each link, you might need to have `onClick` for each links, for example:
 
 ```js
-var Player = React.createClass({
-    ...
-    render: function () {
-        trackButton: function (category, action) {
-            // assume "beacon" is some beaconing function
-            beacon(category, action);
-        },
-        trackExternalLink: function (category, action, url) {
-            // typically you will redirect users to the destination page after beaconing
-            beacon(category, action, function onBeaconFinish() {
-                document.location = url;
-            });
-        },
-        return (
-            <div>
-                ...
-                <button onClick="this.trackButton('VideoPlayer', 'Play')">Play</button>
-                <button onClick="this.trackButton('VideoPlayer', 'Download')">Download</button>
-                <a onClick="this.trackExternalLink('VideoPlayer', 'More', 'http://some.more.link')" href="http://some.more.link">More</a>
-            </div>
-        )
-    }
-});
+class Player extends React.Component {
+  trackButton = (category, action) => {
+    // assume "beacon" is some beaconing function
+    beacon(category, action);
+  };
+
+  trackExternalLink = (category, action, url) => {
+    // typically you will redirect users to the destination page after beaconing
+    beacon(category, action, function onBeaconFinish() {
+      document.location = url;
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        ...
+        <button onClick="this.trackButton('VideoPlayer', 'Play')">Play</button>
+        <button onClick="this.trackButton('VideoPlayer', 'Download')">Download</button>
+        <a
+          onClick="this.trackExternalLink('VideoPlayer', 'More', 'http://some.more.link')"
+          href="http://some.more.link"
+        >
+          More
+        </a>
+      </div>
+    );
+  }
+}
 
 // in some other component
-<Player></Player>
+<Player></Player>;
 ```
 
 ### Replace with I13n Components
@@ -51,9 +57,9 @@ var I13nButton = createI13nNode('button', {
     bindClickEvent: true,
     follow: false // it's only interaction here, we don't want to redirect users to the destination page, set it as false
 });
-var Player = React.createClass({
+class Player extends React.Component {
     ...
-    render: function () {
+    render() {
         return (
             <div>
                 ...
@@ -63,7 +69,7 @@ var Player = React.createClass({
             </div>
         )
     }
-});
+};
 
 // in some other component
 <Player></Player>
@@ -87,9 +93,9 @@ var I13nButton = createI13nNode('button', {
     bindClickEvent: true,
     follow: false
 });
-var Player = React.createClass({
+class Player extends React.Component {
     ...
-    render: function () {
+    render() {
         return (
             <div>
                 ...
@@ -99,7 +105,7 @@ var Player = React.createClass({
             </div>
         )
     }
-});
+};
 
 Player = createI13nNode(Player);
 
@@ -108,7 +114,6 @@ Player = createI13nNode(Player);
 ```
 
 The player component is now an i13nNode and you can pass i13nModel here, all the links inside will apply this model data.
-
 
 ### Dynamic I13n Model
 
@@ -126,15 +131,15 @@ var I13nButton = createI13nNode('button', {
     bindClickEvent: true,
     follow: false
 });
-var Player = React.createClass({
+class Player extends React.Component {
     ...
-    getPlayI13nModel: function () {
+    getPlayI13nModel() {
         return {
             action: 'Play',
             label: this.getVideoTitle();
         }
-    },
-    render: function () {
+    };
+    render() {
         return (
             <div>
                 ...
@@ -144,7 +149,7 @@ var Player = React.createClass({
             </div>
         )
     }
-});
+};
 
 Player = createI13nNode(Player);
 
@@ -156,25 +161,23 @@ Player = createI13nNode(Player);
 
 Sometimes you just want to group links in your template instead of creating a component with i13n functionalities, you can create a simple component and pass `i13nModel` data directly. This way, you can easily group links with some shared i13n data definition.
 
-* Please note that since we integrate the feature of `parent-based context`, with `dev` env, react will generate warning like
+- Please note that since we integrate the feature of `parent-based context`, with `dev` env, react will generate warning like
 
 ```js
 Warning: owner-based and parent-based contexts differ (values: [object Object] vs [object Object]) for key (parentI13nNode) while mounting I13nAnchor (see: http://fb.me/react-context-by-parent)
 ```
 
-* This feature can only be used after `react-0.13`, if you are using an older version, you will have to create the component as mentioned above [example](#integrate-with-parent-nodes).
+- This feature can only be used after `react-0.13`, if you are using an older version, you will have to create the component as mentioned above [example](#integrate-with-parent-nodes).
 
 ```js
 var createI13nNode = require('react-i13n').createI13nNode;
 var I13nDiv = createI13nNode('div', {
-    isLeafNode: false,
-    bindClickEvent: false,
-    follow: false
+  isLeafNode: false,
+  bindClickEvent: false,
+  follow: false
 });
 
-<I13nDiv i13nModel={parentI13nModel}>
-    // the i13n node inside will inherit the model data of its parent
-</I13nDiv>
+<I13nDiv i13nModel={parentI13nModel}>// the i13n node inside will inherit the model data of its parent</I13nDiv>;
 ```
 
 ```js
@@ -197,15 +200,15 @@ var I13nDiv = createI13nNode('div', {
     follow: false
 });
 
-var Player = React.createClass({
+class Player extends React.Component {
     ...
-    getPlayI13nModel: function () {
+    getPlayI13nModel() {
         return {
             action: 'Play',
             label: this.getVideoTitle();
         }
-    },
-    render: function () {
+    };
+    render() {
         return (
             <I13nDiv i13nModel={{category: 'VideoPlayer'}}>
                 ...
@@ -215,7 +218,7 @@ var Player = React.createClass({
             </I13nDiv>
         )
     }
-});
+};
 
 // in some other component
 <Player></Player>
@@ -225,8 +228,8 @@ var Player = React.createClass({
 
 For common usage, the following components are available, you can require them without generating them every time. These setting can be overwritten by `props`.
 
-| Component | isLeafNode | bindClickEvent | follow |
-| --------- | ---------- | -------------- | -------- |
-| **I13nAnchor** | true | true | true |
-| **I13nButton** | true | true | true |
-| **I13nDiv** | false | false | false |
+| Component      | isLeafNode | bindClickEvent | follow |
+| -------------- | ---------- | -------------- | ------ |
+| **I13nAnchor** | true       | true           | true   |
+| **I13nButton** | true       | true           | true   |
+| **I13nDiv**    | false      | false          | false  |

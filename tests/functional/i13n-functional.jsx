@@ -1,6 +1,5 @@
 /* global document, React, ReactDOM */
 
-
 function getJsonFromUrl() {
   const query = location.search.substr(1);
   const result = {};
@@ -17,7 +16,7 @@ function getJsonFromUrl() {
 const container = document.getElementById('container');
 const itemsNumber = getJsonFromUrl().items || 1;
 
-let I13nComponentLevel1 = createClass({
+class I13nComponentLevel1 extends React.Component {
   render() {
     const links = [];
     for (let i = 0; i < itemsNumber; i++) {
@@ -107,11 +106,11 @@ let I13nComponentLevel1 = createClass({
       </div>
     );
   }
-});
+}
 
 I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
-let I13nComponentLevel2 = createClass({
+class I13nComponentLevel2 extends React.Component {
   render() {
     const links = [];
     for (let i = 0; i < itemsNumber; i++) {
@@ -132,19 +131,19 @@ let I13nComponentLevel2 = createClass({
       </div>
     );
   }
-});
+}
 
 I13nComponentLevel2 = createI13nNode(I13nComponentLevel2);
 
-let I13nComponentLevel2Hidden = createClass({
-  getInitialState() {
-    return {
-      expend: false
-    };
-  },
-  clickHandler(e) {
+class I13nComponentLevel2Hidden extends React.Component {
+  state = {
+    expend: false
+  };
+
+  clickHandler = () => {
     this.setState({ expend: true });
-  },
+  }
+
   render() {
     const links = [];
     if (this.state.expend) {
@@ -173,18 +172,19 @@ let I13nComponentLevel2Hidden = createClass({
       </div>
     );
   }
-});
+}
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-let I13nDemo = createClass({
+class I13nDemo extends React.Component {
   componentWillMount() {
     ReactI13n.getInstance().execute('pageview', {});
-  },
+  }
+
   render() {
     return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
   }
-});
+}
 
 window.firedEvents = [];
 

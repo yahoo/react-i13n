@@ -1,18 +1,16 @@
 /* start with benchmark */
 const { Suite } = require('benchmark');
-const createClass = require('create-react-class');
 const { renderToString } = require('react-dom/server');
-const { createElement } = require('react');
+const { createElement, Component } = require('react');
 const createI13nNode = require('../../dist/utils/createI13nNode').default;
 const I13nAnchor = require('../../dist/components/I13nAnchor').default;
 const I13nButton = require('../../dist/components/I13nButton').default;
 
-const PureReactComponent = createClass({
-  autobind: false,
+class PureReactComponent extends Component {
   render() {
     return createElement('a', this.props, this.props.children);
   }
-});
+};
 
 const createLinkChildren = function (Element, count) {
   const links = [];

@@ -33,15 +33,15 @@ var fooPlugin = {
     }
 }
 
-var Foo = React.createClass({
-    componentWillMount: function () {
+class Foo extends React.Component {
+    componentWillMount () {
         // whenever you define a event handler, you can fire an event for that.
         this.props.i13n.executeEvent('customEvent', {payload}, function beaconCallback () {
             // do whatever after beaconing
         });
     }
     ...
-});
+};
 
 var I13nFoo = setupI13n(Foo, {}, [fooPlugin]);
 
