@@ -1,15 +1,35 @@
 {
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "plugins": [
+    "dynamic-import-node",
+    "syntax-dynamic-import",
+    "@babel/plugin-transform-spread",
+    "@babel/plugin-proposal-class-properties"
+  ],
   "env": {
-    "plugins": [
-      "dynamic-import-node",
-      "syntax-dynamic-import",
-      "add-module-exports",
-      "transform-object-rest-spread"
-    ],
-    "test": {
+    "dist": {
       "presets": [
-        "env",
-        "react"
+        [
+          "@babel/preset-env",
+          {
+            "loose": true
+          }
+        ],
+        "@babel/preset-react"
+      ]
+    },
+    "dist-es": {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "modules": false,
+            "targets": {
+              "esmodules": true
+            }
+          }
+        ],
+        "@babel/preset-react"
       ]
     }
   }

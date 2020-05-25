@@ -1,16 +1,11 @@
 /**
- * Copyright 2015, Yahoo! Inc.
+ * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals describe,it,document,beforeEach,afterEach */
 
-
-import expect from 'expect.js';
 import I13nNode from '../../../src/libs/I13nNode';
+import clickHandler from '../../../src/libs/clickHandler';
 
-let clickHandler;
-let React;
-const mockData = {};
 let mockClickEvent;
 let mockComponent;
 
@@ -37,8 +32,6 @@ describe('clickHandler', () => {
       }
     };
 
-    React = require('react');
-    clickHandler = require('../../../src/libs/clickHandler').default;
     mockClickEvent = {
       target: {},
       button: 0
@@ -60,7 +53,7 @@ describe('clickHandler', () => {
 
   it('should run click handler correctly', (done) => {
     const i13nNode = new I13nNode(null, {});
-    mockClickEvent.preventDefault = function () {};
+    mockClickEvent.preventDefault = jest.fn();
     mockComponent.executeI13nEvent = function () {
       // simply done here to make sure it goes to the executeI13nEvent
       done();
@@ -82,7 +75,7 @@ describe('clickHandler', () => {
     };
     document.location.assign = function () {
       executedActions.push('assign');
-      expect(executedActions).to.eql(['preventDefault', 'assign']);
+      expect(executedActions).toEqual(['preventDefault', 'assign']);
       done();
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
@@ -106,7 +99,7 @@ describe('clickHandler', () => {
     mockClickEvent.target.form = {
       submit() {
         executedActions.push('submit');
-        expect(executedActions).to.eql(['preventDefault', 'submit']);
+        expect(executedActions).toEqual(['preventDefault', 'submit']);
         done();
       }
     };
@@ -132,7 +125,7 @@ describe('clickHandler', () => {
     mockClickEvent.target.form = {
       submit() {
         executedActions.push('submit');
-        expect(executedActions).to.eql(['preventDefault', 'submit']);
+        expect(executedActions).toEqual(['preventDefault', 'submit']);
         done();
       }
     };
@@ -153,7 +146,7 @@ describe('clickHandler', () => {
       executedActions.push('preventDefault');
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).to.eql(['preventDefault']);
+      expect(executedActions).toEqual(['preventDefault']);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -170,7 +163,7 @@ describe('clickHandler', () => {
       executedActions.push('preventDefault');
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).to.eql(['preventDefault']);
+      expect(executedActions).toEqual(['preventDefault']);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -191,7 +184,7 @@ describe('clickHandler', () => {
     };
     document.location.assign = function () {
       executedActions.push('assign');
-      expect(executedActions).to.eql(['preventDefault', 'assign']);
+      expect(executedActions).toEqual(['preventDefault', 'assign']);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -211,7 +204,7 @@ describe('clickHandler', () => {
       executedActions.push('preventDefault');
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).to.eql([]);
+      expect(executedActions).toEqual([]);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -232,7 +225,7 @@ describe('clickHandler', () => {
       executedActions.push('preventDefault');
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).to.eql([]);
+      expect(executedActions).toEqual([]);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -252,7 +245,7 @@ describe('clickHandler', () => {
       executedActions.push('preventDefault');
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).to.eql([]);
+      expect(executedActions).toEqual([]);
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -276,8 +269,8 @@ describe('clickHandler', () => {
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
       callback();
-      expect(executedActions).to.eql(['preventDefault']);
-      expect(global.window.top.location.href).to.eql('foo');
+      expect(executedActions).toEqual(['preventDefault']);
+      expect(global.window.top.location.href).toEqual('foo');
       done();
     };
     mockComponent.getI13nNode = function () {
@@ -301,8 +294,8 @@ describe('clickHandler', () => {
     };
     mockComponent.executeI13nEvent = function (eventName, payload, callback) {
       callback();
-      expect(executedActions).to.eql(['preventDefault']);
-      expect(global.window.parent.location.href).to.eql('foo');
+      expect(executedActions).toEqual(['preventDefault']);
+      expect(global.window.parent.location.href).toEqual('foo');
       done();
     };
     mockComponent.getI13nNode = function () {

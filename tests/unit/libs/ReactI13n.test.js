@@ -1,11 +1,7 @@
 /**
- * Copyright 2015, Yahoo! Inc.
+ * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals describe, it, beforeEach, afterEach */
-
-
-import expect from 'expect.js';
 import ReactI13n from '../../../src/libs/ReactI13n';
 
 describe('ReactI13n', () => {
@@ -13,35 +9,36 @@ describe('ReactI13n', () => {
     const reactI13n = new ReactI13n({
       isViewportEnabled: true
     });
-    expect(reactI13n.isViewportEnabled()).to.eql(true);
+    expect(reactI13n.isViewportEnabled()).toEqual(true);
   });
 
   it('should be able to update options', () => {
     const reactI13n = new ReactI13n({
       isViewportEnabled: true
     });
-    expect(reactI13n.isViewportEnabled()).to.eql(true);
+    expect(reactI13n.isViewportEnabled()).toEqual(true);
 
     reactI13n.updateOptions({
       isViewportEnabled: false
     });
-    expect(reactI13n.isViewportEnabled()).to.eql(false);
+    expect(reactI13n.isViewportEnabled()).toEqual(false);
   });
 
-  it('should be able to greate root i13n node', () => {
+  it('should be able to generate root i13n node', () => {
     const rootModelData = {
       foo: 'bar'
     };
-    const mockReactI13nClass = function () {};
+    const mockReactI13nClass = jest.fn();
     mockReactI13nClass.prototype.getMergedModel = function () {
       return rootModelData;
     };
+    mockReactI13nClass.prototype.setDOMNode = () => {};
     const reactI13n = new ReactI13n({
       rootModelData,
       i13nNodeClass: mockReactI13nClass
     });
     reactI13n.createRootI13nNode();
-    expect(reactI13n.getRootI13nNode().getMergedModel()).to.eql(rootModelData);
+    expect(reactI13n.getRootI13nNode().getMergedModel()).toEqual(rootModelData);
   });
 
   it('should be able to setup plugin and execute event', (done) => {
@@ -49,7 +46,7 @@ describe('ReactI13n', () => {
       name: 'test1',
       eventHandlers: {
         click(payload, callback) {
-          expect(payload).to.eql({});
+          expect(payload).toEqual({});
           callback();
         }
       }
@@ -59,7 +56,7 @@ describe('ReactI13n', () => {
       name: 'test2',
       eventHandlers: {
         click(payload, callback) {
-          expect(payload).to.eql({});
+          expect(payload).toEqual({});
           callback();
         }
       }
@@ -69,7 +66,7 @@ describe('ReactI13n', () => {
     reactI13n.plug(mockPlugin2);
     // two plugin should be executed correctly then call the custom callback
     reactI13n.execute('click', {}, () => {
-      expect(true).to.eql(true);
+      expect(true).toEqual(true);
       done();
     });
   });
@@ -79,7 +76,7 @@ describe('ReactI13n', () => {
       name: 'test1',
       eventHandlers: {
         click(payload, callback) {
-          expect(payload).to.eql({});
+          expect(payload).toEqual({});
           callback();
         }
       }
@@ -93,7 +90,7 @@ describe('ReactI13n', () => {
     reactI13n.plug(mockPlugin1);
     reactI13n.execute('click', payload, () => {
       // should only have one attribute as 'foo', which means payload is not modified inside reactI13n.execute
-      expect(payload).to.eql({ foo: 'bar' });
+      expect(payload).toEqual({ foo: 'bar' });
       done();
     });
   });
@@ -113,7 +110,7 @@ describe('ReactI13n', () => {
     // two plugin should be executed correctly then call the custom callback
     reactI13n.execute('click', {}, () => {
       // should still have callback due to the global timeout
-      expect(true).to.eql(true);
+      expect(true).toEqual(true);
       done();
     });
   });
@@ -123,7 +120,7 @@ describe('ReactI13n', () => {
       scrollableContainerId: 'scrollable-test'
     });
 
-    expect(reactI13n.getScrollableContainerId()).to.eql('scrollable-test');
+    expect(reactI13n.getScrollableContainerId()).toEqual('scrollable-test');
   });
 
   it('should have an undefined scrollableContainerDOMNode if the scrollableContainerId is undefined', () => {
@@ -131,6 +128,6 @@ describe('ReactI13n', () => {
       isViewportEnabled: true
     });
 
-    expect(reactI13n.getScrollableContainerDOMNode()).to.eql(undefined);
+    expect(reactI13n.getScrollableContainerDOMNode()).toEqual(undefined);
   });
 });

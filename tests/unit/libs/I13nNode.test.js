@@ -1,11 +1,7 @@
 /**
- * Copyright 2015, Yahoo! Inc.
+ * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals describe, it, beforeEach, afterEach */
-
-
-import expect from 'expect.js';
 import I13nNode from '../../../src/libs/I13nNode';
 
 describe('I13nNode', () => {
@@ -20,10 +16,10 @@ describe('I13nNode', () => {
       sec: 'foo'
     };
     const i13nNode = new I13nNode(null, model, true, true);
-    expect(i13nNode.getMergedModel()).to.eql(model);
-    expect(i13nNode.getParentNode()).to.eql(null);
-    expect(i13nNode.isLeafNode()).to.eql(true);
-    expect(i13nNode.isInViewport()).to.eql(false);
+    expect(i13nNode.getMergedModel()).toEqual(model);
+    expect(i13nNode.getParentNode()).toEqual(null);
+    expect(i13nNode.isLeafNode()).toEqual(true);
+    expect(i13nNode.isInViewport()).toEqual(false);
   });
 
   it('should be created correctly with function model', () => {
@@ -34,18 +30,18 @@ describe('I13nNode', () => {
       return modelData;
     };
     const i13nNode = new I13nNode(null, model, true, true);
-    expect(i13nNode.getMergedModel()).to.eql(modelData);
-    expect(i13nNode.getParentNode()).to.eql(null);
-    expect(i13nNode.isLeafNode()).to.eql(true);
-    expect(i13nNode.isInViewport()).to.eql(false);
+    expect(i13nNode.getMergedModel()).toEqual(modelData);
+    expect(i13nNode.getParentNode()).toEqual(null);
+    expect(i13nNode.isLeafNode()).toEqual(true);
+    expect(i13nNode.isInViewport()).toEqual(false);
   });
 
   it('should be able to append a child and work correctly with model data', () => {
     const i13nNodeParent = new I13nNode(null, { psec: 'parent' }, true, true);
     const i13nNodeChild = new I13nNode(i13nNodeParent, { sec: 'child' }, true, true);
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(1);
-    expect(i13nNodeParent.getChildrenNodes()[0]).to.eql(i13nNodeChild);
-    expect(i13nNodeParent.getChildrenNodes()[0].getMergedModel()).to.eql({
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(1);
+    expect(i13nNodeParent.getChildrenNodes()[0]).toEqual(i13nNodeChild);
+    expect(i13nNodeParent.getChildrenNodes()[0].getMergedModel()).toEqual({
       psec: 'parent',
       sec: 'child'
     });
@@ -56,15 +52,15 @@ describe('I13nNode', () => {
     const childModel = { sec: 'child' };
     const i13nNodeParent = new I13nNode(null, parentModel, true, true);
     const i13nNodeChild = new I13nNode(i13nNodeParent, childModel, true, true);
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(1);
-    expect(i13nNodeParent.getChildrenNodes()[0]).to.eql(i13nNodeChild);
-    expect(i13nNodeParent.getChildrenNodes()[0].getMergedModel()).to.eql({
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(1);
+    expect(i13nNodeParent.getChildrenNodes()[0]).toEqual(i13nNodeChild);
+    expect(i13nNodeParent.getChildrenNodes()[0].getMergedModel()).toEqual({
       psec: 'parent',
       sec: 'child'
     });
     i13nNodeParent.getMergedModel().foo = 'bar';
-    expect(parentModel).to.eql({ psec: 'parent' }); // should not be changed
-    expect(childModel).to.eql({ sec: 'child' });
+    expect(parentModel).toEqual({ psec: 'parent' }); // should not be changed
+    expect(childModel).toEqual({ sec: 'child' });
   });
 
   it.skip('should be able to append a child and work correctly with position', () => {
@@ -82,14 +78,14 @@ describe('I13nNode', () => {
     i13nNodeChild2.setDOMNode(mockDomNode);
     i13nNodeChild3.setDOMNode(mockDomNode);
     i13nNodeChild4.setDOMNode(mockDomNode);
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(4);
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(4);
     // since the mockDomNode always return Node.DOCUMENT_POSITION_PRECEDING, so the order is the same as they insert
-    expect(i13nNodeParent.isOrderDirty()).to.eql(true);
-    expect(i13nNodeChild1.getPosition()).to.eql(1);
-    expect(i13nNodeParent.isOrderDirty()).to.eql(false); // only need to sort once
-    expect(i13nNodeChild2.getPosition()).to.eql(2);
-    expect(i13nNodeChild3.getPosition()).to.eql(3);
-    expect(i13nNodeChild4.getPosition()).to.eql(4);
+    expect(i13nNodeParent.isOrderDirty()).toEqual(true);
+    expect(i13nNodeChild1.getPosition()).toEqual(1);
+    expect(i13nNodeParent.isOrderDirty()).toEqual(false); // only need to sort once
+    expect(i13nNodeChild2.getPosition()).toEqual(2);
+    expect(i13nNodeChild3.getPosition()).toEqual(3);
+    expect(i13nNodeChild4.getPosition()).toEqual(4);
   });
 
   it('should be able to traverse the children', () => {
@@ -99,16 +95,16 @@ describe('I13nNode', () => {
     const i13nNodeChild3 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
     const i13nNodeChild4 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
     const traverseArray = [];
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(4);
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(4);
     i13nNodeParent.traverseNodes((child) => {
       child.setCustomAttribute('traversed', true);
       traverseArray.push(child);
     });
-    expect(traverseArray.length).to.eql(5);
-    expect(i13nNodeChild1.getCustomAttribute('traversed')).to.eql(true);
-    expect(i13nNodeChild2.getCustomAttribute('traversed')).to.eql(true);
-    expect(i13nNodeChild3.getCustomAttribute('traversed')).to.eql(true);
-    expect(i13nNodeChild4.getCustomAttribute('traversed')).to.eql(true);
+    expect(traverseArray.length).toEqual(5);
+    expect(i13nNodeChild1.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild2.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild3.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild4.getCustomAttribute('traversed')).toEqual(true);
   });
 
   it('should be handle append child correctly', () => {
@@ -117,12 +113,12 @@ describe('I13nNode', () => {
     const i13nNodeChild2 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
     const i13nNodeChild3 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
     const traverseArray = [];
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(3);
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(3);
     i13nNodeParent.traverseNodes((child) => {
       child.setCustomAttribute('traversed', true);
       traverseArray.push(child);
     });
-    expect(i13nNodeParent.getCustomAttribute('traversed')).to.eql(true);
+    expect(i13nNodeParent.getCustomAttribute('traversed')).toEqual(true);
     // start to append child, should get on change event and clear the traverse status
     const i13nNodeChild4 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
   });
@@ -130,16 +126,16 @@ describe('I13nNode', () => {
   it('should remove child correctly', () => {
     const i13nNodeParent = new I13nNode(null, { psec: 'parent' }, true, true);
     const i13nNodeChild = new I13nNode(i13nNodeParent, { sec: 'child' }, true, true);
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(1);
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(1);
     // after getposition, IsOrderDirty should be false
     i13nNodeChild.getPosition();
-    expect(i13nNodeParent.isOrderDirty()).to.eql(false);
+    expect(i13nNodeParent.isOrderDirty()).toEqual(false);
 
     i13nNodeParent.removeChildNode(i13nNodeChild);
 
     // after remove child, IsOrderDirty is set as true
-    expect(i13nNodeParent.isOrderDirty()).to.eql(true);
-    expect(i13nNodeParent.getChildrenNodes().length).to.eql(0);
+    expect(i13nNodeParent.isOrderDirty()).toEqual(true);
+    expect(i13nNodeParent.getChildrenNodes().length).toEqual(0);
   });
 
   it('should be able to get text of the dom node', () => {
@@ -148,7 +144,7 @@ describe('I13nNode', () => {
     };
     const i13nNode = new I13nNode(null, { sec: 'foo' }, true, true);
     i13nNode.setDOMNode(mockDomNode);
-    expect(i13nNode.getText()).to.eql('bar');
+    expect(i13nNode.getText()).toEqual('bar');
   });
 
   it('should be able to set the parent node', () => {
@@ -160,10 +156,10 @@ describe('I13nNode', () => {
     };
     const i13nNode = new I13nNode(null, model, true, true);
     const parentNode = new I13nNode(null, parentModel, true, true);
-    expect(i13nNode.getMergedModel()).to.eql(model);
-    expect(i13nNode.getParentNode()).to.eql(null);
+    expect(i13nNode.getMergedModel()).toEqual(model);
+    expect(i13nNode.getParentNode()).toEqual(null);
     i13nNode.setParentNode(parentNode);
-    expect(i13nNode.getParentNode()).to.eql(parentNode);
+    expect(i13nNode.getParentNode()).toEqual(parentNode);
   });
 
   it('should be able to get and set react component', () => {
@@ -172,12 +168,12 @@ describe('I13nNode', () => {
     };
     const i13nNode = new I13nNode(null, { sec: 'foo' }, true, true);
     i13nNode.setReactComponent(mockReactComponent);
-    expect(i13nNode.getReactComponent()).to.eql(mockReactComponent);
+    expect(i13nNode.getReactComponent()).toEqual(mockReactComponent);
   });
 
   it('should be able to update i13n model', () => {
     const i13nNode = new I13nNode(null, { sec: 'foo', sec2: 'bar' }, true, true);
     i13nNode.updateModel({ sec2: 'baz', sec3: 'foo' });
-    expect(i13nNode.getModel()).to.eql({ sec: 'foo', sec2: 'baz', sec3: 'foo' });
+    expect(i13nNode.getModel()).toEqual({ sec: 'foo', sec2: 'baz', sec3: 'foo' });
   });
 });
