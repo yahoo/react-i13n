@@ -60,17 +60,17 @@ var I13nAnchor = createI13nNode('a', {
     follow: true
 });
 
-var DemoApp = React.createClass({
+class DemoApp extends React.Component {
     componentWillMount: function () {
         this.props.i13n.executeEvent('pageview', {}); // fire a custom event
-    },
+    }
     render: function () {
         ...
         <I13nAnchor href="http://foo.bar" i13nModel={{action: 'click', label: 'foo'}}>...</I13nAnchor>
         // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
         // {site: 'foo', action: 'click', label: 'foo'}
     }
-});
+};
 
 var I13nDempApp = setupI13n(DemoApp, {
     rootModelData: {site: 'foo'},

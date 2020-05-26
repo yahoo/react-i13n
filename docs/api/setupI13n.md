@@ -1,6 +1,6 @@
 ## setupI13n
 
-We provide `setupI13n` as a convenient [higher order function](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) to setup the ReactI13n, you will need to pass your `top level component`, `options`, and `plugins` into it. This takes care of creating a `ReactI13n` instance and setting up the plugins. 
+We provide `setupI13n` as a convenient [higher order function](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) to setup the ReactI13n, you will need to pass your `top level component`, `options`, and `plugins` into it. This takes care of creating a `ReactI13n` instance and setting up the plugins.
 
  * `Component` - the top level application component.
  * `options` - the options passed into ReactI13n.
@@ -16,7 +16,7 @@ var React = require('react');
 var setupI13n = require('react-i13n').setupI13n;
 var someReactI13nPlugin = require('some-react-i13n-plugin');
 
-var DemoApp = React.createClass({
+class DemoApp extends React.Component({
     ...
 });
 
@@ -31,7 +31,7 @@ var I13nDempApp = setupI13n(DemoApp, {
 
 ### Create and access the ReactI13n instance
 
-What we do with `setupI13n` is that we will create the `ReactI13n` instance, along with a root node of the I13nTree, passing them via component context to the children. 
+What we do with `setupI13n` is that we will create the `ReactI13n` instance, along with a root node of the I13nTree, passing them via component context to the children.
 
 It's designed to work within React components, you should be able to just use [utilFuctions](https://github.com/yahoo/react-i13n/blob/master/docs/guides/utilFunctions.md) and trigger i13n events. In case you want to do this out of React components, you can access `window._reactI13nInstance` directly.
 
