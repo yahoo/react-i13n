@@ -12,18 +12,18 @@ We provide `setupI13n` as a convenient [higher order function](https://medium.co
  * `plugins` - plugins array that you defined according to the definition below.
 
 ```js
-var React = require('react');
-var setupI13n = require('react-i13n').setupI13n;
-var someReactI13nPlugin = require('some-react-i13n-plugin');
+import React from 'react';
+import { setupI13n } from 'react-i13n';
+import someReactI13nPlugin from 'some-react-i13n-plugin';
 
 class DemoApp extends React.Component({
     ...
 });
 
-var I13nDempApp = setupI13n(DemoApp, {
-    rootModelData: {site: 'foo'}, // the default i13n model data to apply to all i13n nodes
-    isViewportEnabled: true,
-    handlerTimeout: 500
+const I13nDempApp = setupI13n(DemoApp, {
+  rootModelData: {site: 'foo'}, // the default i13n model data to apply to all i13n nodes
+  isViewportEnabled: true,
+  handlerTimeout: 500
 }, [someReactI13nPlugin]);
 
 // then you could use I13nDemoApp to render you app

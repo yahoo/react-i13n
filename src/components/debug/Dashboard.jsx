@@ -1,3 +1,8 @@
+/**
+ * Copyright 2015 - Present, Yahoo Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
@@ -32,19 +37,19 @@ const Dashboard = (props) => {
       setDisplay(DISPLAY_NONE);
       onHide();
     }
-  });
+  }, []);
 
   const handleMouseOver = useCallback(() => {
     if (DOMNode) {
       DOMNode.style.border = '4px solid #b39ddb';
     }
-  });
+  }, []);
 
   const handleMouseOut = useCallback(() => {
     if (DOMNode) {
       DOMNode.style.border = null;
     }
-  });
+  }, []);
 
   useEffect(() => {
     onMount();

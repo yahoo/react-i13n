@@ -46,35 +46,44 @@ in order to support all browsers and older versions of Node.js. We recommend usi
 * (Optionally) follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
 
 ```js
-var React = require('react');
-var ReactI13n = require('react-i13n').ReactI13n;
-var setupI13n = require('react-i13n').setupI13n;
-var somePlugin = require('some-i13n-plugin'); // a plugin for a certain instrumentation mechanism
+import React from 'react';
+import {
+  ReactI13n,
+  createI13nNode,
+  setupI13n
+} from 'react-i13n';
+import somePlugin from 'some-i13n-plugin'; // a plugin for a certain instrumentation mechanism
 
 // create a i13n anchor for link tracking
 // or you can use the mixin to track an existing component
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nAnchor = createI13nNode('a', {
+const I13nAnchor = createI13nNode('a', {
     isLeafNode: true,
     bindClickEvent: true,
     follow: true
 });
 
 class DemoApp extends React.Component {
-    componentWillMount: function () {
-        this.props.i13n.executeEvent('pageview', {}); // fire a custom event
-    }
-    render: function () {
+  componentWillMount () {
+    this.props.i13n.executeEvent('pageview', {}); // fire a custom event
+  }
+
+  render() {
+      ...
+      <I13nAnchor
+        href="http://foo.bar"
+        i13nModel={{action: 'click', label: 'foo'}}
+      >
         ...
-        <I13nAnchor href="http://foo.bar" i13nModel={{action: 'click', label: 'foo'}}>...</I13nAnchor>
-        // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
-        // {site: 'foo', action: 'click', label: 'foo'}
-    }
+      </I13nAnchor>
+      // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
+      // {site: 'foo', action: 'click', label: 'foo'}
+  }
 };
 
-var I13nDempApp = setupI13n(DemoApp, {
-    rootModelData: {site: 'foo'},
-    isViewportEnabled: true
+
+const I13nDempApp = setupI13n(DemoApp, {
+  rootModelData: {site: 'foo'},
+  isViewportEnabled: true
 }, [somePlugin]);
 
 // then you could use I13nDemoApp to render you app
@@ -124,16 +133,16 @@ We check `process.env.NODE_ENV !== 'production'` to determine if we should do so
 Use `DefinePlugin` to define the value for `process.env`.
 
 ```js
-Example of the webpack configuration:
+// Example of the webpack configuration:
 
-    plugins: [
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('production')
-            }
-        }),
-        ...
-    ]
+plugins: [
+  new webpack.DefinePlugin({
+    'process.env': {
+        NODE_ENV: JSON.stringify('production')
+    }
+  }),
+  ...
+]
 ```
 
 ### With Browserify

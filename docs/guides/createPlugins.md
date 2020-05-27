@@ -11,7 +11,7 @@ All of the `eventHandlers` will receive a `payload` object and a `callback` func
 - `payload.env` - `server` or `client`, some events e.g., `pageview` will fire on both server and client side, you can define the prefer way you want to handle the beacon.
 
 ```js
-import ReactI13n from 'react-i13n';
+import { ReactI13n } from 'react-i13n';
 
 // define the plugin
 var fooPlugin = {

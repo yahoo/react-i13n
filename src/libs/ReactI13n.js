@@ -1,8 +1,7 @@
 /**
- * Copyright 2015 -  Present, Yahoo Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* global window, document */
 
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
 import EventsQueue from './EventsQueue';
