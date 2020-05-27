@@ -24,6 +24,6 @@ module.exports = {
     jasmine: true,
     es6: true
   },
-  plugins: ['import', 'react'],
+  plugins: ['import', 'react', 'react-hooks'],
   parser: 'babel-eslint'
 };

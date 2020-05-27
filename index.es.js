@@ -1,8 +1,8 @@
-// eslint-disble
 /**
- * Copyright 2015, Yahoo! Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
+
 import I13nNodeLib from './dist-es/libs/I13nNode';
 import ReactI13nLib from './dist-es/libs/ReactI13n';
 

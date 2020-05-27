@@ -1,9 +1,9 @@
-import isUndefined from '../utils/isUndefined';
 /**
- * Copyright 2015 -  Present, Yahoo Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals document, window */
+
+import isUndefined from '../utils/isUndefined';
 
 function isLeftClickEvent(e) {
   return e.button === 0;

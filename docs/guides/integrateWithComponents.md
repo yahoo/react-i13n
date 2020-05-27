@@ -46,29 +46,31 @@ class Player extends React.Component {
 A better approach might be to remove the `onClick` hooks everywhere and use the [createI13nNode](../api/createI13nNode.md) component to create i13n components to do the same thing.
 
 ```js
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+import { createI13nNode } from 'react-i13n';
+
+const I13nAnchor = createI13nNode('a', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
-var I13nButton = createI13nNode('button', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: false // it's only interaction here, we don't want to redirect users to the destination page, set it as false
+const I13nButton = createI13nNode('button', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: false // it's only interaction here, we don't want to redirect users to the destination page, set it as false
 });
+
 class Player extends React.Component {
     ...
-    render() {
-        return (
-            <div>
-                ...
-                <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Play'}}>Play</I13nButton>
-                <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Download'}}>Download</I13nButton>
-                <I13nAnchor i13nModel={{category: 'VideoPlayer', action: 'More'}} href="http://some.more.link">More</I13nAnchor>
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        ...
+        <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Play'}}>Play</I13nButton>
+        <I13nButton i13nModel={{category: 'VideoPlayer', action: 'Download'}}>Download</I13nButton>
+        <I13nAnchor i13nModel={{category: 'VideoPlayer', action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+      </div>
+    );
+  }
 };
 
 // in some other component
@@ -82,29 +84,30 @@ This is better, however, you will notice that you have to put `category: VideoPl
 Below we use [createI13nNode](../api/createI13nNode.md) to wrap `Player` as an `I13nNode`, then define `category: VideoPlayer`.
 
 ```js
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+import { createI13nNode } from 'react-i13n';
+
+const I13nAnchor = createI13nNode('a', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
-var I13nButton = createI13nNode('button', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: false
+const I13nButton = createI13nNode('button', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: false
 });
 class Player extends React.Component {
-    ...
-    render() {
-        return (
-            <div>
-                ...
-                <I13nButton i13nModel={{action: 'Play'}}>Play</I13nButton>
-                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
-                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
-            </div>
-        )
-    }
+  ...
+  render() {
+    return (
+      <div>
+        ...
+        <I13nButton i13nModel={{action: 'Play'}}>Play</I13nButton>
+        <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+        <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+      </div>
+    );
+  }
 };
 
 Player = createI13nNode(Player);
@@ -120,35 +123,37 @@ The player component is now an i13nNode and you can pass i13nModel here, all the
 If you need to pass video title as `label`, instead of static data, you will need to dynamically generate label value, here you can pass in a `function` as `i13nModel`.
 
 ```js
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+import { createI13nNode } from 'react-i13n';
+
+const I13nAnchor = createI13nNode('a', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
-var I13nButton = createI13nNode('button', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: false
+const I13nButton = createI13nNode('button', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: false
 });
 class Player extends React.Component {
     ...
-    getPlayI13nModel() {
-        return {
-            action: 'Play',
-            label: this.getVideoTitle();
-        }
-    };
-    render() {
-        return (
-            <div>
-                ...
-                <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
-                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
-                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
-            </div>
-        )
+  getPlayI13nModel() {
+    return {
+      action: 'Play',
+      label: this.getVideoTitle();
     }
+  };
+
+  render() {
+    return (
+      <div>
+        ...
+        <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
+        <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+        <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+      </div>
+    );
+  }
 };
 
 Player = createI13nNode(Player);
@@ -170,8 +175,9 @@ Warning: owner-based and parent-based contexts differ (values: [object Object] v
 - This feature can only be used after `react-0.13`, if you are using an older version, you will have to create the component as mentioned above [example](#integrate-with-parent-nodes).
 
 ```js
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nDiv = createI13nNode('div', {
+import { createI13nNode } from 'react-i13n';
+
+const I13nDiv = createI13nNode('div', {
   isLeafNode: false,
   bindClickEvent: false,
   follow: false
@@ -181,43 +187,44 @@ var I13nDiv = createI13nNode('div', {
 ```
 
 ```js
-var createI13nNode = require('react-i13n').createI13nNode;
-var I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+import { createI13nNode } from 'react-i13n';
+
+const I13nAnchor = createI13nNode('a', {
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
 var I13nButton = createI13nNode('button', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: false
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: false
 });
 
 // this will be used to group the i13n data without creating a i13nNode
-var I13nDiv = createI13nNode('div', {
-    isLeafNode: false,
-    bindClickEvent: false,
-    follow: false
+const I13nDiv = createI13nNode('div', {
+  isLeafNode: false,
+  bindClickEvent: false,
+  follow: false
 });
 
 class Player extends React.Component {
-    ...
-    getPlayI13nModel() {
-        return {
-            action: 'Play',
-            label: this.getVideoTitle();
-        }
-    };
-    render() {
-        return (
-            <I13nDiv i13nModel={{category: 'VideoPlayer'}}>
-                ...
-                <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
-                <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
-                <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
-            </I13nDiv>
-        )
-    }
+  ...
+  getPlayI13nModel() {
+      return {
+          action: 'Play',
+          label: this.getVideoTitle();
+      }
+  };
+  render() {
+    return (
+      <I13nDiv i13nModel={{category: 'VideoPlayer'}}>
+        ...
+        <I13nButton i13nModel={this.getPlayI13nModel}>Play</I13nButton>
+        <I13nButton i13nModel={{action: 'Download'}}>Download</I13nButton>
+        <I13nAnchor i13nModel={{action: 'More'}} href="http://some.more.link">More</I13nAnchor>
+      </I13nDiv>
+    );
+  }
 };
 
 // in some other component

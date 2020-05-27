@@ -1,8 +1,8 @@
 /**
- * Copyright 2015 -  Present, Yahoo Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* global document, window */
+
 import React, { Suspense, lazy } from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { subscribe } from 'subscribe-ui-event';

@@ -20,26 +20,26 @@ Other than the default events, you can define the `eventHandlers` yourself and u
 
 ```js
 import React from 'react';
-import ReactI13n from 'react-i13n';
+import { ReactI13n } from 'react-i13n';
 
 var fooPlugin = {
-    name: 'foo',
-    eventHandlers: {
-        customEvent: function (payload, callback) {
-            // handle the event here, typically you will use some beacon function to fire the beacon
-            callback();
-        }
-        ...
+  name: 'foo',
+  eventHandlers: {
+    customEvent: function (payload, callback) {
+        // handle the event here, typically you will use some beacon function to fire the beacon
+        callback();
     }
+    ...
+  }
 }
 
 class Foo extends React.Component {
-    componentWillMount () {
-        // whenever you define a event handler, you can fire an event for that.
-        this.props.i13n.executeEvent('customEvent', {payload}, function beaconCallback () {
-            // do whatever after beaconing
-        });
-    }
+  componentWillMount () {
+    // whenever you define a event handler, you can fire an event for that.
+    this.props.i13n.executeEvent('customEvent', {payload}, function beaconCallback () {
+        // do whatever after beaconing
+    });
+  }
     ...
 };
 
