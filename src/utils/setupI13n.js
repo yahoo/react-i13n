@@ -101,59 +101,6 @@ function setupI13n(Component, options = {}, plugins = []) {
   };
 
   RootI13nComponent.displayName = displayName || `RootI13n${getDisplayName(Component)}`;
-  // class RootI13nComponent extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-  //     const reactI13n = new ReactI13n(options);
-  //     this._reactI13nInstance = reactI13n;
-  //     // we might have case to access reactI13n instance to execute event outside react components
-  //     // assign reactI13n to window
-  //     if (IS_CLIENT) {
-  //       // put in componentDidMount will be too slow
-  //       window._reactI13nInstance = this._reactI13nInstance;
-  //     }
-  //     plugins.forEach((plugin) => {
-  //       reactI13n.plug(plugin);
-  //     });
-  //     reactI13n.createRootI13nNode();
-  //   }
-  //
-  //   render() {
-  //     const props = Object.assign({}, this.props);
-  //     if (!options.skipUtilFunctionsByProps) {
-  //       props.i13n = {
-  //         executeEvent: this.executeI13nEvent.bind(this),
-  //         getI13nNode: this.getI13nNode.bind(this),
-  //         reactI13nInstance: this._reactI13nInstance
-  //       };
-  //     }
-  //     return React.createElement(Component, props, props.children);
-  //   }
-  // }
-
-  // const specs = pickSpecs({
-  //   prototype: [
-  //     'getChildContext',
-  //     'executeI13nEvent',
-  //     'getI13nNode',
-  //     '_getReactI13n',
-  //     '_getParentI13nNode'
-  //   ],
-  //   static: ['contextTypes', 'childContextTypes']
-  // });
-
-  // const componentName = getDisplayName(Component);
-  //
-  // augmentComponent(
-  //   RootI13nComponent,
-  //   specs.prototype,
-  //   Object.assign(
-  //     {
-  //       displayName: options.displayName || `RootI13n${componentName}`
-  //     },
-  //     specs.static
-  //   )
-  // );
 
   hoistNonReactStatics(RootI13nComponent, Component);
 
