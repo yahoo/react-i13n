@@ -7,8 +7,7 @@ import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
-import { IS_CLIENT, IS_PROD } from '../utils/variables';
-import arrayFrom from '../utils/arrayFrom';
+import { IS_CLIENT, IS_PROD, IS_DEBUG_MODE } from '../utils/variables';
 import clickHandler from './clickHandler';
 import DebugDashboard from './DebugDashboard';
 import I13nNode from './I13nNode';
@@ -18,26 +17,6 @@ import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debug = require('debug')('I13nComponent');
 
-const IS_DEBUG_MODE = (function isDebugMode() {
-  if (!IS_CLIENT) {
-    return false;
-  }
-  const { location } = window;
-  function getJsonFromUrl() {
-    const query = location.search.substr(1);
-    const result = {};
-    query.split('&').forEach((part) => {
-      const item = part.split('=');
-      result[item[0]] = decodeURIComponent(item[1]);
-    });
-    return result;
-  }
-
-  if (isUndefined(location)) {
-    return false;
-  }
-  return getJsonFromUrl().i13n_debug === '1';
-}());
 const DEFAULT_SCAN_TAGS = ['a', 'button'];
 let pageInitViewportDetectionTimeout = null;
 
@@ -47,7 +26,7 @@ const staticSpecs = {
       // remove propTypes for production build
       propTypes: {
         component: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
-        model: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
+        // model: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
         i13nModel: PropTypes.oneOfType([PropTypes.object, PropTypes.func]),
         isLeafNode: PropTypes.bool,
         bindClickEvent: PropTypes.bool,
@@ -119,7 +98,7 @@ const prototypeSpecs = {
     const self = this;
 
     if (nextProps && self._i13nNode) {
-      self._i13nNode.updateModel(nextProps.model || nextProps.i13nModel);
+      self._i13nNode.updateModel(nextProps.i13nModel);
     }
   },
 
@@ -154,9 +133,9 @@ const prototypeSpecs = {
       }
     }
     self.executeI13nEvent('created', {});
-    if (self.props.scanLinks && self.props.scanLinks.enable) {
-      self._scanLinks();
-    }
+    // if (self.props.scanLinks && self.props.scanLinks.enable) {
+    //   self._scanLinks();
+    // }
 
     if (IS_DEBUG_MODE) {
       self._debugDashboard = new DebugDashboard(self._i13nNode);
@@ -212,7 +191,7 @@ const prototypeSpecs = {
       this._debugDashboard && this._debugDashboard.destroy();
     }
 
-    this._removeSubComponentsListenersAndDebugDashboards();
+    // this._removeSubComponentsListenersAndDebugDashboards();
   },
 
   /**
@@ -311,56 +290,56 @@ const prototypeSpecs = {
    * @method _scanLinks
    * @private
    */
-  _scanLinks() {
-    const self = this;
-    const DOMNode = ReactDOM.findDOMNode(self);
-    let foundElements = [];
-    const reactI13n = self._getReactI13n();
-    const scanTags = (self.props.scanLinks && self.props.scanLinks.tags) || DEFAULT_SCAN_TAGS;
-    if (!DOMNode) {
-      return;
-    }
-    self._subI13nComponents = [];
+  // _scanLinks() {
+  //   const self = this;
+  //   const DOMNode = ReactDOM.findDOMNode(self);
+  //   let foundElements = [];
+  //   const reactI13n = self._getReactI13n();
+  //   const scanTags = (self.props.scanLinks && self.props.scanLinks.tags) || DEFAULT_SCAN_TAGS;
+  //   if (!DOMNode) {
+  //     return;
+  //   }
+  //   self._subI13nComponents = [];
 
     // find all links
-    scanTags.forEach((tagName) => {
-      const collections = DOMNode.getElementsByTagName(tagName);
-      if (collections) {
-        foundElements = foundElements.concat(arrayFrom(collections));
-      }
-    });
+    // scanTags.forEach((tagName) => {
+    //   const collections = DOMNode.getElementsByTagName(tagName);
+    //   if (collections) {
+    //     foundElements = foundElements.concat([...collections]);
+    //   }
+    // });
 
     // for each link
     // 1. create a i13n node
     // 2. bind the click event
     // 3. fire created event
     // 4. (if enabled) create debug node for it
-    foundElements.forEach((element) => {
-      const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
-      const i13nNode = new I13nNodeClass(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
-      i13nNode.setDOMNode(element);
-      const subThis = {
-        props: {
-          href: element.href,
-          follow: true
-        },
-        getI13nNode: function getI13nNodeForScannedNode() {
-          return i13nNode;
-        }
-      };
-
-      subThis._shouldFollowLink = self._shouldFollowLink.bind(subThis);
-      subThis.executeI13nEvent = self.executeI13nEvent.bind(self);
-
-      self._subI13nComponents.push({
-        componentClickListener: listen(element, 'click', clickHandler.bind(subThis)),
-        debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
-        domElement: element,
-        i13nNode
-      });
-      self._getReactI13n().execute('created', { i13nNode });
-    });
-  },
+  //   foundElements.forEach((element) => {
+  //     const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
+  //     const i13nNode = new I13nNodeClass(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
+  //     i13nNode.setDOMNode(element);
+  //     const subThis = {
+  //       props: {
+  //         href: element.href,
+  //         follow: true
+  //       },
+  //       getI13nNode: function getI13nNodeForScannedNode() {
+  //         return i13nNode;
+  //       }
+  //     };
+  //
+  //     subThis._shouldFollowLink = self._shouldFollowLink.bind(subThis);
+  //     subThis.executeI13nEvent = self.executeI13nEvent.bind(self);
+  //
+  //     self._subI13nComponents.push({
+  //       componentClickListener: listen(element, 'click', clickHandler.bind(subThis)),
+  //       debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
+  //       domElement: element,
+  //       i13nNode
+  //     });
+  //     self._getReactI13n().execute('created', { i13nNode });
+  //   });
+  // },
 
   /**
    * _shouldFollowLink, provide a hook to check followLink.
@@ -400,25 +379,25 @@ const prototypeSpecs = {
     }
   },
 
-  /**
-   * remove all click listeners and debug dashboards
-   * @method _removeSubComponentsListenersAndDebugDashboards
-   * @private
-   */
-  _removeSubComponentsListenersAndDebugDashboards() {
-    const self = this;
-    if (self._subI13nComponents && self._subI13nComponents.length > 0) {
-      self._subI13nComponents.forEach((subI13nComponent) => {
-        subI13nComponent.componentClickListener.remove();
-        if (subI13nComponent.viewportDetector) {
-          subI13nComponent.viewportDetector.unsubscribeAll();
-        }
-        if (subI13nComponent.debugDashboard) {
-          subI13nComponent.debugDashboard.destroy();
-        }
-      });
-    }
-  },
+  // /**
+  //  * remove all click listeners and debug dashboards
+  //  * @method _removeSubComponentsListenersAndDebugDashboards
+  //  * @private
+  //  */
+  // _removeSubComponentsListenersAndDebugDashboards() {
+  //   const self = this;
+  //   if (self._subI13nComponents && self._subI13nComponents.length > 0) {
+  //     self._subI13nComponents.forEach((subI13nComponent) => {
+  //       subI13nComponent.componentClickListener.remove();
+  //       if (subI13nComponent.viewportDetector) {
+  //         subI13nComponent.viewportDetector.unsubscribeAll();
+  //       }
+  //       if (subI13nComponent.debugDashboard) {
+  //         subI13nComponent.debugDashboard.destroy();
+  //       }
+  //     });
+  //   }
+  // },
 
   /**
    * _handleEnterViewport for react-viewport

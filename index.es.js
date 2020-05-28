@@ -4,7 +4,7 @@
  */
 
 import I13nNodeLib from './dist-es/libs/I13nNode';
-import ReactI13nLib from './dist-es/libs/ReactI13n';
+import ReactI13nLib, { getInstance as getInstanceLib } from './dist-es/libs/ReactI13n';
 
 import createI13nNodeLib from './dist-es/utils/createI13nNode';
 import setupI13nLib from './dist-es/utils/setupI13n';
@@ -16,6 +16,7 @@ import I13nDivLib from './dist-es/components/I13nDiv';
 // Core libraries
 export var I13nNode = I13nNodeLib;
 export var ReactI13n = ReactI13nLib;
+export var getInstance = getInstanceLib;
 
 // Utils
 export var createI13nNode = createI13nNodeLib;

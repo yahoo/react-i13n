@@ -7,6 +7,7 @@ module.exports = {
   // Core libraries
   I13nNode: require('./dist/libs/I13nNode').default,
   ReactI13n: require('./dist/libs/ReactI13n').default,
+  getInstance: require('./dist/libs/ReactI13n').getInstance,
 
   // Utils
   createI13nNode: require('./dist/utils/createI13nNode').default,

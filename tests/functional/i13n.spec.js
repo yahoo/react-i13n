@@ -1,12 +1,12 @@
 /* global describe, it, document, expect */
 
 describe('React I13n test', () => {
-  it('should init correctly and give the rootI13nNode the correct default model value', () => {
+  it.only('should init correctly and give the rootI13nNode the correct default model value', () => {
     const result = window._reactI13nInstance.getRootI13nNode().getMergedModel();
     expect(result).to.eql({ sec: 'default-section-name', page: 'test-page' });
   });
 
-  it('should fire a pageview', () => {
+  it.only('should fire a pageview', () => {
     const events = window.firedEvents;
     expect(events[0].name).to.eql('pageview');
   });

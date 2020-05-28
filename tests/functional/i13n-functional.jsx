@@ -1,5 +1,4 @@
 /* global document, React, ReactDOM */
-
 function getJsonFromUrl() {
   const query = location.search.substr(1);
   const result = {};
@@ -176,14 +175,12 @@ class I13nComponentLevel2Hidden extends React.Component {
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-class I13nDemo extends React.Component {
-  componentWillMount() {
-    ReactI13n.getInstance().execute('pageview', {});
-  }
+let I13nDemo = () => {
+  React.useEffect(() => {
+    getInstance().execute('pageview', {});
+  }, []);
 
-  render() {
-    return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
-  }
+  return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
 }
 
 window.firedEvents = [];

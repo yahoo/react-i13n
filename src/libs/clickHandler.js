@@ -14,7 +14,7 @@ function isModifiedEvent(e) {
 }
 
 function getLinkTarget(target, props) {
-  return props.target || (target && target.target) || '_self';
+  return props.target || (target?.target) || '_self';
 }
 
 function isNewWindow(target, props) {
@@ -23,15 +23,16 @@ function isNewWindow(target, props) {
 
 function isDefaultRedirectLink(target) {
   let defaultRedirectLink = false;
+  const { tagName, type } = target;
   // if it's a
   // 1. link
   // 2. button
   // 3. input with submit or button type
   // then redirect it by default, otherwise
-  if (target.tagName === 'A' || target.tagName === 'BUTTON') {
+  if (tagName === 'A' || tagName === 'BUTTON') {
     defaultRedirectLink = true;
   }
-  if (target.tagName === 'INPUT' && (target.type === 'submit' || target.type === 'button')) {
+  if (tagName === 'INPUT' && (type === 'submit' || type === 'button')) {
     defaultRedirectLink = true;
   }
   return defaultRedirectLink;
@@ -39,12 +40,16 @@ function isDefaultRedirectLink(target) {
 
 function isFormSubmit(target) {
   let formSubmit = false;
+  const {
+    tagName,
+    type
+  } = target;
   // if it's a
   // 1. button
   // 2. input with submit or button type
   if (
-    target.tagName === 'BUTTON'
-    || (target.tagName === 'INPUT' && (target.type === 'submit' || target.type === 'button'))
+    tagName === 'BUTTON'
+    || (tagName === 'INPUT' && (type === 'submit' || type === 'button'))
   ) {
     formSubmit = true;
   }
@@ -56,27 +61,30 @@ function isFormSubmit(target) {
  * @param {Object} e the click event
  * @method ClickHandler
  */
-function clickHandler(e) {
-  const self = this;
+const clickHandler = (e, options) => {
   const target = e.target || e.srcElement;
   let isRedirectLink = isDefaultRedirectLink(target);
   let isPreventDefault = true;
 
-  const { props } = self;
-  const followLink = self._shouldFollowLink();
+  const {
+    executeEvent,
+    i13nNode,
+    props,
+    shouldFollowLink
+   } = options;
+
   let href = '';
 
-  // return and do nothing if the handler is append on a component without I13nMixin
-  if (!self.executeI13nEvent) {
+  if (!executeEvent) {
     return;
   }
+
+  const { follow } = props;
 
   href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
-  if (!isUndefined(followLink)) {
-    isRedirectLink = followLink;
-  }
+  isRedirectLink = shouldFollowLink?.(props) ?? follow;
 
   // if it's not an anchor or this is a hash link url for page's internal links.
   // Do not trigger navigate action. Let browser handle it natively.
@@ -100,7 +108,7 @@ function clickHandler(e) {
     }
   }
 
-  self.executeI13nEvent('click', { i13nNode: self.getI13nNode(), e }, () => {
+  executeEvent('click', { i13nNode: getI13nNode(), e }, () => {
     if (isRedirectLink) {
       if (isFormSubmit(target)) {
         // if the button has no form linked, then do nothing
