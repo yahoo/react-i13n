@@ -8,10 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 import I13nNode from '../libs/I13nNode';
 
 const useI13nNode = ({
-  parentI13nNode,
-  i13nInstance: reactI13n,
-  isLeafNode,
-  i13nModel
+  parentI13nNode, i13nInstance: reactI13n, isLeafNode, i13nModel
 }) => {
   const i13nNodeRef = useRef();
   const [i13nNode, setI13nNode] = useState();
@@ -19,7 +16,7 @@ const useI13nNode = ({
   useEffect(() => {
     if (reactI13n && !i13nNode) {
       // check if reactI13n is initialized successfully, otherwise return
-      const I13nNodeClass = (reactI13n?.getI13nNodeClass()) ?? I13nNode;
+      const I13nNodeClass = reactI13n?.getI13nNodeClass() ?? I13nNode;
 
       i13nNodeRef.current = new I13nNodeClass(
         parentI13nNode,

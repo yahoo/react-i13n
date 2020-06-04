@@ -11,7 +11,7 @@ export const IS_TEST = NODE_ENV === 'test';
 export const IS_CLIENT = typeof window !== 'undefined';
 export const ENVIRONMENT = IS_CLIENT ? 'client' : 'server';
 
-const IS_DEBUG_MODE = (function isDebugMode() {
+export const IS_DEBUG_MODE = (function isDebugMode() {
   if (!IS_CLIENT) {
     return false;
   }
@@ -20,6 +20,6 @@ const IS_DEBUG_MODE = (function isDebugMode() {
     return false;
   }
   // https://caniuse.com/#feat=url (IE needs polyfill)
-  const debugParam = new URL(location.href)?.searchParams?.i13n_debug;
+  const debugParam = new URL(location.href)?.searchParams?.i13n_debug; // eslint-disable-line camelcase
   return debugParam === '1';
 }());

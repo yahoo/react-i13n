@@ -137,21 +137,21 @@ const prototypeSpecs = {
     //   self._scanLinks();
     // }
 
-    if (IS_DEBUG_MODE) {
-      self._debugDashboard = new DebugDashboard(self._i13nNode);
-    }
+    // if (IS_DEBUG_MODE) {
+    //   self._debugDashboard = new DebugDashboard(self._i13nNode);
+    // }
   },
 
   /**
    * componentDidUpdate
    * @method componentDidUpdate
    */
-  componentDidUpdate() {
-    if (IS_DEBUG_MODE) {
-      this._debugDashboard && this._debugDashboard.destroy();
-      this._debugDashboard = new DebugDashboard(this._i13nNode);
-    }
-  },
+  // componentDidUpdate() {
+  //   if (IS_DEBUG_MODE) {
+  //     this._debugDashboard && this._debugDashboard.destroy();
+  //     this._debugDashboard = new DebugDashboard(this._i13nNode);
+  //   }
+  // },
 
   /**
    * componentWillMount
@@ -187,9 +187,9 @@ const prototypeSpecs = {
     }
 
     // remove debug dashboard
-    if (IS_DEBUG_MODE) {
-      this._debugDashboard && this._debugDashboard.destroy();
-    }
+    // if (IS_DEBUG_MODE) {
+    //   this._debugDashboard && this._debugDashboard.destroy();
+    // }
 
     // this._removeSubComponentsListenersAndDebugDashboards();
   },

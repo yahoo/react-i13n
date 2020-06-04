@@ -3,7 +3,13 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
+import { findDOMNode } from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
 import { IS_DEBUG_MODE } from '../utils/variables';
@@ -27,7 +33,7 @@ const useScanLinks = ({
   i13nInstance,
   node,
   shouldFollowLink,
-  tags = DEFAULT_SCAN_TAGS,
+  tags = DEFAULT_SCAN_TAGS
 }) => {
   const [subI13nComponents, setSubI13nComponents] = useState([]);
   if (!enabled) {
@@ -35,7 +41,7 @@ const useScanLinks = ({
   }
 
   useEffect(() => {
-    const DOMNode = ReactDOM.findDOMNode(node);
+    const DOMNode = findDOMNode(node);
     if (!DOMNode) {
       return;
     }
@@ -56,12 +62,7 @@ const useScanLinks = ({
     // 4. (if enabled) create debug node for it
     const newSubI13nComponents = foundElements.map((element) => {
       const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
-      const i13nNode = new I13nNodeClass(
-        node,
-        {},
-        true,
-        reactI13n.isViewportEnabled()
-      );
+      const i13nNode = new I13nNodeClass(node, {}, true, reactI13n.isViewportEnabled());
 
       i13nNode.setDOMNode(element);
 
@@ -74,7 +75,7 @@ const useScanLinks = ({
             follow: true
           },
           shouldFollowLink
-        })
+        });
       });
       i13nInstance.execute('created', { i13nNode });
 
@@ -83,7 +84,7 @@ const useScanLinks = ({
         debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
         domElement: element,
         i13nNode
-      }
+      };
     });
 
     if (newSubI13nComponents) {
@@ -103,6 +104,5 @@ const useScanLinks = ({
     subI13nComponents
   };
 };
-
 
 export default useScanLinks;
