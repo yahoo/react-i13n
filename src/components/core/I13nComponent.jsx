@@ -3,34 +3,51 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import { useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
-import useScanLinks from '../../hooks/useScanLinks';
 import useDebugDashboard from '../../hooks/useDebugDashboard';
+import useScanLinks from '../../hooks/useScanLinks';
+
+import I13nContext from './I13nContext';
 
 const I13nComponent = (props) => {
   const {
-    executeEvent,
-    i13nInstance,
-    node,
+    children,
+    follow,
+    i13nModel,
+    isLeafNode,
     scanLinks = {}
-    follow
   } = props;
 
-  const debugDashboard = useRef();
+  const {
+    executeEvent,
+    i13nNode,
+    i13nInstance,
+    parentI13nNode
+  } = useContext(I13nContext);
 
-  const { enable: scanLinksEnabled, tags } = scanLinks;
+  const {
+    enable: scanLinksEnabled,
+    tags
+  } = scanLinks;
+
+  // create event
+  useEffect(() => {
+    executeEvent('created', {});
+  }, []);
 
   useScanLinks({
     enabled: scanLinksEnabled,
     executeEvent,
     i13nInstance,
-    node,
+    node: i13nNode.getDOMNode(),
     shouldFollowLink: follow,
     tags
   });
 
-  useDebugDashboard({ node });
+  useDebugDashboard({ node: i13nNode });
+
+  return children;
 };
 
 export default I13nComponent;

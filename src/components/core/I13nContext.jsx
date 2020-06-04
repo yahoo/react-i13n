@@ -6,9 +6,9 @@
 import { createContext } from 'react';
 
 const I13nContext = createContext({
-  i13nInstance: null,
   executeEvent: () => {},
-  getI13nNode: () => {},
+  i13nInstance: null,
+  i13nNode: null,
   parentI13nNode: null
 });
 I13nContext.displayName = 'ReactI13nContext';

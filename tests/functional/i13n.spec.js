@@ -8,7 +8,7 @@ describe('React I13n test', () => {
 
   it.only('should fire a pageview', () => {
     const events = window.firedEvents;
-    expect(events[0].name).to.eql('pageview');
+    expect(events.filter(({ name }) => name === 'pageview').length).to.eql(1);
   });
 
   it('should fire an update event when dom change, should get i13n model updated', () => {

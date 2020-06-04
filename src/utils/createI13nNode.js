@@ -3,40 +3,20 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { findDOMNode } from 'react-dom';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import augmentComponent from './augmentComponent';
 import getDisplayName from './getDisplayName';
-import pickSpecs from '../libs/ComponentSpecs';
 import warnAndPrintTrace from './warnAndPrintTrace';
+
+import I13nComponent from '../components/core/I13nComponent';
 import I13nContext from '../components/core/I13nContext';
 
-const PROPS_TO_FILTER = [
-  'bindClickEvent',
-  'follow',
-  'i13nModel',
-  'isLeafNode',
-  'scanLinks'
-];
+import useI13nNode from '../hooks/useI13nNode';
 
 const isFunctionalComponent = TargetComponent => typeof TargetComponent === 'function';
 // && !(TargetComponent.prototype && TargetComponent.prototype.isReactComponent);
-
-function omit(obj, keys) {
-  const target = {};
-  for (const i in obj) {
-    if (keys.indexOf(i) >= 0) {
-      continue;
-    }
-    if (!Object.prototype.hasOwnProperty.call(obj, i)) {
-      continue;
-    }
-    target[i] = obj[i];
-  }
-  return target;
-}
 
 /**
  * createI13nNode higher order function to create a Component with I13nNode functionality
@@ -61,36 +41,67 @@ function createI13nNode(Component, defaultProps, options = {}) {
     skipUtilFunctionsByProps
   } = options;
 
-  const I13nComponent = (props) => {
+  const I13nComponentWrapper = (props) => {
     const {
-      executeEvent,
-      getI13nNode: parentI13nNode
-    } = useContext(I13nContext);
-    const {
+      // i13n props
+      bindClickEvent,
+      follow,
       i13n,
+      i13nModel,
+      isLeafNode,
+      scanLinks,
+
       children,
       ...restProps
     } = props;
 
-    const newProps = {
-      ...omit(restProps, PROPS_TO_FILTER),
+    const {
+      executeEvent,
+      i13nInstance,
+      i13nNode: parentI13nNode
+    } = useContext(I13nContext);
+
+    const i13nProps = {
+      bindClickEvent,
+      follow,
+      i13n,
+      i13nModel,
+      isLeafNode,
+      scanLinks,
       ...(refToWrappedComponent ? {
         ref: refToWrappedComponent // @TODO, won't work here, need to forwardRef
-      } : {}),
-      ...({ // We probably don't need to pass props anymore, just use context
-        i13n: !i13n && !skipUtilFunctionsByProps && componentIsFunction ? ({
-          executeEvent,
-          getI13nNode: () => parentI13nNode
-        }): i13n
-      })
+      } : {})
     };
 
-    const node = <Component {...newProps}>{children}</Component>;
-    // const i13nNode = findDOMNode(node);
+    const {
+      i13nNode
+    } = useI13nNode({
+      parentI13nNode,
+      i13nInstance,
+      isLeafNode,
+      i13nModel
+    });
+
+    const node = useMemo(() => (
+      <I13nComponent {...i13nProps}>
+        <Component {...restProps}>
+          {children}
+        </Component>
+      </I13nComponent>
+    ), [
+      bindClickEvent,
+      follow,
+      i13n,
+      i13nModel,
+      isLeafNode,
+      scanLinks
+    ]);
 
     // overrides node/parent node
     const contextValue = {
-      i13nNode: node,
+      executeEvent,
+      i13nInstance,
+      i13nNode,
       parentI13nNode
     };
 
@@ -101,22 +112,22 @@ function createI13nNode(Component, defaultProps, options = {}) {
     );
   }
 
-  I13nComponent.displayName = options.displayName ?? `I13n${componentName}`;
+  I13nComponentWrapper.displayName = options.displayName ?? `I13n${componentName}`;
 
-  I13nComponent.defaultProps = {
-    i13nModel: null,
+  I13nComponentWrapper.defaultProps = {
+    i13nModel: undefined,
     isLeafNode: false,
     bindClickEvent: false,
     follow: false,
-    scanLinks: null,
+    scanLinks: undefined,
     ...defaultProps
   };
 
   if (componentIsFunction) {
-    return hoistNonReactStatics(I13nComponent, Component);
+    return hoistNonReactStatics(I13nComponentWrapper, Component);
   }
 
-  return I13nComponent;
+  return I13nComponentWrapper;
 }
 
 export default createI13nNode;

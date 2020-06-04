@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 
-import { IS_DEBUG_MODE } from '../../utils/variables';
-import DebugDashboard from '../../DebugDashboard';
+import { IS_DEBUG_MODE } from '../utils/variables';
+import DebugDashboard from '../libs/DebugDashboard';
 
 const useDebugDashboard = ({
   node
