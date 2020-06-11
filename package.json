@@ -62,7 +62,7 @@
     "jest": "^26.0.1",
     "jest-junit": "^10.0.0",
     "minimist": "^1.2.0",
-    "mocha": "^7.1.2",
+    "mocha": "^8.0.1",
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
     "prettier": "^2.0.5",
