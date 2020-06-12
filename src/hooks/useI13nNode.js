@@ -8,10 +8,10 @@ import { useEffect, useRef, useState } from 'react';
 import I13nNode from '../libs/I13nNode';
 
 const useI13nNode = ({
-  parentI13nNode,
   i13nInstance: reactI13n,
+  i13nModel,
   isLeafNode,
-  i13nModel
+  parentI13nNode
 }) => {
   const i13nNodeRef = useRef();
   const [i13nNode, setI13nNode] = useState();

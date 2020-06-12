@@ -31,6 +31,7 @@ const useScanLinks = ({
   enabled,
   executeEvent,
   i13nInstance,
+  i13nNode,
   node,
   shouldFollowLink,
   tags = DEFAULT_SCAN_TAGS
@@ -48,7 +49,7 @@ const useScanLinks = ({
     let foundElements = [];
 
     // find all links
-    scanTags.forEach((tagName) => {
+    tags.forEach((tagName) => {
       const collections = DOMNode.getElementsByTagName(tagName);
       if (collections) {
         foundElements = foundElements.concat([...collections]);
@@ -61,12 +62,12 @@ const useScanLinks = ({
     // 3. fire created event
     // 4. (if enabled) create debug node for it
     const newSubI13nComponents = foundElements.map((element) => {
-      const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
-      const i13nNode = new I13nNodeClass(node, {}, true, reactI13n.isViewportEnabled());
+      const I13nNodeClass = i13nInstance.getI13nNodeClass() || I13nNode;
+      const i13nNode = new I13nNodeClass(i13nNode, {}, true, i13nInstance.isViewportEnabled());
 
       i13nNode.setDOMNode(element);
 
-      const handleClick = useCallback((e) => {
+      const handleClick = (e) => {
         clickHandler(e, {
           executeEvent,
           i13nNode,
@@ -76,7 +77,7 @@ const useScanLinks = ({
           },
           shouldFollowLink
         });
-      });
+      };
       i13nInstance.execute('created', { i13nNode });
 
       return {
@@ -98,7 +99,7 @@ const useScanLinks = ({
         subI13nComponent?.debugDashboard?.destroy();
       });
     };
-  }, [tags, node]);
+  }, [tags, node, i13nNode]);
 
   return {
     subI13nComponents

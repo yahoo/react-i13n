@@ -3,7 +3,9 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import { useContext, useEffect, useRef } from 'react';
+import {
+  useContext, useEffect, useRef, useState
+} from 'react';
 
 import useDebugDashboard from '../../hooks/useDebugDashboard';
 import useScanLinks from '../../hooks/useScanLinks';
@@ -12,11 +14,7 @@ import I13nContext from './I13nContext';
 
 const I13nComponent = (props) => {
   const {
-    children,
-    follow,
-    i13nModel,
-    isLeafNode,
-    scanLinks = {}
+    children, follow, i13nModel, isLeafNode, scanLinks = {}
   } = props;
 
   const {
@@ -25,11 +23,9 @@ const I13nComponent = (props) => {
     i13nInstance,
     parentI13nNode
   } = useContext(I13nContext);
+  const [DOMNode, setDOMNode] = useState();
 
-  const {
-    enable: scanLinksEnabled,
-    tags
-  } = scanLinks;
+  const { enable: scanLinksEnabled, tags } = scanLinks;
 
   // create event
   useEffect(() => {
@@ -40,6 +36,7 @@ const I13nComponent = (props) => {
     enabled: scanLinksEnabled,
     executeEvent,
     i13nInstance,
+    i13nNode,
     node: i13nNode.getDOMNode(),
     shouldFollowLink: follow,
     tags
@@ -47,7 +44,18 @@ const I13nComponent = (props) => {
 
   useDebugDashboard({ node: i13nNode });
 
-  return children;
+  return (
+    <span
+      ref={(node) => {
+        if (node) {
+          i13nNode?.setDOMNode(node);
+          setDOMNode(node);
+        }
+      }}
+    >
+      {children}
+    </span>
+  );
 };
 
 export default I13nComponent;

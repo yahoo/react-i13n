@@ -18,7 +18,7 @@ const useDebugDashboard = ({
         debugDashboard.current.destroy();
       }
     };
-  });
+  }, [node]);
 };
 
 export default useDebugDashboard;

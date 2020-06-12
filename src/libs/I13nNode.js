@@ -240,7 +240,7 @@ I13nNode.prototype.removeChildNode = function removeChildNode(childNode) {
  * @method setReactComponent
  * @param {Object} react component
  */
-I13nNode.prototype.setReactComponent = function setDOMNode(component) {
+I13nNode.prototype.setReactComponent = function setReactComponent(component) {
   this._component = component;
 };
 

@@ -15,11 +15,13 @@ export const IS_DEBUG_MODE = (function isDebugMode() {
   if (!IS_CLIENT) {
     return false;
   }
+
   const { location } = window;
   if (isUndefined(location)) {
     return false;
   }
   // https://caniuse.com/#feat=url (IE needs polyfill)
-  const debugParam = new URL(location.href)?.searchParams?.i13n_debug; // eslint-disable-line camelcase
+  const debugParam = new URL(location.href)?.searchParams?.get('i13n_debug'); // eslint-disable-line camelcase
+
   return debugParam === '1';
 }());

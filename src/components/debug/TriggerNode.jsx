@@ -12,6 +12,7 @@ const TriggerNode = (props) => {
     background: '#673ab7',
     color: 'rgba(255,255,255,.87)',
     cursor: 'pointer',
+    fontFamily: 'inherit',
     padding: '0 4px'
   };
 

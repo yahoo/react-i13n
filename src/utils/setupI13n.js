@@ -64,7 +64,7 @@ function setupI13n(Component, options = {}, plugins = []) {
       i13nInstance: reactI13n,
       i13nModel,
       isLeafNode,
-      parentI13nNode,
+      parentI13nNode
     });
 
     // if (!skipUtilFunctionsByProps) {

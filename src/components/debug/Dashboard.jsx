@@ -19,14 +19,14 @@ const Dashboard = (props) => {
   const [display, setDisplay] = useState(DISPLAY_NONE);
 
   const style = {
+    fontFamily: `-apple-system, system-ui, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, Arial, sans-serif`,
     position: 'relative',
     display,
     color: 'rgba(255,255,255,.87)',
     fontSize: '14px',
     width: '100%',
     marginTop: '2px',
-    zIndex: 1,
-    borderRadius: '2px'
+    zIndex: 1
   };
 
   const handleOnClick = useCallback(() => {
@@ -37,17 +37,17 @@ const Dashboard = (props) => {
       setDisplay(DISPLAY_NONE);
       onHide();
     }
-  }, []);
+  }, [display]);
 
   const handleMouseOver = useCallback(() => {
     if (DOMNode) {
-      DOMNode.style.border = '4px solid #b39ddb';
+      DOMNode.style.outline = '2px solid #b39ddb';
     }
   }, []);
 
   const handleMouseOut = useCallback(() => {
     if (DOMNode) {
-      DOMNode.style.border = null;
+      DOMNode.style.outline = null;
     }
   }, []);
 
@@ -56,8 +56,15 @@ const Dashboard = (props) => {
   }, []);
 
   return (
-    <div onFocus={handleMouseOver} onMouseOver={handleMouseOver} onBlur={handleMouseOut} onMouseOut={handleMouseOut}>
-      <TriggerNode onClick={handleOnClick} />
+    <div
+      onFocus={handleMouseOver}
+      onMouseOver={handleMouseOver}
+      onBlur={handleMouseOut}
+      onMouseOut={handleMouseOut}
+    >
+      <TriggerNode
+        onClick={handleOnClick}
+      />
       <div style={style} className="dashboard">
         <DashboardContainer title={title} model={model} DOMNode={DOMNode} />
       </div>
@@ -66,7 +73,6 @@ const Dashboard = (props) => {
 };
 
 Dashboard.propTypes = {
-  DOMNode: PropTypes.node.isRequired,
   model: PropTypes.shape().isRequired,
   onHide: PropTypes.func.isRequired,
   onMount: PropTypes.func.isRequired,

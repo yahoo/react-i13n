@@ -11,10 +11,11 @@ const DashboardTitle = (props) => {
   const style = {
     background: '#673ab7',
     color: 'rgba(255,255,255,.87)',
-    padding: '8px',
-    whiteSpace: 'nowrap',
+    fontFamily: 'inherit',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    padding: '8px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   };
 
   return <li style={style}>{title}</li>;

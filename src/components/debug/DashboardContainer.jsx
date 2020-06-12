@@ -37,8 +37,7 @@ const DashboardContainer = (props) => {
 
 DashboardContainer.propTypes = {
   title: PropTypes.string.isRequired,
-  model: PropTypes.shape().isRequired,
-  DOMNode: PropTypes.node.isRequired
+  model: PropTypes.shape().isRequired
 };
 
 export default DashboardContainer;

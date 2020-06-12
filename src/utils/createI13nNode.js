@@ -73,15 +73,6 @@ function createI13nNode(Component, defaultProps, options = {}) {
       } : {})
     };
 
-    const {
-      i13nNode
-    } = useI13nNode({
-      parentI13nNode,
-      i13nInstance,
-      isLeafNode,
-      i13nModel
-    });
-
     const node = useMemo(() => (
       <I13nComponent {...i13nProps}>
         <Component {...restProps}>
@@ -96,6 +87,15 @@ function createI13nNode(Component, defaultProps, options = {}) {
       isLeafNode,
       scanLinks
     ]);
+
+    const {
+      i13nNode
+    } = useI13nNode({
+      parentI13nNode,
+      i13nInstance,
+      isLeafNode,
+      i13nModel
+    });
 
     // overrides node/parent node
     const contextValue = {
