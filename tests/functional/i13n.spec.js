@@ -1,17 +1,17 @@
 /* global describe, it, document, expect */
 
 describe('React I13n test', () => {
-  it.only('should init correctly and give the rootI13nNode the correct default model value', () => {
+  it('should init correctly and give the rootI13nNode the correct default model value', () => {
     const result = window._reactI13nInstance.getRootI13nNode().getMergedModel();
     expect(result).to.eql({ sec: 'default-section-name', page: 'test-page' });
   });
 
-  it.only('should fire a pageview', () => {
+  it('should fire a pageview', () => {
     const events = window.firedEvents;
     expect(events.filter(({ name }) => name === 'pageview').length).to.eql(1);
   });
 
-  it.only('should fire an update event when dom change, should get i13n model updated', () => {
+  it('should fire an update event when dom change, should get i13n model updated', () => {
     const hiddenBtn = document.querySelectorAll('.HiddenBtn')[0];
     hiddenBtn.click();
     const events = window.firedEvents;

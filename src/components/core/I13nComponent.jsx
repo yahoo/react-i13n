@@ -24,7 +24,8 @@ const I13nComponent = (props) => {
     follow,
     i13nModel,
     isLeafNode,
-    scanLinks = {}
+    scanLinks = {},
+    shouldFollowLink
   } = props;
 
   const {
@@ -79,11 +80,20 @@ const I13nComponent = (props) => {
     i13nInstance,
     i13nNode,
     node: i13nNode.getDOMNode(),
-    shouldFollowLink: follow,
+    shouldFollowLink,
     tags
   });
 
   useDebugDashboard({ node: i13nNode });
+
+  // clean up
+  useEffect(() => {
+    return () => {
+      if (parentI13nNode) {
+        parentI13nNode.removeChildNode(i13nNode);
+      }
+    };
+  }, [parentI13nNode, i13nNode]);
 
   return (
     <span

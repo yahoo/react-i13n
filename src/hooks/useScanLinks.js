@@ -31,7 +31,7 @@ const useScanLinks = ({
   enabled,
   executeEvent,
   i13nInstance,
-  i13nNode,
+  i13nNode: parentI13nNode,
   node,
   shouldFollowLink,
   tags = DEFAULT_SCAN_TAGS
@@ -63,14 +63,14 @@ const useScanLinks = ({
     // 4. (if enabled) create debug node for it
     const newSubI13nComponents = foundElements.map((element) => {
       const I13nNodeClass = i13nInstance.getI13nNodeClass() || I13nNode;
-      const i13nNode = new I13nNodeClass(i13nNode, {}, true, i13nInstance.isViewportEnabled());
+      const subI13nNode = new I13nNodeClass(parentI13nNode, {}, true, i13nInstance.isViewportEnabled());
 
-      i13nNode.setDOMNode(element);
+      subI13nNode.setDOMNode(element);
 
       const handleClick = (e) => {
         clickHandler(e, {
           executeEvent,
-          i13nNode,
+          i13nNode: subI13nNode,
           props: {
             href: element.href,
             follow: true
@@ -78,13 +78,13 @@ const useScanLinks = ({
           shouldFollowLink
         });
       };
-      i13nInstance.execute('created', { i13nNode });
+      i13nInstance.execute('created', { i13nNode: subI13nNode });
 
       return {
         componentClickListener: listen(element, 'click', handleClick),
-        debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(i13nNode) : null,
+        debugDashboard: IS_DEBUG_MODE ? new DebugDashboard(subI13nNode) : null,
         domElement: element,
-        i13nNode
+        i13nNode: subI13nNode
       };
     });
 
@@ -99,7 +99,7 @@ const useScanLinks = ({
         subI13nComponent?.debugDashboard?.destroy();
       });
     };
-  }, [tags, node, i13nNode]);
+  }, [tags, node, parentI13nNode, shouldFollowLink]);
 
   return {
     subI13nComponents

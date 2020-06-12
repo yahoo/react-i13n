@@ -94,13 +94,13 @@ const prototypeSpecs = {
    * @method componentWillUpdate
    */
   // @TODO, UNSAFE_componentWillUpdate()
-  componentWillUpdate(nextProps) {
-    const self = this;
-
-    if (nextProps && self._i13nNode) {
-      self._i13nNode.updateModel(nextProps.i13nModel);
-    }
-  },
+  // componentWillUpdate(nextProps) {
+  //   const self = this;
+  //
+  //   if (nextProps && self._i13nNode) {
+  //     self._i13nNode.updateModel(nextProps.i13nModel);
+  //   }
+  // },
 
   /**
    * componentDidMount
@@ -161,7 +161,7 @@ const prototypeSpecs = {
     if (pageInitViewportDetectionTimeout) {
       clearTimeout(pageInitViewportDetectionTimeout);
     }
-    this._createI13nNode();
+    // this._createI13nNode();
     this._i13nNode.setReactComponent(this);
   },
 
@@ -173,10 +173,10 @@ const prototypeSpecs = {
     if (!this._getReactI13n()) {
       return;
     }
-    const parentI13nNode = this._getParentI13nNode();
-    if (parentI13nNode) {
-      parentI13nNode.removeChildNode(this._i13nNode);
-    }
+    // const parentI13nNode = this._getParentI13nNode();
+    // if (parentI13nNode) {
+    //   parentI13nNode.removeChildNode(this._i13nNode);
+    // }
 
     // if (this.clickEventListener) {
     //   this.clickEventListener.remove();
@@ -348,12 +348,12 @@ const prototypeSpecs = {
    * @method _shouldFollowLink
    * @private
    */
-  _shouldFollowLink() {
-    if (!isUndefined(this.shouldFollowLink)) {
-      return this.shouldFollowLink(this.props);
-    }
-    return this.props.follow;
-  },
+  // _shouldFollowLink() {
+  //   if (!isUndefined(this.shouldFollowLink)) {
+  //     return this.shouldFollowLink(this.props);
+  //   }
+  //   return this.props.follow;
+  // },
 
   /**
    * _subComponentsViewportDetection, will be executed by viewport mixin

@@ -50,6 +50,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
       i13nModel,
       isLeafNode,
       scanLinks,
+      shouldFollowLink,
 
       children,
       ...restProps
@@ -68,6 +69,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
       i13nModel,
       isLeafNode,
       scanLinks,
+      shouldFollowLink,
       ...(refToWrappedComponent ? {
         ref: refToWrappedComponent // @TODO, won't work here, need to forwardRef
       } : {})
