@@ -11,7 +11,7 @@ describe('React I13n test', () => {
     expect(events.filter(({ name }) => name === 'pageview').length).to.eql(1);
   });
 
-  it('should fire an update event when dom change, should get i13n model updated', () => {
+  it.only('should fire an update event when dom change, should get i13n model updated', () => {
     const hiddenBtn = document.querySelectorAll('.HiddenBtn')[0];
     hiddenBtn.click();
     const events = window.firedEvents;

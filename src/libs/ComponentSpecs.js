@@ -114,12 +114,12 @@ const prototypeSpecs = {
     }
 
     // bind the click event for i13n component if it's enabled
-    if (self.props.bindClickEvent) {
-      self.clickEventListener = listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
-    }
+    // if (self.props.bindClickEvent) {
+    //   self.clickEventListener = listen(ReactDOM.findDOMNode(self), 'click', clickHandler.bind(self));
+    // }
 
     const domNode = ReactDOM.findDOMNode(self);
-    self._i13nNode.setDOMNode(domNode);
+    // self._i13nNode.setDOMNode(domNode);
 
     // enable viewport checking if enabled
     if (reactI13n.isViewportEnabled()) {
@@ -132,7 +132,7 @@ const prototypeSpecs = {
         self._triggerPageInitViewportDetection();
       }
     }
-    self.executeI13nEvent('created', {});
+    // self.executeI13nEvent('created', {});
     // if (self.props.scanLinks && self.props.scanLinks.enable) {
     //   self._scanLinks();
     // }
@@ -178,9 +178,9 @@ const prototypeSpecs = {
       parentI13nNode.removeChildNode(this._i13nNode);
     }
 
-    if (this.clickEventListener) {
-      this.clickEventListener.remove();
-    }
+    // if (this.clickEventListener) {
+    //   this.clickEventListener.remove();
+    // }
 
     if (this._getReactI13n().isViewportEnabled()) {
       this._viewportDetector.unsubscribeAll();

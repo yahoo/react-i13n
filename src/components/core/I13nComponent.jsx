@@ -4,9 +4,14 @@
  */
 
 import {
-  useContext, useEffect, useRef, useState
+  useContext,
+  useEffect,
+  useRef,
+  useState
 } from 'react';
+import { listen } from 'subscribe-ui-event';
 
+import clickHandler from '../../libs/clickHandler';
 import useDebugDashboard from '../../hooks/useDebugDashboard';
 import useScanLinks from '../../hooks/useScanLinks';
 
@@ -14,7 +19,12 @@ import I13nContext from './I13nContext';
 
 const I13nComponent = (props) => {
   const {
-    children, follow, i13nModel, isLeafNode, scanLinks = {}
+    bindClickEvent,
+    children,
+    follow,
+    i13nModel,
+    isLeafNode,
+    scanLinks = {}
   } = props;
 
   const {
@@ -31,6 +41,37 @@ const I13nComponent = (props) => {
   useEffect(() => {
     executeEvent('created', {});
   }, []);
+
+  // auto bind click event
+  useEffect(() => {
+    let clickEventListener;
+
+    if (bindClickEvent && DOMNode) {
+      const handleClick = (e) => {
+        clickHandler(e, {
+          executeEvent,
+          i13nNode,
+          props: {
+            follow
+          }
+        });
+      };
+      clickEventListener = listen(DOMNode, 'click', handleClick);
+    }
+
+    return () => {
+      if (clickEventListener) {
+        clickEventListener.unsubscribe();
+      }
+    };
+  }, [bindClickEvent, i13nNode, executeEvent, DOMNode]);
+
+  // update modal if changes
+  useEffect(() => {
+    if (i13nNode) {
+      i13nNode.updateModel(i13nModel);
+    }
+  }, [i13nNode, i13nModel])
 
   useScanLinks({
     enabled: scanLinksEnabled,

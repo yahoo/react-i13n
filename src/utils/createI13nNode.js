@@ -112,7 +112,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
     );
   }
 
-  I13nComponentWrapper.displayName = options.displayName ?? `I13n${componentName}`;
+  I13nComponentWrapper.displayName = options.displayName ?? componentName;
 
   I13nComponentWrapper.defaultProps = {
     i13nModel: undefined,

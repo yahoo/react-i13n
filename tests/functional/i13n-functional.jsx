@@ -141,7 +141,7 @@ class I13nComponentLevel2Hidden extends React.Component {
 
   clickHandler = () => {
     this.setState({ expend: true });
-  }
+  };
 
   render() {
     const links = [];
@@ -181,7 +181,7 @@ let I13nDemo = () => {
   }, []);
 
   return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
-}
+};
 
 window.firedEvents = [];
 

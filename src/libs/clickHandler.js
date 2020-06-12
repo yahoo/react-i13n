@@ -108,7 +108,7 @@ const clickHandler = (e, options) => {
     }
   }
 
-  executeEvent('click', { i13nNode: getI13nNode(), e }, () => {
+  executeEvent('click', { i13nNode, e }, () => {
     if (isRedirectLink) {
       if (isFormSubmit(target)) {
         // if the button has no form linked, then do nothing
