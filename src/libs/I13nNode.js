@@ -1,12 +1,10 @@
 /**
- * Copyright 2015, Yahoo Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* global Node */
-'use strict';
 
 // var debug = require('debug')('I13nNode');
-var TAG_PATTERN = /<[^>]*>/g;
+const TAG_PATTERN = /<[^>]*>/g;
 
 /**
  * I13nNode the virtual DOM Node used to build a I13n Tree for instrumentation
@@ -17,33 +15,37 @@ var TAG_PATTERN = /<[^>]*>/g;
  * @param {Boolean} isViewportEnabled indicate if viewport check enable
  * @constructor
  */
-var I13nNode = function I13nNode (parentNode, model, isLeafNode, isViewportEnabled) {
-    this._parentNode = parentNode;
-    if (this._parentNode) {
-        this._parentNode.appendChildNode(this);
-    }
+const I13nNode = function I13nNode(parentNode, model, isLeafNode, isViewportEnabled) {
+  this._parentNode = parentNode;
+  if (this._parentNode) {
+    this._parentNode.appendChildNode(this);
+  }
 
-    // we allow users to pass in a function which generate the dynamic model data
-    if ('function' === typeof model) {
-        this._model = model;
-    } else {
-        this._model = Object.assign({}, model);
-    }
+  // we allow users to pass in a function which generate the dynamic model data
+  if (typeof model === 'function') {
+    this._model = model;
+  } else {
+    this._model = Object.assign({}, model);
+  }
 
-    this._childrenNodes = []; // children nodes
-    this._DOMNode = null; // DOM node of the i13n node, will use setDOMNode to set it in componentDidMount
-    this._customAttributes = {}; // any custom value want to set in the i13n node, can used to save some status in the handler functions
+  this._childrenNodes = []; // children nodes
+  this._DOMNode = null; // DOM node of the i13n node, will use setDOMNode to set it in componentDidMount
+  // any custom value want to set in the i13n node, can used to save some status in the handler functions
+  this._customAttributes = {};
 
-    // _isLeafNode indicate if it's a leaf node or not, e.g., an anchor or button. it's used to help users to know if they want to handle it for some cases, e.g., when we want to track links
-    this._isLeafNode = isLeafNode || false;
+  // _isLeafNode indicate if it's a leaf node or not,
+  // e.g., an anchor or button. it's used to help users to know if they want to handle it for some cases,
+  // e.g., when we want to track links
+  this._isLeafNode = isLeafNode || false;
 
-    // _isOrderDirty used to check if we need to sort children nodes before we get position of one of it child
-    // will set to true if we already sort them
-    // set to false once we add/remove a child
-    this._isOrderDirty = false;
+  // _isOrderDirty used to check if we need to sort children nodes before we get position of one of it child
+  // will set to true if we already sort them
+  // set to false once we add/remove a child
+  this._isOrderDirty = false;
 
-    // _isInViewport save the status if node is already shown in the viewport, if viewport check isn't enabled, then always set to true
-    this._isInViewport = !isViewportEnabled ? true : false;
+  // _isInViewport save the status if node is already shown in the viewport,
+  // if viewport check isn't enabled, then always set to true
+  this._isInViewport = !isViewportEnabled;
 };
 
 /**
@@ -51,9 +53,9 @@ var I13nNode = function I13nNode (parentNode, model, isLeafNode, isViewportEnabl
  * @method appendChildNode
  * @param {Object} childNode the child node
  */
-I13nNode.prototype.appendChildNode = function appendChildNode (childNode) {
-    this._childrenNodes.push(childNode);
-    this._isOrderDirty = true;
+I13nNode.prototype.appendChildNode = function appendChildNode(childNode) {
+  this._childrenNodes.push(childNode);
+  this._isOrderDirty = true;
 };
 
 /**
@@ -61,8 +63,8 @@ I13nNode.prototype.appendChildNode = function appendChildNode (childNode) {
  * @method getChildrenNodes
  * @return {Array} the children array
  */
-I13nNode.prototype.getChildrenNodes = function getChildrenNodes () {
-    return this._childrenNodes;
+I13nNode.prototype.getChildrenNodes = function getChildrenNodes() {
+  return this._childrenNodes;
 };
 
 /**
@@ -71,8 +73,8 @@ I13nNode.prototype.getChildrenNodes = function getChildrenNodes () {
  * @param {String} name attribute name
  * @return {Boolean|Number|String|Array|Object} the attribute value
  */
-I13nNode.prototype.getCustomAttribute = function getCustomAttribute (name) {
-    return this._customAttributes[name];
+I13nNode.prototype.getCustomAttribute = function getCustomAttribute(name) {
+  return this._customAttributes[name];
 };
 
 /**
@@ -80,8 +82,8 @@ I13nNode.prototype.getCustomAttribute = function getCustomAttribute (name) {
  * @method getReactComponent
  * @return {Object} the react component
  */
-I13nNode.prototype.getReactComponent = function getReactComponent () {
-    return this._component;
+I13nNode.prototype.getReactComponent = function getReactComponent() {
+  return this._component;
 };
 
 /**
@@ -89,8 +91,8 @@ I13nNode.prototype.getReactComponent = function getReactComponent () {
  * @method getDOMNode
  * @return {Object} the DOMNode
  */
-I13nNode.prototype.getDOMNode = function getDOMNode () {
-    return this._DOMNode;
+I13nNode.prototype.getDOMNode = function getDOMNode() {
+  return this._DOMNode;
 };
 
 /**
@@ -99,13 +101,12 @@ I13nNode.prototype.getDOMNode = function getDOMNode () {
  * @param {Boolean} debugMode indicate it's debug mode, will return additional information for debug tool
  * @return {Object} the merged model
  */
-I13nNode.prototype.getMergedModel = function getMergedModel (debugMode) {
-    if (this._parentNode) {
-        var parentModel = this._parentNode.getMergedModel(debugMode);
-        return Object.assign({}, parentModel, this.getModel(debugMode));
-    } else {
-        return this.getModel(debugMode);
-    }
+I13nNode.prototype.getMergedModel = function getMergedModel(debugMode) {
+  if (this._parentNode) {
+    const parentModel = this._parentNode.getMergedModel(debugMode);
+    return Object.assign({}, parentModel, this.getModel(debugMode));
+  }
+  return this.getModel(debugMode);
 };
 
 /**
@@ -114,30 +115,30 @@ I13nNode.prototype.getMergedModel = function getMergedModel (debugMode) {
  * @param {Boolean} debugMode indicate it's debug mode, will return additional information for debug tool
  * @return {Object} the plain object model
  */
-I13nNode.prototype.getModel = function getModel (debugMode) {
-    var self = this;
-    var model = null;
-    var finalModel = null;
-    if ('function' === typeof self._model) {
-        model = self._model();
-    } else {
-        model = self._model;
-    }
+I13nNode.prototype.getModel = function getModel(debugMode) {
+  const self = this;
+  let model = null;
+  let finalModel = null;
+  if (typeof self._model === 'function') {
+    model = self._model();
+  } else {
+    model = self._model;
+  }
 
-    //always return new object to prevent reference issue
-    finalModel = Object.assign({}, model);
+  // always return new object to prevent reference issue
+  finalModel = Object.assign({}, model);
 
-    if (debugMode) {
-        var DOMNode = self.getDOMNode();
-        // add the DOMNode to the returned model, so that it can be used in debug tool
-        Object.keys(finalModel).forEach(function interateModel(index) {
-            finalModel[index] = {
-                value: finalModel[index],
-                DOMNode: DOMNode
-            };
-        });
-    }
-    return finalModel;
+  if (debugMode) {
+    const DOMNode = self.getDOMNode();
+    // add the DOMNode to the returned model, so that it can be used in debug tool
+    Object.keys(finalModel).forEach((index) => {
+      finalModel[index] = {
+        value: finalModel[index],
+        DOMNode
+      };
+    });
+  }
+  return finalModel;
 };
 
 /**
@@ -145,8 +146,8 @@ I13nNode.prototype.getModel = function getModel (debugMode) {
  * @method getParentNode
  * @return {Object} the parent node
  */
-I13nNode.prototype.getParentNode = function getParentNode () {
-    return this._parentNode;
+I13nNode.prototype.getParentNode = function getParentNode() {
+  return this._parentNode;
 };
 
 /**
@@ -154,15 +155,15 @@ I13nNode.prototype.getParentNode = function getParentNode () {
  * @method getPosition
  * @return {Number} the position
  */
-I13nNode.prototype.getPosition = function getPosition () {
-    var parentNode = this._parentNode;
-    if (!parentNode) {
-        return 1;
-    }
-    if (parentNode.isOrderDirty()) {
-        parentNode.sortChildrenNodes();
-    }
-    return parentNode.getChildrenNodes().indexOf(this) + 1;
+I13nNode.prototype.getPosition = function getPosition() {
+  const parentNode = this._parentNode;
+  if (!parentNode) {
+    return 1;
+  }
+  if (parentNode.isOrderDirty()) {
+    parentNode.sortChildrenNodes();
+  }
+  return parentNode.getChildrenNodes().indexOf(this) + 1;
 };
 
 /**
@@ -171,17 +172,16 @@ I13nNode.prototype.getPosition = function getPosition () {
  * @param {Object} target the event target, would take the target's text then i13n node's text
  * @return {String} text of the node
  */
-I13nNode.prototype.getText = function getText (target) {
-    var DOMNode = this.getDOMNode();
-    if (!DOMNode && !target) {
-        return '';
-    }
-    var text = (target && (target.value || target.innerHTML)) ||
-        (DOMNode && (DOMNode.value || DOMNode.innerHTML));
-    if (text) {
-        text = text.replace(TAG_PATTERN, '');
-    }
-    return text;
+I13nNode.prototype.getText = function getText(target) {
+  const DOMNode = this.getDOMNode();
+  if (!DOMNode && !target) {
+    return '';
+  }
+  let text = (target && (target.value || target.innerHTML)) || (DOMNode && (DOMNode.value || DOMNode.innerHTML));
+  if (text) {
+    text = text.replace(TAG_PATTERN, '');
+  }
+  return text;
 };
 
 /**
@@ -189,8 +189,8 @@ I13nNode.prototype.getText = function getText (target) {
  * @method isLeafNode
  * @return {Boolean} the isLeafNode value
  */
-I13nNode.prototype.isLeafNode = function isLeafNode () {
-    return this._isLeafNode;
+I13nNode.prototype.isLeafNode = function isLeafNode() {
+  return this._isLeafNode;
 };
 
 /**
@@ -198,8 +198,8 @@ I13nNode.prototype.isLeafNode = function isLeafNode () {
  * @method isOrderDirty
  * @return {Boolean} the isOrderDirty value
  */
-I13nNode.prototype.isOrderDirty = function isOrderDirty () {
-    return this._isOrderDirty;
+I13nNode.prototype.isOrderDirty = function isOrderDirty() {
+  return this._isOrderDirty;
 };
 
 /**
@@ -207,8 +207,8 @@ I13nNode.prototype.isOrderDirty = function isOrderDirty () {
  * @method isInViewport
  * @return {Boolean} the isInViewport value
  */
-I13nNode.prototype.isInViewport = function isInViewport () {
-    return this._isInViewport;
+I13nNode.prototype.isInViewport = function isInViewport() {
+  return this._isInViewport;
 };
 
 /**
@@ -216,12 +216,12 @@ I13nNode.prototype.isInViewport = function isInViewport () {
  * @method traverseNodes
  * @param {Function} handler function
  */
-I13nNode.prototype.traverseNodes = function traverseNodes (handler) {
-    handler && handler(this);
-    this._childrenNodes.forEach(function traverseChildNode(child) {
-        child.traverseNodes(handler);
-    });
-    return this;
+I13nNode.prototype.traverseNodes = function traverseNodes(handler) {
+  handler && handler(this);
+  this._childrenNodes.forEach((child) => {
+    child.traverseNodes(handler);
+  });
+  return this;
 };
 
 /**
@@ -229,10 +229,10 @@ I13nNode.prototype.traverseNodes = function traverseNodes (handler) {
  * @param {Object} childNode child node
  * @method removeChildNode
  */
-I13nNode.prototype.removeChildNode = function removeChildNode (childNode) {
-    var index = this._childrenNodes.indexOf(childNode);
-    this._childrenNodes.splice(index, 1);
-    this._isOrderDirty = true;
+I13nNode.prototype.removeChildNode = function removeChildNode(childNode) {
+  const index = this._childrenNodes.indexOf(childNode);
+  this._childrenNodes.splice(index, 1);
+  this._isOrderDirty = true;
 };
 
 /**
@@ -240,8 +240,8 @@ I13nNode.prototype.removeChildNode = function removeChildNode (childNode) {
  * @method setReactComponent
  * @param {Object} react component
  */
-I13nNode.prototype.setReactComponent = function setDOMNode (component) {
-    this._component = component;
+I13nNode.prototype.setReactComponent = function setDOMNode(component) {
+  this._component = component;
 };
 
 /**
@@ -249,8 +249,8 @@ I13nNode.prototype.setReactComponent = function setDOMNode (component) {
  * @method setDOMNode
  * @param {Object} DOMNode
  */
-I13nNode.prototype.setDOMNode = function setDOMNode (DOMNode) {
-    this._DOMNode = DOMNode;
+I13nNode.prototype.setDOMNode = function setDOMNode(DOMNode) {
+  this._DOMNode = DOMNode;
 };
 
 /**
@@ -258,8 +258,8 @@ I13nNode.prototype.setDOMNode = function setDOMNode (DOMNode) {
  * @method setIsInViewport
  * @param {Boolean} isInViewport
  */
-I13nNode.prototype.setIsInViewport = function setIsInViewport (isInViewport) {
-    this._isInViewport = isInViewport;
+I13nNode.prototype.setIsInViewport = function setIsInViewport(isInViewport) {
+  this._isInViewport = isInViewport;
 };
 
 /**
@@ -268,8 +268,8 @@ I13nNode.prototype.setIsInViewport = function setIsInViewport (isInViewport) {
  * @param {String} name attribute name
  * @param {Boolean|Number|String|Array|Object} value attribute value, can be any types
  */
-I13nNode.prototype.setCustomAttribute = function setCustomAttribute (name, value) {
-    this._customAttributes[name] = value;
+I13nNode.prototype.setCustomAttribute = function setCustomAttribute(name, value) {
+  this._customAttributes[name] = value;
 };
 
 /**
@@ -277,8 +277,8 @@ I13nNode.prototype.setCustomAttribute = function setCustomAttribute (name, value
  * @method setParentNode
  * @param {Object} parentNode the parent node
  */
-I13nNode.prototype.setParentNode = function setParentNode (parentNode) {
-    this._parentNode = parentNode;
+I13nNode.prototype.setParentNode = function setParentNode(parentNode) {
+  this._parentNode = parentNode;
 };
 
 /**
@@ -286,13 +286,13 @@ I13nNode.prototype.setParentNode = function setParentNode (parentNode) {
  * @method updateModel
  * @param {Object|Function} newModel the new i13n model
  */
-I13nNode.prototype.updateModel = function updateModel (newModel) {
-    // if i13n is a function, just assign it to _model, otherwise use Object.assign to merge old and new model data
-    if ('function' === typeof newModel) {
-        this._model = newModel;
-    } else {
-        this._model = Object.assign({}, this._model, newModel);
-    }
+I13nNode.prototype.updateModel = function updateModel(newModel) {
+  // if i13n is a function, just assign it to _model, otherwise use Object.assign to merge old and new model data
+  if (typeof newModel === 'function') {
+    this._model = newModel;
+  } else {
+    this._model = Object.assign({}, this._model, newModel);
+  }
 };
 
 /**
@@ -300,27 +300,27 @@ I13nNode.prototype.updateModel = function updateModel (newModel) {
  * @method sortChildrenNodes
  * @param {Boolean} propagate indicate if want to propagate the sorting event to its parent
  */
-I13nNode.prototype.sortChildrenNodes = function sortChildrenNodes (propagate) {
-    this._childrenNodes.sort(function compareChildrenNodes(childA, childB) {
-        var domA = childA.getDOMNode();
-        var domB = childB.getDOMNode();
-        if (domA && domB) {
-            if (domB.compareDocumentPosition) {
-                var comparison = domB.compareDocumentPosition(domA);
-                if (comparison & Node.DOCUMENT_POSITION_PRECEDING) {
-                    return -1;
-                }
-            } else if (domB.sourceIndex) {
-                // IE 8
-                return domA.sourceIndex - domB.sourceIndex;
-            }
+I13nNode.prototype.sortChildrenNodes = function sortChildrenNodes(propagate) {
+  this._childrenNodes.sort((childA, childB) => {
+    const domA = childA.getDOMNode();
+    const domB = childB.getDOMNode();
+    if (domA && domB) {
+      if (domB.compareDocumentPosition) {
+        const comparison = domB.compareDocumentPosition(domA);
+        if (comparison & Node.DOCUMENT_POSITION_PRECEDING) { // eslint-disable-line no-bitwise
+          return -1;
         }
-        return 1;
-    });
-    this._isOrderDirty = false;
-    if (this._parentNode && propagate) {
-        this._parentNode.sortChildrenNodes(propagate);
+      } else if (domB.sourceIndex) {
+        // IE 8
+        return domA.sourceIndex - domB.sourceIndex;
+      }
     }
+    return 1;
+  });
+  this._isOrderDirty = false;
+  if (this._parentNode && propagate) {
+    this._parentNode.sortChildrenNodes(propagate);
+  }
 };
 
-module.exports = I13nNode;
+export default I13nNode;

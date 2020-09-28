@@ -1,63 +1,76 @@
 {
   "name": "react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "2.7.3",
+  "version": "3.0.0-alpha.4",
   "main": "index.js",
+  "module": "index.es.js",
   "repository": {
     "type": "git",
     "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
-    "func": "./tests/functional/saucelabs.sh",
-    "lint": "jshint",
-    "prepublish": "grunt dist",
-    "test": "grunt cover"
+    "benchmark": "NODE_ENV=production node tests/benchmark/benchmark",
+    "clean": "rm -rf dist/* && rm -rf dist-es/*",
+    "dev": "grunt functional-debug",
+    "dist": "npm run clean && npm run dist-cjs && npm run dist-es",
+    "dist-cjs": "BABEL_ENV=dist babel src --out-dir dist",
+    "dist-es": "BABEL_ENV=dist-es babel src --out-dir dist-es",
+    "dist-functional": "BABEL_ENV=dist babel tests/functional/**/*.jsx --out-dir tests/functional",
+    "func": "npm run dist && npm run dist-functional && grunt functional",
+    "func-debug": "npm run dist && npm run dist-functional && grunt functional-debug",
+    "lint": "eslint src",
+    "prepublish": "npm run dist",
+    "test": "jest tests/unit --coverage --coverageReporters=lcov",
+    "unit": "jest tests/unit"
   },
   "dependencies": {
-    "debug": "^3.1.0",
-    "hoist-non-react-statics": "^3.0.0",
-    "prop-types": "^15.5.10",
-    "subscribe-ui-event": "^2.0.0"
+    "debug": "^4.1.1",
+    "hoist-non-react-statics": "^3.3.0",
+    "prop-types": "^15.7.2",
+    "subscribe-ui-event": "^2.0.5"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
-    "babel-loader": "^8.0.0",
-    "babel-plugin-istanbul": "^4.1.1",
-    "babel-plugin-transform-react-jsx": "^6.22.0",
-    "babel-polyfill": "^6.9.1",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.9.0",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-spread": "^7.8.3",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/register": "^7.9.0",
+    "@testing-library/react": "^11.0.1",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-dynamic-import-node": "^2.2.0",
+    "babel-plugin-syntax-dynamic-import": "^6.18.0",
     "benchmark": "^2.1.3",
-    "coveralls": "^3.0.0",
-    "create-react-class": "^15.5.2",
-    "es5-shim": "^4.0.0",
+    "es5-shim": "^4.5.12",
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-react-hooks": "^4.0.4",
     "expect.js": "^0.3.1",
-    "grunt": "^1.0.1",
-    "grunt-atomizer": "^3.0.0",
-    "grunt-babel": "^7.0.0",
-    "grunt-cli": "^1.0.0",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-connect": "^1.0.0",
-    "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
+    "grunt": "^1.0.4",
+    "grunt-atomizer": "^3.1.3",
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-connect": "^3.0.0",
+    "grunt-contrib-watch": "^1.1.0",
     "grunt-saucelabs": "^9.0.0",
-    "grunt-shell": "^2.0.0",
-    "grunt-webpack": "^3.0.0",
-    "istanbul": "^0.4.0",
-    "jsdom": "^12.0.0",
-    "jshint": "^2.9.4",
+    "grunt-webpack": "^3.1.3",
+    "jest": "^26.0.1",
+    "jest-junit": "^11.0.1",
     "minimist": "^1.2.0",
-    "mocha": "^5.0.0",
-    "mockery": "^2.0.0",
-    "nyc": "^12.0.1",
+    "mocha": "^8.0.1",
     "object-assign": "^4.0.0",
     "pre-commit": "^1.0.0",
-    "promise": "^8.0.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "webpack": "^3.0.0",
-    "webpack-dev-server": "^3.1.7",
+    "prettier": "^2.0.5",
+    "promise": "^8.0.2",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "webpack": "^4.0.0",
+    "webpack-dev-server": "^3.2.1",
     "xunit-file": "^1.0.0"
   },
   "keywords": [
@@ -67,33 +80,17 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0 || ^16.0.0",
-    "react-dom": "^0.14.0 || ^15.0.0 || ^16.0.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "precommit": [
     "lint",
     "test"
   ],
-  "yhint": {
-    "excludes": [
-      "/dist/",
-      "/tests/"
-    ]
-  },
-  "jshintConfig": {
-    "node": true
-  },
   "licenses": [
     {
       "type": "BSD",
       "url": "https://github.com/yahoo/react-i13n/blob/master/LICENSE.md"
     }
-  ],
-  "nyc": {
-    "exclude": [
-      "tests/*"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  }
+  ]
 }

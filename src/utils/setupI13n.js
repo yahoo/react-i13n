@@ -1,17 +1,20 @@
 /**
- * Copyright 2015, Yahoo Inc.
+ * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-'use strict';
 
-var ComponentSpecs = require('../libs/ComponentSpecs');
-var React = require('react');
-var ReactI13n = require('../libs/ReactI13n');
-var augmentComponent = require('./augmentComponent');
-var hoistNonReactStatics = require('hoist-non-react-statics');
-var IS_CLIENT = typeof window !== 'undefined';
-var debugLib = require('debug');
-var debug = debugLib('ReactI13n');
+import React from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
+
+import { IS_CLIENT } from './variables';
+import augmentComponent from './augmentComponent';
+import getDisplayName from './getDisplayName';
+import pickSpecs from '../libs/ComponentSpecs';
+import ReactI13n from '../libs/ReactI13n';
+
+const debugLib = require('debug');
+
+const debug = debugLib('ReactI13n');
 
 /**
  * Create an app level component with i13n setup
@@ -25,70 +28,68 @@ var debug = debugLib('ReactI13n');
  * @param {Array} plugins plugins
  * @method setupI13n
  */
-module.exports = function setupI13n (Component, options, plugins) {
-    options = options || {};
-    plugins = plugins || [];
-    
-    if (!plugins.length) {
-        debug('no plugins provided');
+function setupI13n(Component, options = {}, plugins = []) {
+  if (!plugins.length) {
+    debug('no plugins provided');
+  }
+
+  class RootI13nComponent extends React.Component {
+    constructor(props) {
+      super(props);
+      const reactI13n = new ReactI13n(options);
+      this._reactI13nInstance = reactI13n;
+      // we might have case to access reactI13n instance to execute event outside react components
+      // assign reactI13n to window
+      if (IS_CLIENT) {
+        // put in componentDidMount will be too slow
+        window._reactI13nInstance = this._reactI13nInstance;
+      }
+      plugins.forEach((plugin) => {
+        reactI13n.plug(plugin);
+      });
+      reactI13n.createRootI13nNode();
     }
 
-    class RootI13nComponent extends React.Component {
-        constructor(props) {
-            super(props);
-        }
-        
-        componentWillMount () {
-            var reactI13n = new ReactI13n(options);
-            this._reactI13nInstance = reactI13n;
-            // we might have case to access reactI13n instance to execute event outside react components
-            // assign reactI13n to window
-            if (IS_CLIENT) {
-                window._reactI13nInstance = reactI13n;
-            }
-            plugins.forEach(function setPlugin(plugin) {
-                reactI13n.plug(plugin);
-            });
-            reactI13n.createRootI13nNode();
-        }
-
-        render () {
-            var props = Object.assign({}, this.props);
-            if (!options.skipUtilFunctionsByProps) {
-                props.i13n = {
-                    executeEvent: this.executeI13nEvent.bind(this),
-                    getI13nNode: this.getI13nNode.bind(this),
-                    reactI13nInstance: this._reactI13nInstance
-                };
-            }
-            return React.createElement(
-                Component,
-                props,
-                props.children
-            );
-        }
+    render() {
+      const props = Object.assign({}, this.props);
+      if (!options.skipUtilFunctionsByProps) {
+        props.i13n = {
+          executeEvent: this.executeI13nEvent.bind(this),
+          getI13nNode: this.getI13nNode.bind(this),
+          reactI13nInstance: this._reactI13nInstance
+        };
+      }
+      return React.createElement(Component, props, props.children);
     }
-    
-    var specs = ComponentSpecs.pickSpecs({
-        prototype: [
-            'getChildContext',
-            'executeI13nEvent',
-            'getI13nNode',
-            '_getReactI13n',
-            '_getParentI13nNode',
-        ],
-        static: [
-            'contextTypes',
-            'childContextTypes'
-        ]
-    });
+  }
 
-    var componentName = Component.displayName || Component.name;
-    augmentComponent(RootI13nComponent, specs.prototype, Object.assign({}, specs.static, {
-        displayName: options.displayName || ('RootI13n' + componentName)
-    }));
- 
-    hoistNonReactStatics(RootI13nComponent, Component);
+  const specs = pickSpecs({
+    prototype: [
+      'getChildContext',
+      'executeI13nEvent',
+      'getI13nNode',
+      '_getReactI13n',
+      '_getParentI13nNode'
+    ],
+    static: ['contextTypes', 'childContextTypes']
+  });
 
-    return RootI13nComponent;
-};
+  const componentName = getDisplayName(Component);
+
+  augmentComponent(
+    RootI13nComponent,
+    specs.prototype,
+    Object.assign(
+      {
+        displayName: options.displayName || `RootI13n${componentName}`
+      },
+      specs.static
+    )
+  );
+
+  hoistNonReactStatics(RootI13nComponent, Component);
+
+  return RootI13nComponent;
+}
+
+export default setupI13n;
