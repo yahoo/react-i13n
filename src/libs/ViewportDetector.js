@@ -58,8 +58,11 @@ ViewportDetector.prototype._detectViewport = function () {
   }
   const rect = this._element.getBoundingClientRect();
 
-// Detect Screen Bottom                           // Detect Screen Top                         //Detect Screen Right
-if (rect.top < innerHeight + this._margins.top && rect.bottom > 0 - this._margins.bottom && rect.right <= (window.innerWidth || document.documentElement.clientWidth)) {
+// Detect Screen Bottom                           // Detect Screen Top
+if (rect.top < innerHeight + this._margins.top && rect.bottom > 0 - this._margins.bottom &&
+    rect.left <= (window.pageXOffset + window.innerWidth) &&  //Detect screen left
+    rect.right <=(window.innerWidth || document.documentElement.clientWidth)){ //Detect if item fully in view horizontally
+    
     this._enteredViewport = true;
     this.unsubscribeAll();
     this._onEnterViewport && this._onEnterViewport();
