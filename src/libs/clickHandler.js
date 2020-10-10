@@ -5,55 +5,46 @@
 
 import isUndefined from '../utils/isUndefined';
 
-function isLeftClickEvent(e) {
-  return e.button === 0;
-}
+const isLeftClickEvent = (e) => e.button === 0;
+const isModifiedEvent = (e) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 
-function isModifiedEvent(e) {
-  return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
-}
+const getLinkTarget = (target, props) => props.target || (target?.target) || '_self';
+const isNewWindow = (target, props) => getLinkTarget(target, props) === '_blank';
 
-function getLinkTarget(target, props) {
-  return props.target || (target?.target) || '_self';
-}
-
-function isNewWindow(target, props) {
-  return getLinkTarget(target, props) === '_blank';
-}
-
-function isDefaultRedirectLink(target) {
-  let defaultRedirectLink = false;
+const isLink = (target) => target.tagName === 'A';
+const isButtonLike = (target) => {
   const { tagName, type } = target;
+  if (tagName === 'BUTTON') {
+    return true;
+  }
+  // input with submit or button type
+  if (tagName === 'INPUT' && (type === 'submit' || type === 'button')) {
+    return true;
+  }
+}
+
+const isDefaultRedirectLink = (target) => {
   // if it's a
   // 1. link
   // 2. button
   // 3. input with submit or button type
   // then redirect it by default, otherwise
-  if (tagName === 'A' || tagName === 'BUTTON') {
-    defaultRedirectLink = true;
+  const { tagName, type } = target;
+  if (isLink(target) || isButtonLike(target)) {
+    return true;
   }
-  if (tagName === 'INPUT' && (type === 'submit' || type === 'button')) {
-    defaultRedirectLink = true;
-  }
-  return defaultRedirectLink;
+
+  return false;
 }
 
-function isFormSubmit(target) {
-  let formSubmit = false;
-  const {
-    tagName,
-    type
-  } = target;
+const isFormSubmit = (target) => {
   // if it's a
   // 1. button
   // 2. input with submit or button type
-  if (
-    tagName === 'BUTTON'
-    || (tagName === 'INPUT' && (type === 'submit' || type === 'button'))
-  ) {
-    formSubmit = true;
+  if (isButtonLike(target)) {
+    return true;
   }
-  return formSubmit;
+  return false;
 }
 
 /**
@@ -63,13 +54,15 @@ function isFormSubmit(target) {
  */
 const clickHandler = (e, options = {}) => {
   const target = e.target || e.srcElement;
+  const isForm = isFormSubmit(target);
+
   let isRedirectLink = isDefaultRedirectLink(target);
   let isPreventDefault = true;
 
   const {
     executeEvent,
     i13nNode,
-    props,
+    props = {},
     shouldFollowLink
    } = options;
 
@@ -84,11 +77,15 @@ const clickHandler = (e, options = {}) => {
   href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
-  isRedirectLink = shouldFollowLink?.(props) ?? follow;
+  isRedirectLink = (shouldFollowLink?.(props) ?? follow) ?? isRedirectLink;
 
-  // if it's not an anchor or this is a hash link url for page's internal links.
+  // 1. if it is an anchor but no href or hash link
+  // 2. button without form submit
   // Do not trigger navigate action. Let browser handle it natively.
-  if (!href || (href && href[0] === '#')) {
+  if (
+    isLink(target) && (!href || (href && href[0] === '#')) ||
+    isButtonLike(target) && !target.form
+  ) {
     isRedirectLink = false;
     isPreventDefault = false;
   }
@@ -109,19 +106,19 @@ const clickHandler = (e, options = {}) => {
   }
 
   executeEvent('click', { i13nNode, e }, () => {
+    if (isFormSubmit(target)) {
+      target.form?.submit();
+    }
+
     if (isRedirectLink) {
-      if (isFormSubmit(target)) {
-        // if the button has no form linked, then do nothing
-        target.form && target.form.submit();
+      const linkTarget = getLinkTarget(target, props);
+
+      if (linkTarget === '_top') {
+        window.top.location.href = href;
+      } else if (linkTarget === '_parent') {
+        window.parent.location.href = href;
       } else {
-        const linkTarget = getLinkTarget(target, props);
-        if (linkTarget === '_top') {
-          window.top.location.href = href;
-        } else if (linkTarget === '_parent') {
-          window.parent.location.href = href;
-        } else {
-          document.location.assign(href);
-        }
+        window.location.assign(href);
       }
     }
   });

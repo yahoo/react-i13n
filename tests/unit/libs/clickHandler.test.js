@@ -2,305 +2,271 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-
 import I13nNode from '../../../src/libs/I13nNode';
 import clickHandler from '../../../src/libs/clickHandler';
 
 let mockClickEvent;
-let mockComponent;
+let mockOptions;
 
 describe('clickHandler', () => {
+  const windowLocation = window.location;
+  const windowParent = window.parent;
+
   beforeEach(() => {
-    global.window = {
-      parent: {
-        location: {
-          href: 'about:blank'
-        }
-      },
-      top: {
-        location: {
-          href: 'about:blank'
-        }
-      }
+    // http://fb.me/react-polyfills
+    global.requestAnimationFrame = (callback) => {
+      setTimeout(callback, 0);
     };
-    global.document = {
+
+    delete window.location;
+    delete window.parent;
+
+    window.location = {
+      assign: jest.fn()
+    };
+    window.parent = {
+      top: {
+        href: 'about:blank'
+      },
       location: {
-        assign(href) {
-          this.href = href;
-        },
         href: 'about:blank'
       }
     };
 
     mockClickEvent = {
       target: {},
-      button: 0
+      button: 0,
+      preventDefault: jest.fn()
     };
-    mockComponent = {
-      props: {
-        href: 'foo'
-      },
-      _shouldFollowLink() {
-        return this.props.follow;
-      }
+
+    mockOptions = {
+      executeEvent: jest.fn(),
+      i13nNode: new I13nNode(null, {}),
+      props: {},
+      shouldFollowLink: ({ follow }) => follow
     };
   });
 
   afterEach(() => {
-    delete global.window;
-    delete global.document;
+    window.location = windowLocation;
+    window.parent = windowParent;
   });
 
   it('should run click handler correctly', (done) => {
-    const i13nNode = new I13nNode(null, {});
-    mockClickEvent.preventDefault = jest.fn();
-    mockComponent.executeI13nEvent = function () {
-      // simply done here to make sure it goes to the executeI13nEvent
+    mockOptions.executeEvent = (eventName) => {
+      expect(eventName).toEqual('click');
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should run click handler correctly if target is an a tag', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockClickEvent.target = {
-      tagName: 'A'
-    };
-    mockClickEvent.preventDefault = function () {
-      executedActions.push('preventDefault');
-    };
-    document.location.assign = function () {
+    window.location.assign = (href) => {
       executedActions.push('assign');
       expect(executedActions).toEqual(['preventDefault', 'assign']);
       done();
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      callback();
+
+    mockClickEvent.target = {
+      tagName: 'A',
+      href: 'https://foobar.com'
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
+    mockClickEvent.preventDefault = () => {
+      executedActions.push('preventDefault');
     };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    mockOptions.executeEvent = (a, b, callback) => { callback(); };
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should run click handler correctly if target is an button', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
+
     mockClickEvent.target = {
-      tagName: 'BUTTON'
+      tagName: 'BUTTON',
+      form: {
+        submit() {
+          executedActions.push('submit');
+          expect(executedActions).toEqual(['preventDefault', 'submit']);
+          done();
+        }
+      }
     };
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    mockClickEvent.target.form = {
-      submit() {
-        executedActions.push('submit');
-        expect(executedActions).toEqual(['preventDefault', 'submit']);
-        done();
-      }
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should run click handler correctly if target is input with submit', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
     mockClickEvent.target = {
       tagName: 'INPUT',
-      type: 'submit'
-    };
-    mockClickEvent.preventDefault = function () {
-      executedActions.push('preventDefault');
-    };
-    mockClickEvent.target.form = {
-      submit() {
-        executedActions.push('submit');
-        expect(executedActions).toEqual(['preventDefault', 'submit']);
-        done();
+      type: 'submit',
+      form: {
+        submit() {
+          executedActions.push('submit');
+          expect(executedActions).toEqual(['preventDefault', 'submit']);
+          done();
+        }
       }
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+    mockClickEvent.preventDefault = function () {
+      executedActions.push('preventDefault');
+    };
+
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should not follow it if follow is set to false', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockComponent.props.follow = false;
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      expect(executedActions).toEqual(['preventDefault']);
-      done();
-    };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
-  });
 
-  it('should not follow it if follow is set to false', (done) => {
-    const i13nNode = new I13nNode(null, {});
-    const executedActions = [];
-    mockComponent.props.follow = false;
-    mockClickEvent.preventDefault = function () {
-      executedActions.push('preventDefault');
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+    mockOptions.props.follow = false;
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       expect(executedActions).toEqual(['preventDefault']);
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should follow it while follow is set to true', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockComponent.props.follow = true;
-    mockClickEvent.preventDefault = function () {
-      executedActions.push('preventDefault');
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
-      callback();
-    };
-    document.location.assign = function () {
+    window.location.assign = function () {
       executedActions.push('assign');
       expect(executedActions).toEqual(['preventDefault', 'assign']);
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
+
+    mockClickEvent.preventDefault = function () {
+      executedActions.push('preventDefault');
     };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    mockOptions.props.follow = true;
+    mockOptions.executeEvent = function (eventName, payload, callback) {
+      callback();
+    };
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should simply execute event without prevent default and redirection if the link is #', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
     mockClickEvent.target = {
       tagName: 'A'
     };
-    mockComponent.props.href = '#';
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.props.href = '#';
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       expect(executedActions).toEqual([]);
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should simply execute event without prevent default and redirection is a modified click', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
     mockClickEvent.target = {
       tagName: 'A'
     };
     mockClickEvent.metaKey = true;
-    mockComponent.props.href = '#';
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.props.href = '#';
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       expect(executedActions).toEqual([]);
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should simply execute event without prevent default and redirection if props.target=_blank', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
     mockClickEvent.target = {
       tagName: 'SPAN'
     };
-    mockComponent.props.target = '_blank';
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.props.target = '_blank';
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       expect(executedActions).toEqual([]);
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should execute event with prevent default and redirection if props.target=_top', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockClickEvent.target = {
-      tagName: 'A'
+    window.location.assign = function () {
+      executedActions.push('assign');
     };
-    mockComponent.props.target = '_top';
+
+    mockClickEvent.target = {
+      tagName: 'A',
+      href: 'foo'
+    };
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    document.location.assign = function () {
-      executedActions.push('assign');
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.props.target = '_top';
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.top.location.href).toEqual('foo');
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 
   it('should execute event with prevent default and redirection if props.target=_parent', (done) => {
-    const i13nNode = new I13nNode(null, {});
     const executedActions = [];
-    mockClickEvent.target = {
-      tagName: 'A'
+    window.location.assign = function () {
+      executedActions.push('assign');
     };
-    mockComponent.props.target = '_parent';
+
+    mockClickEvent.target = {
+      tagName: 'A',
+      href: 'foo'
+    };
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
-    document.location.assign = function () {
-      executedActions.push('assign');
-    };
-    mockComponent.executeI13nEvent = function (eventName, payload, callback) {
+
+    mockOptions.props.target = '_parent';
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.parent.location.href).toEqual('foo');
       done();
     };
-    mockComponent.getI13nNode = function () {
-      return i13nNode;
-    };
-    clickHandler.apply(mockComponent, [mockClickEvent]);
+
+    clickHandler(mockClickEvent, mockOptions);
   });
 });

@@ -21,7 +21,7 @@
     "lint": "eslint src",
     "prepublish": "npm run dist",
     "test": "jest tests/unit --coverage --coverageReporters=lcov",
-    "unit": "jest tests/unit/utils/setupI13n.test.js"
+    "unit": "jest tests/unit/libs/clickHandler.test"
   },
   "dependencies": {
     "debug": "^4.1.1",
