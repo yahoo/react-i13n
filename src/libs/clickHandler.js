@@ -106,19 +106,19 @@ const clickHandler = (e, options = {}) => {
   }
 
   executeEvent('click', { i13nNode, e }, () => {
-    if (isFormSubmit(target)) {
-      target.form?.submit();
-    }
-
     if (isRedirectLink) {
-      const linkTarget = getLinkTarget(target, props);
-
-      if (linkTarget === '_top') {
-        window.top.location.href = href;
-      } else if (linkTarget === '_parent') {
-        window.parent.location.href = href;
+      if (isFormSubmit(target)) {
+        target.form?.submit();
       } else {
-        window.location.assign(href);
+        const linkTarget = getLinkTarget(target, props);
+
+        if (linkTarget === '_top') {
+          window.top.location.href = href;
+        } else if (linkTarget === '_parent') {
+          window.parent.location.href = href;
+        } else {
+          window.location.assign(href);
+        }
       }
     }
   });
