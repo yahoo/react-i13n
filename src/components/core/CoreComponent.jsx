@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import {
+import React, {
   useContext,
   useEffect,
   useRef,
@@ -17,7 +17,7 @@ import useScanLinks from '../../hooks/useScanLinks';
 
 import I13nContext from './I13nContext';
 
-const I13nComponent = (props) => {
+const CoreComponent = (props) => {
   const {
     bindClickEvent,
     children,
@@ -61,17 +61,13 @@ const I13nComponent = (props) => {
     }
 
     return () => {
-      if (clickEventListener) {
-        clickEventListener.unsubscribe();
-      }
+      clickEventListener?.unsubscribe();
     };
   }, [bindClickEvent, i13nNode, executeEvent, DOMNode]);
 
   // update modal if changes
   useEffect(() => {
-    if (i13nNode) {
-      i13nNode.updateModel(i13nModel);
-    }
+    i13nNode?.updateModel(i13nModel);
   }, [i13nNode, i13nModel])
 
   useScanLinks({
@@ -79,7 +75,7 @@ const I13nComponent = (props) => {
     executeEvent,
     i13nInstance,
     i13nNode,
-    node: i13nNode.getDOMNode(),
+    node: i13nNode?.getDOMNode(),
     shouldFollowLink,
     tags
   });
@@ -109,4 +105,4 @@ const I13nComponent = (props) => {
   );
 };
 
-export default I13nComponent;
+export default CoreComponent;

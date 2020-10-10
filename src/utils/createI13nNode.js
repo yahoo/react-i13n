@@ -10,7 +10,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import getDisplayName from './getDisplayName';
 import warnAndPrintTrace from './warnAndPrintTrace';
 
-import I13nComponent from '../components/core/I13nComponent';
+import CoreComponent from '../components/core/CoreComponent';
 import I13nContext from '../components/core/I13nContext';
 
 import useI13nNode from '../hooks/useI13nNode';
@@ -76,11 +76,11 @@ function createI13nNode(Component, defaultProps, options = {}) {
     };
 
     const node = useMemo(() => (
-      <I13nComponent {...i13nProps}>
+      <CoreComponent {...i13nProps}>
         <Component {...restProps}>
           {children}
         </Component>
-      </I13nComponent>
+      </CoreComponent>
     ), [
       bindClickEvent,
       follow,
@@ -114,7 +114,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
     );
   }
 
-  I13nComponentWrapper.displayName = options.displayName ?? componentName;
+  I13nComponentWrapper.displayName = options.displayName ?? `I13n${componentName}`;
 
   I13nComponentWrapper.defaultProps = {
     i13nModel: undefined,

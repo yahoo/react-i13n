@@ -61,7 +61,7 @@ function isFormSubmit(target) {
  * @param {Object} e the click event
  * @method ClickHandler
  */
-const clickHandler = (e, options) => {
+const clickHandler = (e, options = {}) => {
   const target = e.target || e.srcElement;
   let isRedirectLink = isDefaultRedirectLink(target);
   let isPreventDefault = true;
