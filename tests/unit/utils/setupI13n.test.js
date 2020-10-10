@@ -3,11 +3,11 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component, useContext } from 'react';
 import { render } from '@testing-library/react';
 
 import setupI13n from '../../../src/utils/setupI13n';
+import I13nContext from '../../../src/components/core/I13nContext';
 
 const mockData = {
   options: {},
@@ -16,27 +16,6 @@ const mockData = {
     name: 'test'
   }
 };
-
-// https://jestjs.io/docs/en/es6-class-mocks
-jest.mock('../../../src/libs/ReactI13n', () => jest.fn().mockImplementation(() => {
-  const _plugins = [];
-  const _options = {};
-  let _rootI13nNode = {};
-  mockData.reactI13n = {};
-  mockData.reactI13n._options = _options;
-  mockData.reactI13n._plugins = _plugins;
-  mockData.reactI13n._rootI13nNode = _rootI13nNode;
-
-  return {
-    getInstance: () => mockData.reactI13n,
-    plug: (plugin) => {
-      _plugins.push(plugin);
-    },
-    createRootI13nNode: () => {
-      _rootI13nNode = {};
-    }
-  };
-}));
 
 describe('setupI13n', () => {
   beforeEach(() => {
@@ -47,17 +26,21 @@ describe('setupI13n', () => {
   });
 
   it('should generate a component with setupI13n', () => {
-    const TestApp = () => <div />;
+    let testContext;
+    const TestApp = () => {
+      const context = useContext(I13nContext);
+      testContext = context;
+      return <div />;
+    };
     TestApp.displayName = 'TestApp';
 
     // check the initial state is correct after render
     const I13nTestApp = setupI13n(TestApp, mockData.options, [mockData.plugin]);
     expect(I13nTestApp.displayName).toEqual('RootI13nTestApp');
     render(<I13nTestApp />);
-
-    expect(mockData.reactI13n._options).toEqual(mockData.options);
-    expect(mockData.reactI13n._plugins[0]).toEqual(mockData.plugin);
-    expect(typeof mockData.reactI13n._rootI13nNode).toEqual('object');
+    const reactI13n = testContext.i13nInstance;
+    expect(reactI13n._plugins.test).toEqual(mockData.plugin);
+    expect(typeof reactI13n._rootI13nNode).toEqual('object');
   });
 
   it('should generate a component with setupI13n and custom display name', () => {
@@ -69,44 +52,20 @@ describe('setupI13n', () => {
     expect(I13nTestApp.displayName).toEqual('CustomName');
   });
 
-  it('should get i13n util functions via both props and context', (done) => {
-    class TestApp extends React.Component {
+  it('should get i13n util functions via context', (done) => {
+    class TestApp extends Component {
       static displayName = 'TestApp';
 
-      static contextTypes = {
-        i13n: PropTypes.object
-      };
+      static contextType = I13nContext;
 
       render() {
-        expect(typeof this.props.i13n).toEqual('object');
-        expect(typeof this.props.i13n.executeEvent).toEqual('function');
-        expect(typeof this.props.i13n.getI13nNode).toEqual('function');
-        expect(typeof this.context.i13n).toEqual('object');
-        expect(typeof this.context.i13n.executeEvent).toEqual('function');
-        expect(typeof this.context.i13n.getI13nNode).toEqual('function');
+        expect(typeof this.context.i13nInstance).toEqual('object');
+        expect(typeof this.context.executeEvent).toEqual('function');
         done();
         return <div />;
       }
     }
     const I13nTestApp = setupI13n(TestApp, [mockData.plugin]);
     render(<I13nTestApp />);
-  });
-
-  it('should not get i13n util functions via props if skipUtilFunctionsByProps=true', (done) => {
-    class TestApp extends React.Component {
-      static displayName = 'TestApp';
-
-      static contextTypes = {
-        i13n: PropTypes.object
-      };
-
-      render() {
-        expect(this.props.i13n).toBeUndefined();
-        done();
-        return <div />;
-      }
-    }
-    const I13nTestApp = setupI13n(TestApp, { skipUtilFunctionsByProps: true }, [mockData.plugin]);
-    render(<TestApp />);
   });
 });

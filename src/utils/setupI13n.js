@@ -22,12 +22,13 @@ const debug = debugLib('ReactI13n');
 /**
  * Create an app level component with i13n setup
  * @param {Object} Component the top level component
+ *
  * @param {Object} options passed into ReactI13n
  * @param {Boolean} options.isViewportEnabled if enable viewport checking
  * @param {Object} options.rootModelData model data of root i13n node
  * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
  * @param {Object} options.displayName display name of the wrapper component
- * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
+ *
  * @param {Array} plugins plugins
  * @method setupI13n
  */
@@ -36,7 +37,7 @@ function setupI13n(Component, options = {}, plugins = []) {
     debug('no plugins provided');
   }
 
-  const { displayName, skipUtilFunctionsByProps } = options;
+  const { displayName } = options;
 
   const RootI13nComponent = (props) => {
     const {
@@ -67,23 +68,6 @@ function setupI13n(Component, options = {}, plugins = []) {
       parentI13nNode
     });
 
-    // if (!skipUtilFunctionsByProps) {
-    //   props.i13n = {
-    //     executeEvent: this.executeI13nEvent.bind(this),
-    //     getI13nNode: this.getI13nNode.bind(this),
-    //     reactI13nInstance: this._reactI13nInstance
-    //   };
-    // }
-
-    const propsToPass = {
-      ...restProps,
-      ...(!skipUtilFunctionsByProps ? {
-        i13n: {
-
-        }
-      }: {})
-    };
-
     const contextValue = {
       executeEvent,
       i13nInstance: reactI13n,
@@ -93,7 +77,7 @@ function setupI13n(Component, options = {}, plugins = []) {
 
     return (
       <I13nContext.Provider value={contextValue}>
-        <Component {...propsToPass}>
+        <Component {...props}>
           {children}
         </Component>
       </I13nContext.Provider>

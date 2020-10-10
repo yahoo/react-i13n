@@ -20,7 +20,7 @@ The `high order component` integrates the functionalities of i13n, it returns a 
 - `options` - options object
 - `options.displayName` - display name of the wrapper component, will fallback to `I13n` + original display name
 - `options.refToWrappedComponent` - ref to the wrapped component, then you can use `{i13nComponent}.refs[options.refToWrappedComponent]` to access the wrapped component.
-- `options.skipUtilFunctionsByProps` - true to prevent i13n util function to be passed via `props.i13n`
+
 
 For example, if you want to enable link tracking, you will need to create an anchor with the `createI13nNode` and enable the click tracking.
 

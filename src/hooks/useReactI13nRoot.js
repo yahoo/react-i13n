@@ -12,7 +12,6 @@ import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 /*
  * @param {Object} options passed into ReactI13n
  * @param {Boolean} options.isViewportEnabled if enable viewport checking
- * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @param {Object} options.displayName display name of the wrapper component
  * @param {Object} options.i13nNodeClass the i13nNode class, you can inherit it with your own functionalities
  * @param {Object} options.rootModelData model data of root i13n node
@@ -26,6 +25,7 @@ const useReactI13n = (options) => {
       const reactI13n = new ReactI13n(options);
       reactI13n.i13nInstance = reactI13n;
       i13nInstance.current = reactI13n;
+
       setInstance(reactI13n);
 
       if (IS_CLIENT && !IS_PROD) {

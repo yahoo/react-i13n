@@ -380,27 +380,6 @@ describe('createI13nNode', () => {
     expect(I13nTestComponent).toEqual(null);
   });
 
-  it('should not get any i13n related props on wrapped component if skipUtilFunctionsByProps=true', (done) => {
-    const TestComponent = (props) => {
-      const {
-        i13n, i13nModal, follow, isLeafNode, bindClickEvent, scanLinks
-      } = props;
-
-      expect(i13n).toBeUndefined();
-      expect(i13nModal).toBeUndefined();
-      expect(follow).toBeUndefined();
-      expect(isLeafNode).toBeUndefined();
-      expect(bindClickEvent).toBeUndefined();
-      expect(scanLinks).toBeUndefined();
-      done();
-
-      return <div />;
-    };
-
-    const I13nTestComponent = createI13nNode(TestComponent, {}, { skipUtilFunctionsByProps: true });
-    render(<I13nTestComponent i13nModel={{ sec: 'foo' }} />);
-  });
-
   it('should get i13n util functions via both props and context', (done) => {
     const TestComponent = (props, context) => {
       const { i13n } = props;
