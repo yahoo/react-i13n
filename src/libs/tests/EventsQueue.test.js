@@ -4,7 +4,7 @@
  */
 /* globals describe, it, beforeEach, afterEach */
 
-import EventsQueue from '../../../src/libs/EventsQueue';
+import EventsQueue from '../EventsQueue';
 
 describe('EventsQueue', () => {
   it('should be created correctly', () => {

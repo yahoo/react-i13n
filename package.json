@@ -21,7 +21,7 @@
     "lint": "eslint src",
     "prepublish": "npm run dist",
     "test": "jest tests/unit --coverage --coverageReporters=lcov",
-    "unit": "jest src/core"
+    "unit": "jest src"
   },
   "dependencies": {
     "debug": "^4.1.1",

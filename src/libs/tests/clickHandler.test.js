@@ -2,7 +2,7 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-import I13nNode from '../../../src/libs/I13nNode';
+import I13nNode from '../../core/I13nNode';
 import clickHandler from '../clickHandler';
 
 let mockClickEvent;
