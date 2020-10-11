@@ -5,7 +5,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import I13nNode from '../libs/I13nNode';
+import I13nNode from '../core/I13nNode';
 
 const useI13nNode = ({
   i13nInstance: reactI13n,

@@ -11,7 +11,7 @@ module.exports = {
 
   // Utils
   createI13nNode: require('./dist/utils/createI13nNode').default,
-  setupI13n: require('./dist/utils/setupI13n').default,
+  setupI13n: require('./dist/core/setupI13n').default,
 
   // I13n Components
   I13nAnchor: require('./dist/components/I13nAnchor').default,

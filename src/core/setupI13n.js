@@ -9,10 +9,11 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import { IS_CLIENT } from '../utils/variables';
 import getDisplayName from '../utils/getDisplayName';
 import I13nContext from '../components/core/I13nContext';
-import ReactI13n from '../libs/ReactI13n';
 
 import useI13nNode from '../hooks/useI13nNode';
 import useReactI13nRoot from '../hooks/useReactI13nRoot';
+
+import ReactI13n from './ReactI13n';
 
 const debugLib = require('debug');
 const debug = debugLib('ReactI13n');
@@ -36,14 +37,16 @@ function setupI13n(Component, options = {}, plugins = []) {
     debug('no plugins provided');
   }
 
-  const { displayName } = options;
+  const {
+    displayName,
+    skipUtilFunctionsByProps
+  } = options;
 
   const RootI13nComponent = (props) => {
     const {
       children,
       i13nModel,
       isLeafNode,
-      skipUtilFunctionsByProps = false,
       ...restProps
     } = props;
 
@@ -68,16 +71,21 @@ function setupI13n(Component, options = {}, plugins = []) {
       parentI13nNode
     });
 
-    const contextValue = useMemo(() => {
+    const contextValue = useMemo(() => ({
       executeEvent,
-      i13nInstance,
+      i13nInstance: reactI13n,
       i13nNode,
       parentI13nNode
-    }, [executeEvent, i13nInstance, i13nNode, parentI13nNode]);
+    }), [executeEvent, reactI13n, i13nNode, parentI13nNode]);
 
     return (
-      <I13nContext.Provider value={contextValue}>
-        <Component {...props} i13n={!skipUtilFunctionsByProps ? contextValue : undefined}>
+      <I13nContext.Provider
+        value={contextValue}
+      >
+        <Component
+          {...restProps}
+          i13n={!skipUtilFunctionsByProps ? contextValue : undefined}
+        >
           {children}
         </Component>
       </I13nContext.Provider>

@@ -4,7 +4,7 @@
  */
 
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
-import EventsQueue from './EventsQueue';
+import EventsQueue from '../libs/EventsQueue';
 import I13nNode from './I13nNode';
 
 import isUndefined from '../utils/isUndefined';
@@ -101,17 +101,17 @@ class ReactI13n {
         .then(
           () => {
             clearTimeout(handlerTimeout);
-            callback.?();
+            callback?.();
           },
           (e) => {
             clearTimeout(handlerTimeout);
             debug('execute event failed', e);
-            callback.?();
+            callback?.();
           }
         );
     } else {
       // if there's no handlers, execute callback directly
-      callback.?();
+      callback?.();
     }
   };
 
@@ -194,7 +194,7 @@ class ReactI13n {
 
   getScrollableContainerDOMNode() {
     if (this._scrollableContainerId) {
-      return document && document.getElementById(this._scrollableContainerId);
+      return document?.getElementById(this._scrollableContainerId);
     }
   }
 

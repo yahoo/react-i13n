@@ -3,11 +3,11 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import I13nNodeLib from './dist-es/libs/I13nNode';
-import ReactI13nLib, { getInstance as getInstanceLib } from './dist-es/libs/ReactI13n';
+import I13nNodeLib from './dist-es/core/I13nNode';
+import ReactI13nLib, { getInstance as getInstanceLib } from './dist-es/core/ReactI13n';
 
 import createI13nNodeLib from './dist-es/utils/createI13nNode';
-import setupI13nLib from './dist-es/utils/setupI13n';
+import setupI13nLib from './dist-es/core/setupI13n';
 
 import I13nAnchorLib from './dist-es/components/I13nAnchor';
 import I13nButtonLib from './dist-es/components/I13nButton';

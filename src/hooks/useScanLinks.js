@@ -16,7 +16,7 @@ import { IS_DEBUG_MODE } from '../utils/variables';
 import clickHandler from '../libs/clickHandler';
 import DebugDashboard from '../libs/DebugDashboard';
 
-import I13nNode from '../libs/I13nNode';
+import I13nNode from '../core/I13nNode';
 
 const DEFAULT_SCAN_TAGS = ['a', 'button'];
 

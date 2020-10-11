@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 import I13nNode from '../../../src/libs/I13nNode';
-import clickHandler from '../../../src/libs/clickHandler';
+import clickHandler from '../clickHandler';
 
 let mockClickEvent;
 let mockOptions;

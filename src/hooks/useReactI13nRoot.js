@@ -5,7 +5,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 
-import ReactI13n from '../libs/ReactI13n';
+import ReactI13n from '../core/ReactI13n';
 
 import { IS_CLIENT, IS_PROD } from '../utils/variables';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
