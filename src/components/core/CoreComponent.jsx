@@ -36,7 +36,10 @@ const CoreComponent = (props) => {
   } = useContext(I13nContext);
   const [DOMNode, setDOMNode] = useState();
 
-  const { enable: scanLinksEnabled, tags } = scanLinks;
+  const {
+    enable: scanLinksEnabled,
+    tags
+  } = scanLinks;
 
   // create event
   useEffect(() => {

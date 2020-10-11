@@ -5,11 +5,12 @@
 
 /* All the functionalities are tested with this higher order component */
 
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { render } from '@testing-library/react';
 
 import createI13nNode from '../../../src/utils/createI13nNode';
+import I13nContext from '../../../src/components/core/I13nContext';
 import I13nNode from '../../../src/libs/I13nNode';
 
 let rootI13nNode = null;
@@ -29,9 +30,6 @@ let mockSubscribeHandler = null;
 let mockSubscribers = [];
 const mockSubscribe = {};
 const mockClickHandler = jest.fn();
-
-const oldWarn = console.warn;
-const oldTrace = console.trace;
 
 jest.mock('subscribe-ui-event', () => ({
   subscribe: (eventName, handler) => {
@@ -69,47 +67,45 @@ describe('createI13nNode', () => {
     window.innerHeight = 100;
 
     rootI13nNode = new I13nNode(null, {});
-
-    // reset data
-    mockData.isViewportEnabled = false;
-    mockData.reactI13n = {
-      execute() {
-        return jest.fn();
-      },
-      getI13nNodeClass() {
-        return I13nNode;
-      },
-      getRootI13nNode() {
-        return rootI13nNode;
-      },
-      isViewportEnabled() {
-        return mockData.isViewportEnabled;
-      }
-    };
-    global.window._reactI13nInstance = mockData.reactI13n;
   });
 
   afterEach(() => {
-    console.warn = oldWarn;
-    console.trace = oldTrace;
     mockSubscribers = [];
     mockSubscribeHandler = null;
   });
 
-  it('should generate a component with createI13nNode', (done) => {
-    const TestComponent = () => <div />;
+  it.only('should generate a component with createI13nNode', () => {
+    let reactI13nInstance;
+
+    const TestComponent = () => {
+      const {
+        executeEvent,
+        i13nInstance
+      } = useContext(I13nContext);
+
+      reactI13nInstance = i13nInstance;
+
+      return <div />;
+    };
+
     TestComponent.displayName = 'TestComponent';
 
     // check the initial state is correct after render
     const I13nTestComponent = createI13nNode(TestComponent);
-    mockData.reactI13n.execute = function (eventName) {
-      // should get a created event
-      expect(eventName).toEqual('created');
-      done();
-    };
+    // mockData.reactI13n.execute = function (eventName) {
+    //   // should get a created event
+    //   expect(eventName).toEqual('created');
+    //   done();
+    // };
     expect(I13nTestComponent.displayName).toEqual('I13nTestComponent');
-    render(<I13nTestComponent i13nModel={{ sec: 'foo' }} />);
-    expect(rootI13nNode.getChildrenNodes()[0].getModel()).toEqual({ sec: 'foo' });
+
+    render(
+      <I13nTestComponent
+        i13nModel={{ sec: 'foo' }}
+      />
+    );
+    console.log(reactI13nInstance);
+    // expect(rootI13nNode.getChildrenNodes()[0].getModel()).toEqual({ sec: 'foo' });
   });
 
   it('should generate a component with createI13nNode and custome name', () => {

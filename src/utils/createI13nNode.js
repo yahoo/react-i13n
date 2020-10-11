@@ -25,6 +25,7 @@ const isFunctionalComponent = TargetComponent => typeof TargetComponent === 'fun
  * @param {Object} options
  * @param {String} options.displayName display name
  * @param {String} options.refToWrappedComponent ref name to wrapped component
+ * @param {Boolean} options.skipUtilFunctionsByProps true to prevent i13n util function to be passed via props.i13n
  * @method createI13nNode
  */
 function createI13nNode(Component, defaultProps, options = {}) {

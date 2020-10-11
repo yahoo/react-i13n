@@ -46,7 +46,7 @@ in order to support all browsers and older versions of Node.js. We recommend usi
 * (Optionally) follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
 
 ```js
-import React from 'react';
+import React, { Component } from 'react';
 import {
   ReactI13n,
   createI13nNode,
@@ -55,34 +55,38 @@ import {
 import somePlugin from 'some-i13n-plugin'; // a plugin for a certain instrumentation mechanism
 
 // create a i13n anchor for link tracking
-// or you can use the mixin to track an existing component
 const I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
 
-class DemoApp extends React.Component {
-  componentWillMount () {
-    this.props.i13n.executeEvent('pageview', {}); // fire a custom event
+class DemoApp extends Component {
+  componentDidMount () {
+    // fire a custom event
+    this.props.i13n.executeEvent('pageview', {});
   }
 
   render() {
-      ...
+    <span>
       <I13nAnchor
         href="http://foo.bar"
-        i13nModel={{action: 'click', label: 'foo'}}
+        i13nModel={{
+          action: 'click',
+          label: 'foo'
+        }}
       >
         ...
       </I13nAnchor>
       // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
       // {site: 'foo', action: 'click', label: 'foo'}
+    </span>
   }
 };
 
 
 const I13nDempApp = setupI13n(DemoApp, {
-  rootModelData: {site: 'foo'},
+  rootModelData: { site: 'foo' },
   isViewportEnabled: true
 }, [somePlugin]);
 

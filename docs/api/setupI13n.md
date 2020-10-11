@@ -40,4 +40,4 @@ If you have multiple React trees in one page, we will create multiple i13n trees
 
 ### Util Functions
 
-You will get i13n util functions automatically via React context by using `setupI13n`, more detail please refer to [util functions](../guides/utilFunctions.md).
+`options.skipUtilFunctionsByProps` - true to prevent i13n util function to be passed via `props.i13n`

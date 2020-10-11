@@ -6,11 +6,11 @@
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
 import EventsQueue from './EventsQueue';
 import I13nNode from './I13nNode';
+
 import isUndefined from '../utils/isUndefined';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debugLib = require('debug');
-
 const debug = debugLib('ReactI13n');
 
 const DEFAULT_HANDLER_TIMEOUT = 1000;
@@ -84,6 +84,7 @@ class ReactI13n {
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     const promiseHandlers = this.getEventHandlers(eventName, payload);
+
     if (promiseHandlers && promiseHandlers.length > 0) {
       let handlerTimeout;
       promiseHandlers.push(
@@ -95,20 +96,22 @@ class ReactI13n {
         })
       );
       // promised execute all handlers if plugins and then call callback function
-      Promise.race(promiseHandlers).then(
-        () => {
-          clearTimeout(handlerTimeout);
-          callback && callback();
-        },
-        (e) => {
-          clearTimeout(handlerTimeout);
-          debug('execute event failed', e);
-          callback && callback();
-        }
-      );
+      Promise
+        .race(promiseHandlers)
+        .then(
+          () => {
+            clearTimeout(handlerTimeout);
+            callback.?();
+          },
+          (e) => {
+            clearTimeout(handlerTimeout);
+            debug('execute event failed', e);
+            callback.?();
+          }
+        );
     } else {
       // if there's no handlers, execute callback directly
-      callback && callback();
+      callback.?();
     }
   };
 
@@ -121,9 +124,10 @@ class ReactI13n {
     if (!plugin) {
       return;
     }
+    debug('setup plugin', plugin);
+
     this._plugins[plugin.name] = plugin;
     this._eventsQueues[plugin.name] = new EventsQueue(plugin);
-    debug('setup plugin', plugin);
   }
 
   /**
