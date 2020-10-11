@@ -14,24 +14,30 @@ function getJsonFromUrl() {
 
 const container = document.getElementById('container');
 const itemsNumber = getJsonFromUrl().items || 1;
+const placeholders = new Array(itemsNumber).fill();
 
 class I13nComponentLevel1 extends React.Component {
   render() {
-    const links = [];
-    for (let i = 0; i < itemsNumber; i++) {
+    const links = placeholders.map((item, i) => {
       const linkText = `Button Level1 ${i}`;
-      var linkSec = `level1-${i}`;
-      links.push(
-        <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{ sec: linkSec, lv1: 'foo' }}>
+      const linkSec = `level1-${i}`;
+      return (
+        <I13nButton
+          className="P(4px) M(4px) Bgc(#ececec)"
+          key={i}
+          i13nModel={{ sec: linkSec, lv1: 'foo' }}
+        >
           {linkText}
         </I13nButton>
       );
-    }
+    });
+
     const getModelData = function () {
       return {
         sec: 'dynamical-generated'
       };
     };
+
     return (
       <div className="P(4px) M(4px) Bgc(#d9edf7) I13nComponentLevel1">
         Level 1 Links
@@ -73,7 +79,7 @@ class I13nComponentLevel1 extends React.Component {
         <div className="P(4px) M(4px) Bgc(#ececec) NormalButton">
           <form action="/mock-destination-page.html">
             <input type="text" name="fname" />
-            <I13nButton i13nModel={{ sec: linkSec }} href="./mock-destination-page.html">
+            <I13nButton i13nModel={{ sec: `evel1-${itemsNumber}` }} href="./mock-destination-page.html">
               NormalButton
             </I13nButton>
           </form>
@@ -111,18 +117,18 @@ I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
 class I13nComponentLevel2 extends React.Component {
   render() {
-    const links = [];
-    for (let i = 0; i < itemsNumber; i++) {
+    const links = placeholders.map((item, i) => {
       const linkText = `Link Level2 ${i}`;
       const linkSec = `level2-${i}`;
-      links.push(
+      return (
         <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
           <I13nAnchor i13nModel={{ sec: linkSec, lv2: 'foo' }} follow={false} href="https://yahoo.com">
             {linkText}
           </I13nAnchor>
         </div>
       );
-    }
+    });
+
     return (
       <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2">
         Level 2 Links
@@ -144,18 +150,18 @@ class I13nComponentLevel2Hidden extends React.Component {
   };
 
   render() {
-    const links = [];
+    let links = [];
     if (this.state.expend) {
-      for (let i = 0; i < itemsNumber; i++) {
+      links = placeholders.map((item, i) => {
         const linkText = `Link Level2 Hidden ${i}`;
-        links.push(
+        return (
           <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
             <I13nAnchor href="/mock-destination-page.html" follow={false}>
               {linkText}
             </I13nAnchor>
           </div>
         );
-      }
+      });
     }
     return (
       <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden">
@@ -196,8 +202,10 @@ const testPlugin = {
         text: payload.i13nNode.getText(),
         position: payload.i13nNode.getPosition()
       });
+
       callback();
     },
+
     event(payload, callback) {
       // event handlers
       window.firedEvents.push({
@@ -205,6 +213,7 @@ const testPlugin = {
       });
       callback();
     },
+
     pageview(payload, callback) {
       if (payload.env === 'client') {
         // client side pageview handlers
@@ -216,6 +225,7 @@ const testPlugin = {
       }
       callback();
     },
+
     created(payload, callback) {
       // updated handlers
       window.firedEvents.push({

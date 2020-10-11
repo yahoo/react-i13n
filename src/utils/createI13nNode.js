@@ -74,20 +74,13 @@ function createI13nNode(Component, defaultProps, options = {}) {
       } : {})
     };
 
-    const node = useMemo(() => (
+    const node = (
       <CoreComponent {...i13nProps}>
         <Component {...restProps}>
           {children}
         </Component>
       </CoreComponent>
-    ), [
-      bindClickEvent,
-      follow,
-      i13n,
-      i13nModel,
-      isLeafNode,
-      scanLinks
-    ]);
+    );
 
     const {
       i13nNode

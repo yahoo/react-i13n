@@ -5,6 +5,7 @@
 
 // var debug = require('debug')('I13nNode');
 const TAG_PATTERN = /<[^>]*>/g;
+const getDOMText = (DOMNode) => DOMNode && (DOMNode.value || DOMNode.innerText || DOMNode.textContent || DOMNode.innerHTML);
 
 /**
  * I13nNode the virtual DOM Node used to build a I13n Tree for instrumentation
@@ -25,7 +26,9 @@ const I13nNode = function I13nNode(parentNode, model, isLeafNode, isViewportEnab
   if (typeof model === 'function') {
     this._model = model;
   } else {
-    this._model = Object.assign({}, model);
+    this._model = {
+      ...model
+    };
   }
 
   this._childrenNodes = []; // children nodes
@@ -104,7 +107,10 @@ I13nNode.prototype.getDOMNode = function getDOMNode() {
 I13nNode.prototype.getMergedModel = function getMergedModel(debugMode) {
   if (this._parentNode) {
     const parentModel = this._parentNode.getMergedModel(debugMode);
-    return Object.assign({}, parentModel, this.getModel(debugMode));
+    return {
+      ...parentModel,
+      ...this.getModel(debugMode)
+    };
   }
   return this.getModel(debugMode);
 };
@@ -116,20 +122,21 @@ I13nNode.prototype.getMergedModel = function getMergedModel(debugMode) {
  * @return {Object} the plain object model
  */
 I13nNode.prototype.getModel = function getModel(debugMode) {
-  const self = this;
   let model = null;
   let finalModel = null;
-  if (typeof self._model === 'function') {
-    model = self._model();
+  if (typeof this._model === 'function') {
+    model = this._model();
   } else {
-    model = self._model;
+    model = this._model;
   }
 
   // always return new object to prevent reference issue
-  finalModel = Object.assign({}, model);
+  finalModel = {
+    ...model
+  };
 
   if (debugMode) {
-    const DOMNode = self.getDOMNode();
+    const DOMNode = this.getDOMNode();
     // add the DOMNode to the returned model, so that it can be used in debug tool
     Object.keys(finalModel).forEach((index) => {
       finalModel[index] = {
@@ -172,12 +179,13 @@ I13nNode.prototype.getPosition = function getPosition() {
  * @param {Object} target the event target, would take the target's text then i13n node's text
  * @return {String} text of the node
  */
+
 I13nNode.prototype.getText = function getText(target) {
   const DOMNode = this.getDOMNode();
   if (!DOMNode && !target) {
     return '';
   }
-  let text = (target && (target.value || target.innerHTML)) || (DOMNode && (DOMNode.value || DOMNode.innerHTML));
+  let text = getDOMText(target) || getDOMText(DOMNode);
   if (text) {
     text = text.replace(TAG_PATTERN, '');
   }
@@ -291,7 +299,10 @@ I13nNode.prototype.updateModel = function updateModel(newModel) {
   if (typeof newModel === 'function') {
     this._model = newModel;
   } else {
-    this._model = Object.assign({}, this._model, newModel);
+    this._model = {
+      ...this._model,
+      ...newModel
+    };
   }
 };
 

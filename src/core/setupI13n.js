@@ -39,6 +39,9 @@ function setupI13n(Component, options = {}, plugins = []) {
 
   const {
     displayName,
+    i13nNodeClass,
+    isViewportEnabled,
+    rootModelData,
     skipUtilFunctionsByProps
   } = options;
 
