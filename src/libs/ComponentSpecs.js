@@ -264,7 +264,10 @@ const prototypeSpecs = {
     const reactI13n = this._getReactI13n();
     const containerId = this._i13nNode._model.scrollableContainerId;
     const container = document.getElementById(containerId);
-    
+
+    if (container) {
+      reactI13n._scrollableContainerId = containerId;
+    }
     if (reactI13n.getScrollableContainerDOMNode) {
       const domNode = reactI13n.getScrollableContainerDOMNode();
       if (domNode) {
