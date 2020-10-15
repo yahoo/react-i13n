@@ -41,6 +41,7 @@ const ViewportDetector = function ViewportDetector(element, options, onEnterView
   this._options = Object.assign({}, SUBSCRIBE_OPTIONS);
   if (options.target) {
     this._options.target = options.target;
+    this._options.touchMoveEndTarget = options.touchMoveEndTarget;
   }
   this._enteredViewport = false;
 };
@@ -83,6 +84,10 @@ ViewportDetector.prototype.init = function (skipInitDetection) {
 
   if (!this._enteredViewport) {
     this._subscribers = [subscribe('scrollEnd', this._detectViewport.bind(this), this._options)];
+    if (this._options.touchMoveEndTarget) {
+      this._subscribers.push(subscribe('touchmoveEnd', this._detectViewport.bind(this), Object.assign({}, this._options, {target: this._options.touchMoveEndTarget})));
+      
+  }
   }
 };
 

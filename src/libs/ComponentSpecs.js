@@ -266,6 +266,10 @@ const prototypeSpecs = {
       const domNode = reactI13n.getScrollableContainerDOMNode();
       if (domNode) {
         options.target = domNode;
+        if (container){
+            options.touchMoveEndTarget=container;
+         
+        }
       }
     }
     return options;
