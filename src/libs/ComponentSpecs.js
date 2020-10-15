@@ -262,13 +262,15 @@ const prototypeSpecs = {
       options.margins = margins;
     }
     const reactI13n = this._getReactI13n();
+    const containerId = this._i13nNode._model.scrollableContainerId;
+    const container = document.getElementById(containerId);
+    
     if (reactI13n.getScrollableContainerDOMNode) {
       const domNode = reactI13n.getScrollableContainerDOMNode();
       if (domNode) {
         options.target = domNode;
         if (container){
             options.touchMoveEndTarget=container;
-         
         }
       }
     }
