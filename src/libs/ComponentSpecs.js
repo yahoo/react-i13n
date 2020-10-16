@@ -261,21 +261,20 @@ const prototypeSpecs = {
     if (margins) {
       options.margins = margins;
     }
-    const reactI13n = this._getReactI13n();
+    var reactI13n = this._getReactI13n();
     const containerId = this._i13nNode._model.scrollableContainerId;
-    const container = document.getElementById(containerId);
-
-    if (container) {
-      reactI13n._scrollableContainerId = containerId;
-    }
     if (reactI13n.getScrollableContainerDOMNode) {
-      const domNode = reactI13n.getScrollableContainerDOMNode();
-      if (domNode) {
-        options.target = domNode;
-        if (container) {
-            options.touchMoveEndTarget = container;
+        const domNode = reactI13n.getScrollableContainerDOMNode();
+        if (domNode) {
+            options.target = domNode;             
         }
-      }
+    }
+    if (containerId) {
+        const touchMoveEndTarget = document.getElementById(containerId);
+        if (touchMoveEndTarget) {
+            reactI13n._scrollableContainerId = containerId;
+            options.touchMoveEndTarget = touchMoveEndTarget;
+        }
     }
     return options;
   },

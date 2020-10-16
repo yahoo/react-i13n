@@ -16,7 +16,8 @@ const PROPS_TO_FILTER = [
   'follow',
   'i13nModel',
   'isLeafNode',
-  'scanLinks'
+  'scanLinks',
+  'touchMoveEndTargetId'
 ];
 
 const isFunctionalComponent = TargetComponent => typeof TargetComponent === 'function';
