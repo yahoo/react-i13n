@@ -125,7 +125,6 @@ describe('I13nNode', () => {
     expect(i13nNodeChild1.getCustomAttribute('traversed')).toEqual(true);
     expect(i13nNodeChild2.getCustomAttribute('traversed')).toEqual(true);
     expect(i13nNodeChild3.getCustomAttribute('traversed')).toEqual(true);
-    expect(i13nNodeChild4.getCustomAttribute('traversed')).toEqual(true);
   });
 
   it('should remove child correctly', () => {
