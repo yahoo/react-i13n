@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom';
 
 import { IS_CLIENT, IS_PROD } from '../utils/variables';
 import I13nNode from '../core/I13nNode';
-import isUndefined from '../utils/isUndefined';
 import ViewportDetector from './ViewportDetector';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
