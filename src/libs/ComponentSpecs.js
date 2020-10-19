@@ -5,19 +5,15 @@
 
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { listen } from 'subscribe-ui-event';
 
-import { IS_CLIENT, IS_PROD, IS_DEBUG_MODE } from '../utils/variables';
-import clickHandler from './clickHandler';
-import DebugDashboard from './DebugDashboard';
-import I13nNode from './I13nNode';
+import { IS_CLIENT, IS_PROD } from '../utils/variables';
+import I13nNode from '../core/I13nNode';
 import isUndefined from '../utils/isUndefined';
 import ViewportDetector from './ViewportDetector';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debug = require('debug')('I13nComponent');
 
-const DEFAULT_SCAN_TAGS = ['a', 'button'];
 let pageInitViewportDetectionTimeout = null;
 
 const staticSpecs = {
