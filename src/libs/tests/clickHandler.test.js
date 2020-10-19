@@ -63,7 +63,7 @@ describe('clickHandler', () => {
 
   it('should run click handler correctly if target is an a tag', (done) => {
     const executedActions = [];
-    window.location.assign = (href) => {
+    window.location.assign = () => {
       executedActions.push('assign');
       expect(executedActions).toEqual(['preventDefault', 'assign']);
       done();
@@ -158,7 +158,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.follow = true;
-    mockOptions.executeEvent = function () {
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
     };
 
@@ -235,7 +235,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.target = '_top';
-    mockOptions.executeEvent = function () {
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.top.location.href).toEqual('foo');
@@ -260,7 +260,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.target = '_parent';
-    mockOptions.executeEvent = function () {
+    mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.parent.location.href).toEqual('foo');

@@ -103,7 +103,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
         {node}
       </I13nContext.Provider>
     );
-  }
+  };
 
   I13nComponentWrapper.displayName = options.displayName ?? `I13n${componentName}`;
 

@@ -2,13 +2,13 @@
  * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-const isLeftClickEvent = (e) => e.button === 0;
-const isModifiedEvent = (e) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+const isLeftClickEvent = e => e.button === 0;
+const isModifiedEvent = e => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 
 const getLinkTarget = (target, props) => props.target || (target?.target) || '_self';
 const isNewWindow = (target, props) => getLinkTarget(target, props) === '_blank';
 
-const isLink = (target) => target.tagName === 'A';
+const isLink = target => target.tagName === 'A';
 const isButtonLike = (target) => {
   const { tagName, type } = target;
   if (tagName === 'BUTTON') {
@@ -26,7 +26,6 @@ const isDefaultRedirectLink = (target) => {
   // 2. button
   // 3. input with submit or button type
   // then redirect it by default, otherwise
-  const { tagName, type } = target;
   if (isLink(target) || isButtonLike(target)) {
     return true;
   }
@@ -61,7 +60,7 @@ const clickHandler = (e, options = {}) => {
     i13nNode,
     props = {},
     shouldFollowLink
-   } = options;
+  } = options;
 
   if (!executeEvent) {
     return;
@@ -69,7 +68,7 @@ const clickHandler = (e, options = {}) => {
 
   const { follow } = props;
 
-  href = props.href || target.href;
+  const href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
   isRedirectLink = (shouldFollowLink?.(props) ?? follow) ?? isRedirectLink;
@@ -78,8 +77,8 @@ const clickHandler = (e, options = {}) => {
   // 2. button without form submit
   // Do not trigger navigate action. Let browser handle it natively.
   if (
-    isLink(target) && (!href || (href && href[0] === '#')) ||
-    isButtonLike(target) && !target.form
+    (isLink(target) && (!href || (href && href[0] === '#')))
+    || (isButtonLike(target) && !target.form)
   ) {
     isRedirectLink = false;
     isPreventDefault = false;
@@ -102,7 +101,7 @@ const clickHandler = (e, options = {}) => {
 
   executeEvent('click', { i13nNode, e }, () => {
     if (isRedirectLink) {
-      if (isFormSubmit(target)) {
+      if (isForm) {
         target.form?.submit();
       } else {
         const linkTarget = getLinkTarget(target, props);

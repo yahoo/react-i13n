@@ -47,7 +47,9 @@ function findProps(elem) {
         key => key.indexOf('__reactInternalInstance') === 0 || key.indexOf('_reactInternalComponent') === 0
       )
     ].memoizedProps;
-  } catch (e) {}
+  } catch (e) {
+    console.log('exception');
+  }
 }
 
 const wrappedByI13nRoot = (ui, options = mockData.options, plugins = mockData.plugins) => {
@@ -70,7 +72,7 @@ describe('createI13nNode', () => {
 
   it('should generate a component with createI13nNode', (done) => {
     const TestComponent = () => {
-      const { executeEvent, i13nInstance, i13nNode } = useContext(I13nContext);
+      const { i13nNode } = useContext(I13nContext);
 
       expect(i13nNode.getModel()).toEqual({ sec: 'foo' });
       done();

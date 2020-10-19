@@ -301,19 +301,19 @@ const prototypeSpecs = {
   //   }
   //   self._subI13nComponents = [];
 
-    // find all links
-    // scanTags.forEach((tagName) => {
-    //   const collections = DOMNode.getElementsByTagName(tagName);
-    //   if (collections) {
-    //     foundElements = foundElements.concat([...collections]);
-    //   }
-    // });
+  // find all links
+  // scanTags.forEach((tagName) => {
+  //   const collections = DOMNode.getElementsByTagName(tagName);
+  //   if (collections) {
+  //     foundElements = foundElements.concat([...collections]);
+  //   }
+  // });
 
-    // for each link
-    // 1. create a i13n node
-    // 2. bind the click event
-    // 3. fire created event
-    // 4. (if enabled) create debug node for it
+  // for each link
+  // 1. create a i13n node
+  // 2. bind the click event
+  // 3. fire created event
+  // 4. (if enabled) create debug node for it
   //   foundElements.forEach((element) => {
   //     const I13nNodeClass = reactI13n.getI13nNodeClass() || I13nNode;
   //     const i13nNode = new I13nNodeClass(self._i13nNode, {}, true, reactI13n.isViewportEnabled());
