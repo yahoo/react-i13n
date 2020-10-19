@@ -99,7 +99,7 @@ describe('ReactI13n', () => {
     const mockPlugin1 = {
       name: 'test1',
       eventHandlers: {
-        click(payload, callback) {
+        click() {
           // do nothing, without callback, simulate if event handler does not execute correctly or timeout
         }
       }

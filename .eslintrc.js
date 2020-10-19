@@ -16,7 +16,8 @@ module.exports = {
     'no-use-before-define': 0,
     'import/no-named-as-default': 0,
     'import/no-named-as-default-member': 0,
-    'react/no-find-dom-node': 0
+    'react/no-find-dom-node': 0,
+    'react/prop-types': 0
   },
   env: {
     browser: true,

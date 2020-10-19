@@ -4,7 +4,6 @@
  */
 
 import React, { useContext } from 'react';
-import { findDOMNode } from 'react-dom';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import getDisplayName from './getDisplayName';

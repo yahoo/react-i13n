@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import I13nNode from '../core/I13nNode';
 

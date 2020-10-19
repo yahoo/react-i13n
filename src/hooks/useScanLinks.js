@@ -4,9 +4,7 @@
  */
 
 import {
-  useCallback,
   useEffect,
-  useRef,
   useState
 } from 'react';
 import { findDOMNode } from 'react-dom';

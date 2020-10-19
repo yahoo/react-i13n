@@ -3,9 +3,17 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-// var debug = require('debug')('I13nNode');
 const TAG_PATTERN = /<[^>]*>/g;
-const getDOMText = (DOMNode) => DOMNode && (DOMNode.value || DOMNode.innerText || DOMNode.textContent || DOMNode.innerHTML);
+const getDOMText = (DOMNode = {}) => {
+  const {
+    value,
+    innerText,
+    textContent,
+    innerHTML
+  } = DOMNode || {};
+  return value || innerText || textContent || innerHTML;
+};
+
 
 /**
  * I13nNode the virtual DOM Node used to build a I13n Tree for instrumentation

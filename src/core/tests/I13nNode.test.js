@@ -121,6 +121,11 @@ describe('I13nNode', () => {
     expect(i13nNodeParent.getCustomAttribute('traversed')).toEqual(true);
     // start to append child, should get on change event and clear the traverse status
     const i13nNodeChild4 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
+
+    expect(i13nNodeChild1.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild2.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild3.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild4.getCustomAttribute('traversed')).toEqual(true);
   });
 
   it('should remove child correctly', () => {

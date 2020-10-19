@@ -2,9 +2,6 @@
  * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-
-import isUndefined from '../utils/isUndefined';
-
 const isLeftClickEvent = (e) => e.button === 0;
 const isModifiedEvent = (e) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 
@@ -21,7 +18,7 @@ const isButtonLike = (target) => {
   if (tagName === 'INPUT' && (type === 'submit' || type === 'button')) {
     return true;
   }
-}
+};
 
 const isDefaultRedirectLink = (target) => {
   // if it's a
@@ -35,7 +32,7 @@ const isDefaultRedirectLink = (target) => {
   }
 
   return false;
-}
+};
 
 const isFormSubmit = (target) => {
   // if it's a
@@ -45,7 +42,7 @@ const isFormSubmit = (target) => {
     return true;
   }
   return false;
-}
+};
 
 /**
  * clickHandler which integrate the beacon event, send out beacon event then redirect user to the destination.
@@ -65,8 +62,6 @@ const clickHandler = (e, options = {}) => {
     props = {},
     shouldFollowLink
    } = options;
-
-  let href = '';
 
   if (!executeEvent) {
     return;
@@ -122,6 +117,6 @@ const clickHandler = (e, options = {}) => {
       }
     }
   });
-}
+};
 
 export default clickHandler;

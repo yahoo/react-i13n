@@ -7,12 +7,11 @@ import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
 import EventsQueue from '../libs/EventsQueue';
 import I13nNode from './I13nNode';
 
-import isUndefined from '../utils/isUndefined';
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debugLib = require('debug');
-const debug = debugLib('ReactI13n');
 
+const debug = debugLib('ReactI13n');
 const DEFAULT_HANDLER_TIMEOUT = 1000;
 
 // export the debug lib in client side

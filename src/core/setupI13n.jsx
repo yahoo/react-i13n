@@ -3,19 +3,17 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import { IS_CLIENT } from '../utils/variables';
 import getDisplayName from '../utils/getDisplayName';
 import I13nContext from '../components/core/I13nContext';
 
 import useI13nNode from '../hooks/useI13nNode';
 import useReactI13nRoot from '../hooks/useReactI13nRoot';
 
-import ReactI13n from './ReactI13n';
-
 const debugLib = require('debug');
+
 const debug = debugLib('ReactI13n');
 
 /**
@@ -39,9 +37,6 @@ function setupI13n(Component, options = {}, plugins = []) {
 
   const {
     displayName,
-    i13nNodeClass,
-    isViewportEnabled,
-    rootModelData,
     skipUtilFunctionsByProps
   } = options;
 

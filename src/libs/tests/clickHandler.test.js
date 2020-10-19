@@ -137,7 +137,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.follow = false;
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       expect(executedActions).toEqual(['preventDefault']);
       done();
     };
@@ -158,7 +158,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.follow = true;
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       callback();
     };
 
@@ -175,7 +175,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.href = '#';
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       expect(executedActions).toEqual([]);
       done();
     };
@@ -194,7 +194,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.href = '#';
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       expect(executedActions).toEqual([]);
       done();
     };
@@ -212,7 +212,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.target = '_blank';
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       expect(executedActions).toEqual([]);
       done();
     };
@@ -235,7 +235,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.target = '_top';
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.top.location.href).toEqual('foo');
@@ -260,7 +260,7 @@ describe('clickHandler', () => {
     };
 
     mockOptions.props.target = '_parent';
-    mockOptions.executeEvent = function (eventName, payload, callback) {
+    mockOptions.executeEvent = function () {
       callback();
       expect(executedActions).toEqual(['preventDefault']);
       expect(global.window.parent.location.href).toEqual('foo');
