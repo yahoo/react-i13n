@@ -20,9 +20,10 @@ module.exports = {
   },
   env: {
     browser: true,
-    node: true,
+    es6: true,
     jasmine: true,
-    es6: true
+    jest: true,
+    node: true
   },
   plugins: ['import', 'react', 'react-hooks'],
   parser: 'babel-eslint'

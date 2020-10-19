@@ -20,7 +20,7 @@
     "func-debug": "npm run dist && npm run dist-functional && grunt functional-debug",
     "lint": "eslint src",
     "prepublish": "npm run dist",
-    "test": "jest tests/unit --coverage --coverageReporters=lcov",
+    "test": "jest src --coverage --coverageReporters=lcov",
     "unit": "jest src"
   },
   "dependencies": {

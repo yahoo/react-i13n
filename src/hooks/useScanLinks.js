@@ -94,7 +94,7 @@ const useScanLinks = ({
 
     return () => {
       subI13nComponents.forEach((subI13nComponent) => {
-        subI13nComponent?.componentClickListener?.unsubscribe();
+        subI13nComponent?.componentClickListener?.remove();
         subI13nComponent?.viewportDetector?.unsubscribeAll();
         subI13nComponent?.debugDashboard?.destroy();
       });

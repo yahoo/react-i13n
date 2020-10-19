@@ -2,7 +2,7 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-/* globals describe, it, beforeEach, afterEach */
+/* globals describe, it */
 
 import EventsQueue from '../EventsQueue';
 

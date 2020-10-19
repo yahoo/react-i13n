@@ -6,48 +6,40 @@
 /* All the functionalities are tested with this higher order component */
 
 import React, { useContext } from 'react';
+import { render, fireEvent } from '@testing-library/react';
 import PropTypes from 'prop-types';
-import { render } from '@testing-library/react';
 
-import createI13nNode from '../../../src/utils/createI13nNode';
-import I13nContext from '../../../src/components/core/I13nContext';
-import I13nNode from '../../../src/libs/I13nNode';
+import createI13nNode from '../createI13nNode';
+import I13nContext from '../../components/core/I13nContext';
+import setupI13n from '../../core/setupI13n';
 
-let rootI13nNode = null;
+let eventsQueue = [];
 
 const mockData = {
   options: {},
-  reactI13n: {
-    execute: jest.fn()
-  },
-  plugin: {
-    name: 'test'
-  },
-  isViewportEnabled: false
+  plugins: [
+    {
+      name: 'test',
+      eventHandlers: {
+        created: () => {
+          eventsQueue.push({
+            action: 'create'
+          });
+        },
+        click: (payload) => {
+          const { i13nNode } = payload;
+          eventsQueue.push({
+            action: 'click',
+            label: i13nNode.getText(),
+            model: i13nNode.getMergedModel()
+          });
+        }
+      }
+    }
+  ]
 };
-const MockReactI13n = {};
-let mockSubscribeHandler = null;
-let mockSubscribers = [];
-const mockSubscribe = {};
-const mockClickHandler = jest.fn();
 
-jest.mock('subscribe-ui-event', () => ({
-  subscribe: (eventName, handler) => {
-    mockSubscribers.push({
-      eventName
-    });
-    mockSubscribeHandler = handler;
-    return {
-      unsubscribe() {}
-    };
-  },
-  listen: (target, event) => ({
-    remove() {}
-  })
-}));
-jest.mock('../../../src/libs/ReactI13n', () => {});
-jest.mock('../../../src/libs/clickHandler', () => jest.fn());
-
+// Use React 16 internal, might break in later release
 function findProps(elem) {
   try {
     return elem[
@@ -58,6 +50,11 @@ function findProps(elem) {
   } catch (e) {}
 }
 
+const wrappedByI13nRoot = (ui, options = mockData.options, plugins = mockData.plugins) => {
+  const RootApp = setupI13n(({ children }) => children, options, plugins);
+  return <RootApp>{ui}</RootApp>;
+};
+
 describe('createI13nNode', () => {
   beforeEach(() => {
     // http://fb.me/react-polyfills
@@ -65,25 +62,18 @@ describe('createI13nNode', () => {
       setTimeout(callback, 0);
     };
     window.innerHeight = 100;
-
-    rootI13nNode = new I13nNode(null, {});
   });
 
   afterEach(() => {
-    mockSubscribers = [];
-    mockSubscribeHandler = null;
+    eventsQueue = [];
   });
 
-  it.only('should generate a component with createI13nNode', () => {
-    let reactI13nInstance;
-
+  it('should generate a component with createI13nNode', (done) => {
     const TestComponent = () => {
-      const {
-        executeEvent,
-        i13nInstance
-      } = useContext(I13nContext);
+      const { executeEvent, i13nInstance, i13nNode } = useContext(I13nContext);
 
-      reactI13nInstance = i13nInstance;
+      expect(i13nNode.getModel()).toEqual({ sec: 'foo' });
+      done();
 
       return <div />;
     };
@@ -92,20 +82,9 @@ describe('createI13nNode', () => {
 
     // check the initial state is correct after render
     const I13nTestComponent = createI13nNode(TestComponent);
-    // mockData.reactI13n.execute = function (eventName) {
-    //   // should get a created event
-    //   expect(eventName).toEqual('created');
-    //   done();
-    // };
     expect(I13nTestComponent.displayName).toEqual('I13nTestComponent');
 
-    render(
-      <I13nTestComponent
-        i13nModel={{ sec: 'foo' }}
-      />
-    );
-    console.log(reactI13nInstance);
-    // expect(rootI13nNode.getChildrenNodes()[0].getModel()).toEqual({ sec: 'foo' });
+    render(wrappedByI13nRoot(<I13nTestComponent i13nModel={{ sec: 'foo' }} />));
   });
 
   it('should generate a component with createI13nNode and custome name', () => {
@@ -117,6 +96,7 @@ describe('createI13nNode', () => {
     expect(I13nTestComponent.displayName).toEqual('CustomeName');
   });
 
+  // hoistNonReactStatics
   it('should generate a component with createI13nNode with statics', (done) => {
     const TestComponent = () => <div />;
     TestComponent.displayName = 'TestComponent';
@@ -133,84 +113,79 @@ describe('createI13nNode', () => {
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
-    window._reactI13nInstance = null;
+    // rendered without provider
     const { container } = render(<I13nTestComponent />);
-
     expect(container).toBeDefined();
   });
 
-  it('should handle the case of unmount', (done) => {
-    const TestComponent = () => <div />;
+  it('should handle the case of unmount', () => {
+    let rootI13nNode = null;
+
+    const TestComponent = () => {
+      const { parentI13nNode } = useContext(I13nContext);
+      // only one layer, parent is root for this case
+      rootI13nNode = parentI13nNode;
+      return <div />;
+    };
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
-    mockData.reactI13n.execute = function (eventName) {
-      // should get a created event
-      expect(eventName).toEqual('created');
-      done();
-    };
-    const { unmount } = render(<I13nTestComponent />);
+    const { unmount } = render(wrappedByI13nRoot(<I13nTestComponent />));
     expect(typeof rootI13nNode.getChildrenNodes()[0]).toEqual('object');
     unmount(); // unmount should remove the child from root
     expect(rootI13nNode.getChildrenNodes()[0]).toEqual(undefined);
   });
 
-  it('should be able to bind click handler', (done) => {
-    const TestComponent = () => <div />;
+  it('should be able to bind click handler', () => {
+    const TestComponent = () => <div data-testid="node" />;
     TestComponent.displayName = 'TestComponent';
 
     // check the initial state is correct after render
     const I13nTestComponent = createI13nNode(TestComponent);
-    mockData.reactI13n.execute = function (eventName) {
-      // should get a created event
-      expect(eventName).toEqual('created');
-      done();
-    };
-    const { container } = render(<I13nTestComponent bindClickEvent />);
+    const { container, getByTestId } = render(wrappedByI13nRoot(<I13nTestComponent bindClickEvent />));
     expect(container).toBeDefined();
+    fireEvent.click(getByTestId('node'));
+    expect(eventsQueue.some(({ action }) => action === 'click')).toEqual(true);
   });
 
-  it('should handle scan the links inside if autoScanLinks is enable', (done) => {
-    mockData.isViewportEnabled = false;
+  it('should handle scan the links inside if autoScanLinks is enable', () => {
     const TestComponent = () => (
-      <div>
-        <a href="/foo">foo</a>
-        <button>bar</button>
+      <div data-testid="node">
+        <a data-testid="anchor" href="/foo">
+          foo
+        </a>
+        <button data-testid="button">bar</button>
       </div>
     );
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
 
-    let executeCount = 0;
-    // should get three created events
-    mockData.reactI13n.execute = function (eventName, payload) {
-      expect(eventName).toEqual('created');
-      executeCount += 1;
-      if (executeCount === 2) {
-        expect(payload.i13nNode.getText()).toEqual('foo');
-      }
-      if (executeCount === 3) {
-        expect(payload.i13nNode.getText()).toEqual('bar');
-        done();
-      }
-    };
-    render(<I13nTestComponent scanLinks={{ enable: true }} />);
+    const { getByTestId } = render(wrappedByI13nRoot(<I13nTestComponent scanLinks={{ enable: true }} />));
+
+    const anchor = getByTestId('anchor');
+    const button = getByTestId('button');
+
+    fireEvent.click(anchor);
+    expect(eventsQueue.some(({ label }) => label === 'foo')).toEqual(true);
+
+    fireEvent.click(button);
+    expect(eventsQueue.some(({ label }) => label === 'bar')).toEqual(true);
   });
 
-  it('should able to use props.getI13nNode to get the nearest i13n node', () => {
+  // @TODO, decide to support props.i13n or not
+  it.skip('should able to use props.getI13nNode to get the nearest i13n node', () => {
     const TestComponent = (props) => {
       expect(props.i13n.getI13nNode().getModel()).toEqual({ foo: 'bar' });
       return <div />;
     };
     TestComponent.displayName = 'TestComponent';
-
-    mockData.isViewportEnabled = false;
     const I13nTestComponent = createI13nNode(TestComponent, {});
-    render(<I13nTestComponent i13nModel={{ foo: 'bar' }} />);
+    render(wrappedByI13nRoot(<I13nTestComponent i13nModel={{ foo: 'bar' }} />));
   });
 
-  it('should able to use props.executeEvent to execute i13n event', (done) => {
+  // @TODO, decide to support props.i13n or not
+  it.skip('should able to use props.executeEvent to execute i13n event', (done) => {
     const TestComponent = (props) => {
       props.i13n.executeEvent('foo', {});
       return <div />;
@@ -231,26 +206,31 @@ describe('createI13nNode', () => {
   });
 
   it('should update the i13n model when component updates', () => {
-    const i13nModel = { sec: 'foo' };
-    const TestComponent = (props) => {
-      expect(props.i13n.getI13nNode().getModel()).toEqual(i13nModel);
+    const i13nModel = {
+      sec: 'foo'
+    };
+
+    const TestComponent = () => {
+      const { i13nNode } = useContext(I13nContext);
+
+      expect(i13nNode.getModel()).toEqual(i13nModel);
       return <div />;
     };
-    TestComponent.contextTypes = {
-      i13n: PropTypes.object
-    };
+
     TestComponent.displayName = 'TestComponent';
 
     // check the initial state is correct after render
     const I13nTestComponent = createI13nNode(TestComponent);
 
-    const { container, rerender } = render(<I13nTestComponent i13nModel={i13nModel} />);
+    const { container, rerender } = render(wrappedByI13nRoot(<I13nTestComponent i13nModel={i13nModel} />));
 
     i13nModel.sec = 'bar';
-    rerender(<I13nTestComponent i13nModel={i13nModel} />);
+
+    rerender(wrappedByI13nRoot(<I13nTestComponent i13nModel={i13nModel} />));
   });
 
-  it('should handle the case if we enable viewport checking', () => {
+  // @TODO, haven't implement viewport
+  it.skip('should handle the case if we enable viewport checking', () => {
     jest.useFakeTimers();
     const TestSubComponent = () => <div />;
     TestSubComponent.displayName = 'TestSubComponent';
@@ -274,7 +254,7 @@ describe('createI13nNode', () => {
     expect(executedArray[3]).toEqual('enterViewport');
   });
 
-  it('should handle the case if we enable viewport checking with subComponents generated by scanLinks', () => {
+  it.skip('should handle the case if we enable viewport checking with subComponents generated by scanLinks', () => {
     jest.useFakeTimers();
     mockData.isViewportEnabled = true;
 
@@ -303,7 +283,7 @@ describe('createI13nNode', () => {
     expect(executedArray[5]).toEqual('enterViewport');
   });
 
-  it('should still subscribe listeners if parent is not in viewport', () => {
+  it.skip('should still subscribe listeners if parent is not in viewport', () => {
     jest.useFakeTimers();
     mockData.isViewportEnabled = true;
     window.innerHeight = -30; // we can't change the rect of the nodes, fake innerHeight to fail the viewport detection
@@ -336,7 +316,7 @@ describe('createI13nNode', () => {
     expect(mockSubscribers[1].eventName).toEqual('scrollEnd');
   });
 
-  it("should stop scanned nodes' viewport detection if parent is not in viewport", () => {
+  it.skip("should stop scanned nodes' viewport detection if parent is not in viewport", () => {
     jest.useFakeTimers();
     mockData.isViewportEnabled = true;
     window.innerHeight = -30; // we can't change the rect of the nodes, fake innerHeight to fail the viewport detection
@@ -376,7 +356,8 @@ describe('createI13nNode', () => {
     expect(I13nTestComponent).toEqual(null);
   });
 
-  it('should get i13n util functions via both props and context', (done) => {
+  // @TODO i13n as props
+  it.skip('should get i13n util functions via both props and context', (done) => {
     const TestComponent = (props, context) => {
       const { i13n } = props;
 
@@ -420,7 +401,7 @@ describe('createI13nNode', () => {
     expect(container.refs).toBeInstanceOf(TestComponent);
   });
 
-  it('should not pass i13n props to string components', () => {
+  it.skip('should not pass i13n props to string components', () => {
     const props = {
       i13nModel: { sec: 'foo' },
       href: '#/foobar'

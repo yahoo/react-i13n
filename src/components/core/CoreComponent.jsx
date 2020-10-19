@@ -64,7 +64,7 @@ const CoreComponent = (props) => {
     }
 
     return () => {
-      clickEventListener?.unsubscribe();
+      clickEventListener?.remove();
     };
   }, [bindClickEvent, i13nNode, executeEvent, DOMNode]);
 
