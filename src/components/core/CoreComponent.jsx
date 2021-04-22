@@ -3,9 +3,8 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, {
+import {
   cloneElement,
-  forwardRef,
   useContext,
   useEffect,
   useState,
