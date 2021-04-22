@@ -1,3 +1,8 @@
+/**
+ * Copyright 2015 - Present, Yahoo Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+
 import { useLayoutEffect, useRef } from 'react';
 
 import { IS_DEBUG_MODE } from '../utils/variables';

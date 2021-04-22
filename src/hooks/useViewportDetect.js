@@ -1,22 +1,26 @@
 // @TODO, probably make it plugin so we don't need to included in main bundle if not used
-import { useEffect } from 'react';
-import ViewportDetector from './ViewportDetector';
+import { useCallback } from 'react';
+import { useInViewport } from 'react-in-viewport';
 
 const useViewportDetect = ({
-  domNode,
-  options
+  executeEvent,
+  node
 }) => {
-  // enable viewport checking if enabled
-  if (reactI13n.isViewportEnabled()) {
-    self._viewportDetector = new ViewportDetector(domNode, self._getViewportOptions(), () => {
-      self._handleEnterViewport();
-    });
-    if (this.pageInitViewportDetected) {
-      self._viewportDetector.init();
-    } else {
-      self._triggerPageInitViewportDetection();
-    }
-  }
+  const onEnterViewport = useCallback(() => {
+    node.setIsInViewport(true);
+    executeEvent('enterViewport', {});
+  }, [executeEvent, node]);
+
+  const onLeaveViewport = useCallback(() => {
+    node.setIsInViewport(false);
+  }, [node]);
+
+  useInViewport(node, {
+
+  }, {}, {
+    onEnterViewport,
+    onLeaveViewport
+  });
 };
 
 export default useViewportDetect;

@@ -3,17 +3,13 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { listen } from 'subscribe-ui-event';
 
 import clickHandler from '../../libs/clickHandler';
 import useDebugDashboard from '../../hooks/useDebugDashboard';
 import useScanLinks from '../../hooks/useScanLinks';
+import useViewportDetect from '../../hooks/useViewportDetect';
 
 import I13nContext from './I13nContext';
 
@@ -23,9 +19,9 @@ const CoreComponent = (props) => {
     children,
     follow,
     i13nModel,
-    isLeafNode,
     scanLinks = {},
-    shouldFollowLink
+    shouldFollowLink,
+    viewport,
   } = props;
 
   const {
@@ -33,13 +29,12 @@ const CoreComponent = (props) => {
     i13nNode,
     i13nInstance,
     parentI13nNode
-  } = useContext(I13nContext);
+  } = useContext(
+    I13nContext
+  );
   const [DOMNode, setDOMNode] = useState();
 
-  const {
-    enable: scanLinksEnabled,
-    tags
-  } = scanLinks;
+  const { enable: scanLinksEnabled, tags } = scanLinks;
 
   // create event
   useEffect(() => {
@@ -56,8 +51,8 @@ const CoreComponent = (props) => {
           executeEvent,
           i13nNode,
           props: {
-            follow
-          }
+            follow,
+          },
         });
       };
       clickEventListener = listen(DOMNode, 'click', handleClick);
@@ -71,7 +66,7 @@ const CoreComponent = (props) => {
   // update modal if changes
   useEffect(() => {
     i13nNode?.updateModel(i13nModel);
-  }, [i13nNode, i13nModel])
+  }, [i13nNode, i13nModel]);
 
   useScanLinks({
     enabled: scanLinksEnabled,
@@ -80,26 +75,34 @@ const CoreComponent = (props) => {
     i13nNode,
     node: i13nNode?.getDOMNode(),
     shouldFollowLink,
-    tags
+    tags,
+  });
+
+  const node = i13nInstance?.isViewportEnabled()
+    ? DOMNode ?? {}
+    : {};
+  useViewportDetect({
+    executeEvent,
+    i13nInstance,
+    node,
+    viewport,
   });
 
   useDebugDashboard({ node: i13nNode });
 
   // clean up
-  useEffect(() => {
-    return () => {
-      if (parentI13nNode) {
-        parentI13nNode.removeChildNode(i13nNode);
-      }
-    };
+  useEffect(() => () => {
+    if (parentI13nNode) {
+      parentI13nNode.removeChildNode(i13nNode);
+    }
   }, [parentI13nNode, i13nNode]);
 
   return (
     <span
-      ref={(node) => {
-        if (node) {
-          i13nNode?.setDOMNode(node);
-          setDOMNode(node);
+      ref={(domNode) => {
+        if (domNode) {
+          i13nNode?.setDOMNode(domNode);
+          setDOMNode(domNode);
         }
       }}
     >
