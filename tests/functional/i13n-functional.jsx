@@ -232,6 +232,13 @@ const testPlugin = {
         name: 'created'
       });
       callback();
+    },
+
+    enterViewport(payload, callback) {
+      window.firedEvents.push({
+        name: 'enterViewport'
+      });
+      callback();
     }
   }
 };

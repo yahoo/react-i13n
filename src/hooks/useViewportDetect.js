@@ -4,18 +4,18 @@ import { useInViewport } from 'react-in-viewport';
 
 const useViewportDetect = ({
   executeEvent,
-  node
+  node,
+  ref
 }) => {
   const onEnterViewport = useCallback(() => {
     node.setIsInViewport(true);
-    executeEvent('enterViewport', {});
+    executeEvent('enterViewport');
   }, [executeEvent, node]);
 
   const onLeaveViewport = useCallback(() => {
     node.setIsInViewport(false);
   }, [node]);
-
-  useInViewport(node, {
+  useInViewport(ref, {
 
   }, {}, {
     onEnterViewport,

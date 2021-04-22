@@ -11,11 +11,6 @@ describe('React I13n test', () => {
     expect(events.filter(({ name }) => name === 'pageview').length).to.eql(1);
   });
 
-  it('should fire a enterViewport', () => {
-    const events = window.firedEvents;
-    expect(events.filter(({ name }) => name === 'enterViewport').length).to.eql(1);
-  });
-
   it('should fire an update event when dom change, should get i13n model updated', () => {
     const hiddenBtn = document.querySelectorAll('.HiddenBtn')[0];
     hiddenBtn.click();
@@ -112,5 +107,10 @@ describe('React I13n test', () => {
     expect(events[currentEventCount - 1].model).to.eql({ page: 'test-page', sec: 'auto-scan' });
     expect(events[currentEventCount - 1].text).to.eql('AutoScanLink');
     expect(events[currentEventCount - 1].position).to.eql(1);
+  });
+
+  it('should fire a enterViewport', () => {
+    const events = window.firedEvents;
+    expect(events.filter(({ name }) => name === 'enterViewport').length).to.greaterThan(1);
   });
 });

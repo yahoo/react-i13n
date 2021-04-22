@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { listen } from 'subscribe-ui-event';
 
 import clickHandler from '../../libs/clickHandler';
@@ -32,6 +32,7 @@ const CoreComponent = (props) => {
   } = useContext(
     I13nContext
   );
+  const domRef = useRef();
   const [DOMNode, setDOMNode] = useState();
 
   const { enable: scanLinksEnabled, tags } = scanLinks;
@@ -78,14 +79,14 @@ const CoreComponent = (props) => {
     tags,
   });
 
-  const node = i13nInstance?.isViewportEnabled()
-    ? DOMNode ?? {}
+  const ref = i13nInstance?.isViewportEnabled()
+    ? domRef
     : {};
+
   useViewportDetect({
     executeEvent,
-    i13nInstance,
-    node,
-    viewport,
+    ref,
+    node: i13nNode
   });
 
   useDebugDashboard({ node: i13nNode });
@@ -102,6 +103,7 @@ const CoreComponent = (props) => {
       ref={(domNode) => {
         if (domNode) {
           i13nNode?.setDOMNode(domNode);
+          domRef.current = domNode;
           setDOMNode(domNode);
         }
       }}
