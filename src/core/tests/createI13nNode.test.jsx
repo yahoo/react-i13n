@@ -5,7 +5,7 @@
 
 /* All the functionalities are tested with this higher order component */
 
-import React, { useContext } from 'react';
+import React, { useContext, forwardRef } from 'react';
 import { render, fireEvent } from '@testing-library/react';
 
 import createI13nNode from '../createI13nNode';
@@ -61,14 +61,14 @@ describe('createI13nNode', () => {
   });
 
   it('should generate a component with createI13nNode', (done) => {
-    const TestComponent = () => {
+    const TestComponent = forwardRef((props, ref) => {
       const { i13nNode } = useContext(I13nContext);
 
       expect(i13nNode.getModel()).toEqual({ sec: 'foo' });
       done();
 
-      return <div />;
-    };
+      return <div ref={ref} />;
+    });
 
     TestComponent.displayName = 'TestComponent';
 
@@ -80,12 +80,12 @@ describe('createI13nNode', () => {
   });
 
   it('should generate a component with createI13nNode and custome name', () => {
-    const TestComponent = () => <div />;
+    const TestComponent = (props, ref) => <div ref={ref} />;
     TestComponent.displayName = 'TestComponent';
 
     // check the initial state is correct after render
     const I13nTestComponent = createI13nNode(
-      TestComponent,
+      forwardRef(TestComponent),
       {},
       { displayName: 'CustomeName' }
     );
@@ -94,7 +94,7 @@ describe('createI13nNode', () => {
 
   // hoistNonReactStatics
   it('should generate a component with createI13nNode with statics', (done) => {
-    const TestComponent = () => <div />;
+    const TestComponent = (props, ref) => <div ref={ref} />;
     TestComponent.displayName = 'TestComponent';
     TestComponent.foo = 'bar';
 
@@ -105,7 +105,7 @@ describe('createI13nNode', () => {
   });
 
   it("should handle the case if reactI13n doesn't inititalized", () => {
-    const TestComponent = () => <div />;
+    const TestComponent = forwardRef((props, ref) => <div ref={ref} />);
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
@@ -117,12 +117,12 @@ describe('createI13nNode', () => {
   it('should handle the case of unmount', () => {
     let rootI13nNode = null;
 
-    const TestComponent = () => {
+    const TestComponent = forwardRef((props, ref) => {
       const { parentI13nNode } = useContext(I13nContext);
       // only one layer, parent is root for this case
       rootI13nNode = parentI13nNode;
-      return <div />;
-    };
+      return <div ref={ref} />;
+    });
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
@@ -133,7 +133,9 @@ describe('createI13nNode', () => {
   });
 
   it('should be able to bind click handler', () => {
-    const TestComponent = () => <div data-testid="node" />;
+    const TestComponent = forwardRef((props, ref) => (
+      <div data-testid="node" ref={ref} />
+    ));
     TestComponent.displayName = 'TestComponent';
 
     // check the initial state is correct after render
@@ -147,14 +149,14 @@ describe('createI13nNode', () => {
   });
 
   it('should handle scan the links inside if autoScanLinks is enable', () => {
-    const TestComponent = () => (
-      <div data-testid="node">
+    const TestComponent = forwardRef((props, ref) => (
+      <div data-testid="node" ref={ref}>
         <a data-testid="anchor" href="/foo">
           foo
         </a>
         <button data-testid="button">bar</button>
       </div>
-    );
+    ));
     TestComponent.displayName = 'TestComponent';
 
     const I13nTestComponent = createI13nNode(TestComponent);
@@ -178,12 +180,12 @@ describe('createI13nNode', () => {
       sec: 'foo',
     };
 
-    const TestComponent = () => {
+    const TestComponent = forwardRef((props, ref) => {
       const { i13nNode } = useContext(I13nContext);
 
       expect(i13nNode.getModel()).toEqual(i13nModel);
-      return <div />;
-    };
+      return <div ref={ref} />;
+    });
 
     TestComponent.displayName = 'TestComponent';
 
