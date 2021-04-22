@@ -1,12 +1,12 @@
 {
-  "name": "react-i13n",
+  "name": "@roderickhsiao/react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:yahoo/react-i13n.git"
+    "url": "git@github.com:roderickhsiao/react-i13n.git"
   },
   "scripts": {
     "benchmark": "NODE_ENV=production node tests/benchmark/benchmark",
@@ -72,8 +72,8 @@
     "pre-commit": "^1.0.0",
     "prettier": "^2.0.5",
     "promise": "^8.0.2",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
+    "react": "^16.8.3 || ^17.0.0",
+    "react-dom": "^16.8.3 || ^17.0.0",
     "webpack": "^4.0.0",
     "webpack-dev-server": "^3.2.1",
     "xunit-file": "^1.0.0"
