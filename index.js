@@ -5,12 +5,10 @@
 
 module.exports = {
   // Core libraries
+  createI13nNode: require('./dist/core/createI13nNode').default,
+  getInstance: require('./dist/core/ReactI13n').getInstance,
   I13nNode: require('./dist/core/I13nNode').default,
   ReactI13n: require('./dist/core/ReactI13n').default,
-  getInstance: require('./dist/core/ReactI13n').getInstance,
-
-  // Utils
-  createI13nNode: require('./dist/utils/createI13nNode').default,
   setupI13n: require('./dist/core/setupI13n').default,
 
   // I13n Components

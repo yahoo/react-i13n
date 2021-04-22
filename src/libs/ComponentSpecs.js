@@ -26,10 +26,10 @@ const staticSpecs = {
         isLeafNode: PropTypes.bool,
         bindClickEvent: PropTypes.bool,
         follow: PropTypes.bool,
-        scanLinks: PropTypes.shape({
-          enable: PropTypes.bool,
-          tags: PropTypes.array
-        }),
+        // scanLinks: PropTypes.shape({
+        //   enable: PropTypes.bool,
+        //   tags: PropTypes.array
+        // }),
         viewport: PropTypes.shape({
           margins: PropTypes.shape({
             usePercent: PropTypes.bool,
@@ -494,29 +494,29 @@ const prototypeSpecs = {
  * @param (Object) specs.static picking static specs
  * @returns picked specs
  */
-const pickSpecs = function pickSpecs(specs = {}) {
-  const picked = {
-    prototype: {},
-    static: {}
-  };
+// const pickSpecs = function pickSpecs(specs = {}) {
+//   const picked = {
+//     prototype: {},
+//     static: {}
+//   };
 
-  if (!specs.prototype) {
-    picked.prototype = prototypeSpecs;
-  } else {
-    specs.prototype.forEach((spec) => {
-      picked.prototype[spec] = prototypeSpecs[spec];
-    });
-  }
+//   if (!specs.prototype) {
+//     picked.prototype = prototypeSpecs;
+//   } else {
+//     specs.prototype.forEach((spec) => {
+//       picked.prototype[spec] = prototypeSpecs[spec];
+//     });
+//   }
 
-  if (!specs.static) {
-    picked.static = staticSpecs;
-  } else {
-    specs.static.forEach((spec) => {
-      picked.static[spec] = staticSpecs[spec];
-    });
-  }
+//   if (!specs.static) {
+//     picked.static = staticSpecs;
+//   } else {
+//     specs.static.forEach((spec) => {
+//       picked.static[spec] = staticSpecs[spec];
+//     });
+//   }
 
-  return picked;
-};
+//   return picked;
+// };
 
 export default pickSpecs;

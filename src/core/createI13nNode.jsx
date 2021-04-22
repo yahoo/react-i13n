@@ -6,8 +6,8 @@
 import React, { useContext } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
-import getDisplayName from './getDisplayName';
-import warnAndPrintTrace from './warnAndPrintTrace';
+import getDisplayName from '../utils/getDisplayName';
+import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 import CoreComponent from '../components/core/CoreComponent';
 import I13nContext from '../components/core/I13nContext';

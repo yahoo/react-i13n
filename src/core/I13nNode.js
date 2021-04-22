@@ -14,7 +14,6 @@ const getDOMText = (DOMNode = {}) => {
   return value || innerText || textContent || innerHTML;
 };
 
-
 /**
  * I13nNode the virtual DOM Node used to build a I13n Tree for instrumentation
  * @class I13nNode

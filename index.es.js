@@ -6,7 +6,7 @@
 import I13nNodeLib from './dist-es/core/I13nNode';
 import ReactI13nLib, { getInstance as getInstanceLib } from './dist-es/core/ReactI13n';
 
-import createI13nNodeLib from './dist-es/utils/createI13nNode';
+import createI13nNodeLib from './dist-es/core/createI13nNode';
 import setupI13nLib from './dist-es/core/setupI13n';
 
 import I13nAnchorLib from './dist-es/components/I13nAnchor';

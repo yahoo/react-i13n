@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 const DashboardTitle = (props) => {
   const { title } = props;
   const style = {
-    background: '#673ab7',
+    background: '#6001d2',
     color: 'rgba(255,255,255,.87)',
     fontFamily: 'inherit',
     overflow: 'hidden',
