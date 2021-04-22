@@ -84,6 +84,7 @@ const CoreComponent = (props) => {
     : {};
 
   useViewportDetect({
+    viewport,
     executeEvent,
     ref,
     node: i13nNode
