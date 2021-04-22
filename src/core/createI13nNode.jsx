@@ -72,17 +72,11 @@ function createI13nNode(Component, defaultProps, options = {}) {
       } : {})
     };
 
-    const WrappedComponent = forwardRef((innerProps, ref) => (
-      <span ref={ref} style={{ all: 'inherit' }}>
-        <Component {...innerProps}>{innerProps.children}</Component>
-      </span>
-    ));
-
     const node = (
       <CoreComponent {...i13nProps}>
-        <WrappedComponent {...restProps}>
+        <Component {...restProps}>
           {children}
-        </WrappedComponent>
+        </Component>
       </CoreComponent>
     );
 
