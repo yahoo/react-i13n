@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useContext } from 'react';
+import React, { useContext, forwardRef } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import getDisplayName from '../utils/getDisplayName';
@@ -32,7 +32,6 @@ function createI13nNode(Component, defaultProps, options = {}) {
     warnAndPrintTrace('You are passing a null component into createI13nNode');
     return null;
   }
-
   const componentName = getDisplayName(Component);
   const componentIsFunction = isFunctionalComponent(Component);
   const {
@@ -73,11 +72,17 @@ function createI13nNode(Component, defaultProps, options = {}) {
       } : {})
     };
 
+    const WrappedComponent = forwardRef((innerProps, ref) => (
+      <span ref={ref}>
+        <Component {...innerProps}>{innerProps.children}</Component>
+      </span>
+    ));
+
     const node = (
       <CoreComponent {...i13nProps}>
-        <Component {...restProps}>
+        <WrappedComponent {...restProps}>
           {children}
-        </Component>
+        </WrappedComponent>
       </CoreComponent>
     );
 

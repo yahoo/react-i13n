@@ -3,7 +3,14 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, {
+  cloneElement,
+  forwardRef,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+} from 'react';
 import { listen } from 'subscribe-ui-event';
 
 import clickHandler from '../../libs/clickHandler';
@@ -24,12 +31,7 @@ const CoreComponent = (props) => {
     viewport,
   } = props;
 
-  const {
-    executeEvent,
-    i13nNode,
-    i13nInstance,
-    parentI13nNode
-  } = useContext(
+  const { executeEvent, i13nNode, i13nInstance, parentI13nNode } = useContext(
     I13nContext
   );
   const domRef = useRef();
@@ -79,39 +81,36 @@ const CoreComponent = (props) => {
     tags,
   });
 
-  const ref = i13nInstance?.isViewportEnabled()
-    ? domRef
-    : {};
+  const ref = i13nInstance?.isViewportEnabled() ? domRef : {};
 
   useViewportDetect({
     viewport,
     executeEvent,
     ref,
-    node: i13nNode
+    node: i13nNode,
   });
 
   useDebugDashboard({ node: i13nNode });
 
   // clean up
-  useEffect(() => () => {
-    if (parentI13nNode) {
-      parentI13nNode.removeChildNode(i13nNode);
-    }
-  }, [parentI13nNode, i13nNode]);
-
-  return (
-    <span
-      ref={(domNode) => {
-        if (domNode) {
-          i13nNode?.setDOMNode(domNode);
-          domRef.current = domNode;
-          setDOMNode(domNode);
-        }
-      }}
-    >
-      {children}
-    </span>
+  useEffect(
+    () => () => {
+      if (parentI13nNode) {
+        parentI13nNode.removeChildNode(i13nNode);
+      }
+    },
+    [parentI13nNode, i13nNode]
   );
+
+  return cloneElement(children, {
+    ref: (node) => {
+      if (node) {
+        i13nNode?.setDOMNode(node);
+        domRef.current = node;
+        setDOMNode(node);
+      }
+    },
+  });
 };
 
 export default CoreComponent;
