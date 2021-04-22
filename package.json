@@ -1,6 +1,6 @@
 {
   "name": "@roderickhsiao/react-i13n",
-  "description": "React I13n provides a performant and scalable solution to application instrumentation.",
+  "description": "[Experiment] React I13n provides a performant and scalable solution to application instrumentation.",
   "version": "3.0.0-alpha.5",
   "main": "index.js",
   "module": "index.es.js",
@@ -85,8 +85,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
   },
   "precommit": [
     "lint",
@@ -95,7 +95,7 @@
   "licenses": [
     {
       "type": "BSD",
-      "url": "https://github.com/yahoo/react-i13n/blob/master/LICENSE.md"
+      "url": "https://github.com/roderickhsiao/react-i13n/blob/master/LICENSE.md"
     }
   ]
 }
