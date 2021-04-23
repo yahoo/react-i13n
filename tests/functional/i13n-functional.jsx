@@ -2,12 +2,9 @@
 function getJsonFromUrl() {
   const query = location.search.substr(1);
   const result = {};
-  const parts = query.split('&');
-  let i = 0;
-  const { length } = parts;
-  for (i; i < length; i++) {
-    const item = parts[i].split('=');
-    result[item[0]] = decodeURIComponent(item[1]);
+  const parts = new URLSearchParams(query);
+  for (let p of parts) {
+    result[p] = parts.get(p);
   }
   return result;
 }
@@ -39,7 +36,7 @@ class I13nComponentLevel1 extends React.Component {
     };
 
     return (
-      <div className="P(4px) M(4px) Bgc(#d9edf7) I13nComponentLevel1">
+      <div className="P(4px) M(4px) Bgc(#d9edf7) I13nComponentLevel1" ref={this.props.innerRef}>
         Level 1 Links
         <div className="P(4px) M(4px) Bgc(#ececec) NormalLink">
           <I13nAnchor
@@ -130,7 +127,7 @@ class I13nComponentLevel2 extends React.Component {
     });
 
     return (
-      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2">
+      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2" ref={this.props.innerRef}>
         Level 2 Links
         {links}
       </div>
@@ -164,7 +161,7 @@ class I13nComponentLevel2Hidden extends React.Component {
       });
     }
     return (
-      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden">
+      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden" ref={this.props.innerRef}>
         <I13nDiv
           className="HiddenBtn"
           onClick={this.clickHandler}

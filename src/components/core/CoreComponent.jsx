@@ -22,6 +22,7 @@ import I13nContext from './I13nContext';
 const CoreComponent = (props) => {
   const {
     bindClickEvent,
+    componentIsFunction,
     children,
     follow,
     i13nModel,
@@ -30,7 +31,12 @@ const CoreComponent = (props) => {
     viewport,
   } = props;
 
-  const { executeEvent, i13nNode, i13nInstance, parentI13nNode } = useContext(
+  const {
+    executeEvent,
+    i13nNode,
+    i13nInstance,
+    parentI13nNode
+  } = useContext(
     I13nContext
   );
   const domRef = useRef();
@@ -102,7 +108,7 @@ const CoreComponent = (props) => {
   );
 
   return cloneElement(children, {
-    ref: (node) => {
+    [componentIsFunction ? 'innerRef' : 'ref']: (node) => {
       if (node) {
         i13nNode?.setDOMNode(node);
         domRef.current = node;

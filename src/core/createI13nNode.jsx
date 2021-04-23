@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useContext, forwardRef } from 'react';
+import React, { useContext, useMemo } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import getDisplayName from '../utils/getDisplayName';
@@ -61,6 +61,7 @@ function createI13nNode(Component, defaultProps, options = {}) {
 
     const i13nProps = {
       bindClickEvent,
+      componentIsFunction,
       follow,
       i13n,
       i13nModel,
@@ -90,12 +91,12 @@ function createI13nNode(Component, defaultProps, options = {}) {
     });
 
     // overrides node/parent node
-    const contextValue = {
+    const contextValue = useMemo(() => ({
       executeEvent,
       i13nInstance,
       i13nNode,
       parentI13nNode
-    };
+    }), [executeEvent, i13nInstance, i13nNode, parentI13nNode]);
 
     return (
       <I13nContext.Provider value={contextValue}>
