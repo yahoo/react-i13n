@@ -1,12 +1,12 @@
 {
-  "name": "@roderickhsiao/react-i13n",
-  "description": "[Experiment] React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.11",
+  "name": "react-i13n",
+  "description": "React I13n provides a performant and scalable solution to application instrumentation.",
+  "version": "3.0.0-alpha.5",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {
     "type": "git",
-    "url": "git@github.com:roderickhsiao/react-i13n.git"
+    "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
     "benchmark": "NODE_ENV=production node tests/benchmark/benchmark",
@@ -95,7 +95,7 @@
   "licenses": [
     {
       "type": "BSD",
-      "url": "https://github.com/roderickhsiao/react-i13n/blob/master/LICENSE.md"
+      "url": "https://github.com/yahoo/react-i13n/blob/master/LICENSE.md"
     }
   ]
 }
