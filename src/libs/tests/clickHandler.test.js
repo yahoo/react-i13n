@@ -130,7 +130,7 @@ describe('clickHandler', () => {
     clickHandler(mockClickEvent, mockOptions);
   });
 
-  it.only('should not follow it if follow is set to false', (done) => {
+  it('should not follow it if follow is set to false', (done) => {
     const executedActions = [];
     mockClickEvent.target = {
       tagName: 'A',
