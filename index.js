@@ -14,5 +14,6 @@ module.exports = {
   // I13n Components
   I13nAnchor: require('./dist/components/I13nAnchor').default,
   I13nButton: require('./dist/components/I13nButton').default,
+  I13nContext: require('./dist/components/core/I13nContext').default,
   I13nDiv: require('./dist/components/I13nDiv').default
 };

@@ -20,11 +20,10 @@ const I13nDemoComponent = createI13nNode(DemoComponent);
 ```js
 
 // For components without `setupI13n` and `createI13nNode`, you can still get i13n functions via context
+import { I13nContext } from 'react-i13n';
 class DemoComponent extends React.Component {
   displayName = 'DemoComponent',;
-  contextTypes = {
-    i13n: React.PropTypes.object
-  };
+  static contextType = I13nContext;
   render() {
     // this.context.i13n.getI13nNode() to access the nearest i13nNode created by createI13nNode
     // this.context.i13n.executeEvent() to execute i13n event

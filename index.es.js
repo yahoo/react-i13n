@@ -11,6 +11,7 @@ import setupI13nLib from './dist-es/core/setupI13n';
 
 import I13nAnchorLib from './dist-es/components/I13nAnchor';
 import I13nButtonLib from './dist-es/components/I13nButton';
+import I13nContextLib from './dist-es/components/core/I13nContext';
 import I13nDivLib from './dist-es/components/I13nDiv';
 
 // Core libraries
@@ -25,3 +26,4 @@ export var setupI13n = setupI13nLib;
 export var I13nAnchor = I13nAnchorLib;
 export var I13nButton = I13nButtonLib;
 export var I13nDiv = I13nDivLib;
+export var I13nContext = I13nContextLib;

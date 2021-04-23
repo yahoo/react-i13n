@@ -103,7 +103,7 @@ Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 ## I13n Tree
 ![I13n Tree](https://cloud.githubusercontent.com/assets/3829183/7980892/0b38eb70-0a60-11e5-8cc2-712ec42089fc.png)
 
-`react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
+`react-i13n` builds the instrumentation tree by leveraging the React `context` feature. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
 
 Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
 
