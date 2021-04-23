@@ -77,7 +77,7 @@ const clickHandler = (e, options = {}) => {
   // 3. button without form submit
   // Do not trigger navigate action. Let browser handle it natively.
   if (
-    (!isLink(target) && !isButtonLike(target))
+    (!isDefaultRedirectLink(target))
     || (isLink(target) && (!href || (href && href[0] === '#')))
     || (isButtonLike(target) && !target.form)
   ) {

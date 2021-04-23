@@ -145,7 +145,7 @@ class ReactI13n {
         if (eventHandler) {
           promiseHandlers.push(
             new Promise((resolve, reject) => {
-              eventsQueue.executeEvent(eventName, payload, resolve, reject);
+              eventsQueue.executeEvent?.(eventName, payload, resolve, reject);
             })
           );
         }

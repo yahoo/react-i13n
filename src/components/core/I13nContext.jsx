@@ -6,7 +6,7 @@
 import { createContext } from 'react';
 
 const I13nContext = createContext({
-  executeEvent: () => {},
+  executeEvent: (name, payload, callback) => { callback?.(); },
   i13nInstance: null,
   i13nNode: null,
   parentI13nNode: null
