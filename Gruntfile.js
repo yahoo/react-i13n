@@ -112,8 +112,8 @@ module.exports = function (grunt) {
       all: {
         options: {
           // this is apply for open source project https://saucelabs.com/open-source
-          username: 'roderick.hsiao',
-          key: () => 'a7c8994f-a04b-4d04-808f-1090f5148079',
+          username: process.env.SAUCE_USERNAME,
+          key: () => process.env.SAUCE_ACCESS_KEY,
 
           testname: 'react-i13n func test',
           urls: ['http://127.0.0.1:9999/tests/functional/page.html'],
