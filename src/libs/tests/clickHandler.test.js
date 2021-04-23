@@ -130,8 +130,12 @@ describe('clickHandler', () => {
     clickHandler(mockClickEvent, mockOptions);
   });
 
-  it('should not follow it if follow is set to false', (done) => {
+  it.only('should not follow it if follow is set to false', (done) => {
     const executedActions = [];
+    mockClickEvent.target = {
+      tagName: 'A',
+      href: 'https://foobar.com'
+    };
     mockClickEvent.preventDefault = function () {
       executedActions.push('preventDefault');
     };
@@ -147,6 +151,10 @@ describe('clickHandler', () => {
 
   it('should follow it while follow is set to true', (done) => {
     const executedActions = [];
+    mockClickEvent.target = {
+      tagName: 'A',
+      href: 'https://foobar.com'
+    };
     window.location.assign = function () {
       executedActions.push('assign');
       expect(executedActions).toEqual(['preventDefault', 'assign']);

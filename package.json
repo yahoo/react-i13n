@@ -1,7 +1,7 @@
 {
   "name": "@roderickhsiao/react-i13n",
   "description": "[Experiment] React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.10",
+  "version": "3.0.0-alpha.11",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {

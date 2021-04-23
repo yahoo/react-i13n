@@ -71,15 +71,14 @@ const clickHandler = (e, options = {}) => {
   const href = props.href || target.href;
 
   // if users disable the redirect by follow, force set it as false
-  if (shouldFollowLink) {
-    isRedirectLink = shouldFollowLink(props) ?? follow;
-  }
-
-  // 1. if it is an anchor but no href or hash link
-  // 2. button without form submit
+  isRedirectLink = (shouldFollowLink?.(props) ?? follow) ?? isRedirectLink;
+  // 1. not a link or button
+  // 2. if it is an anchor but no href or hash link
+  // 3. button without form submit
   // Do not trigger navigate action. Let browser handle it natively.
   if (
-    (isLink(target) && (!href || (href && href[0] === '#')))
+    (!isLink(target) && !isButtonLike(target))
+    || (isLink(target) && (!href || (href && href[0] === '#')))
     || (isButtonLike(target) && !target.form)
   ) {
     isRedirectLink = false;
