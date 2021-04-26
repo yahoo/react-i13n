@@ -16,13 +16,15 @@ module.exports = {
     'no-use-before-define': 0,
     'import/no-named-as-default': 0,
     'import/no-named-as-default-member': 0,
-    'react/no-find-dom-node': 0
+    'react/no-find-dom-node': 0,
+    'react/prop-types': 0
   },
   env: {
     browser: true,
-    node: true,
+    es6: true,
     jasmine: true,
-    es6: true
+    jest: true,
+    node: true
   },
   plugins: ['import', 'react', 'react-hooks'],
   parser: 'babel-eslint'

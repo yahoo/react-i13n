@@ -10,12 +10,13 @@ const DashboardItem = (props) => {
   const { text } = props;
   const style = {
     background: '#d1c4e9',
-    color: 'rgba(0,0,0,.87)',
-    padding: '8px',
     borderTop: 'rgba(0,0,0,.12) 1px solid',
-    whiteSpace: 'nowrap',
+    color: 'rgba(0,0,0,.87)',
+    fontFamily: 'inherit',
     overflow: 'hiiden',
-    textOverflow: 'ellipsis'
+    padding: '8px',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
   };
 
   return (

@@ -5,15 +5,15 @@
 
 module.exports = {
   // Core libraries
-  I13nNode: require('./dist/libs/I13nNode').default,
-  ReactI13n: require('./dist/libs/ReactI13n').default,
-
-  // Utils
-  createI13nNode: require('./dist/utils/createI13nNode').default,
-  setupI13n: require('./dist/utils/setupI13n').default,
+  createI13nNode: require('./dist/core/createI13nNode').default,
+  getInstance: require('./dist/core/ReactI13n').getInstance,
+  I13nNode: require('./dist/core/I13nNode').default,
+  ReactI13n: require('./dist/core/ReactI13n').default,
+  setupI13n: require('./dist/core/setupI13n').default,
 
   // I13n Components
   I13nAnchor: require('./dist/components/I13nAnchor').default,
   I13nButton: require('./dist/components/I13nButton').default,
+  I13nContext: require('./dist/components/core/I13nContext').default,
   I13nDiv: require('./dist/components/I13nDiv').default
 };

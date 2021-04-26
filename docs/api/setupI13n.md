@@ -12,11 +12,11 @@ We provide `setupI13n` as a convenient [higher order function](https://medium.co
  * `plugins` - plugins array that you defined according to the definition below.
 
 ```js
-import React from 'react';
+import React, { Component } from 'react';
 import { setupI13n } from 'react-i13n';
 import someReactI13nPlugin from 'some-react-i13n-plugin';
 
-class DemoApp extends React.Component({
+class DemoApp extends Component({
     ...
 });
 
@@ -40,4 +40,4 @@ If you have multiple React trees in one page, we will create multiple i13n trees
 
 ### Util Functions
 
-You will get i13n util functions automatically via `this.props.i13n` by using `setupI13n`, more detail please refer to [util functions](../guides/utilFunctions.md).
+`options.skipUtilFunctionsByProps` - true to prevent i13n util function to be passed via `props.i13n`

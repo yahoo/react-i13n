@@ -1,40 +1,42 @@
 /* global document, React, ReactDOM */
-
 function getJsonFromUrl() {
   const query = location.search.substr(1);
   const result = {};
-  const parts = query.split('&');
-  let i = 0;
-  const { length } = parts;
-  for (i; i < length; i++) {
-    const item = parts[i].split('=');
-    result[item[0]] = decodeURIComponent(item[1]);
+  const parts = new URLSearchParams(query);
+  for (let p of parts) {
+    result[p] = parts.get(p);
   }
   return result;
 }
 
 const container = document.getElementById('container');
 const itemsNumber = getJsonFromUrl().items || 1;
+const placeholders = new Array(itemsNumber).fill();
 
 class I13nComponentLevel1 extends React.Component {
   render() {
-    const links = [];
-    for (let i = 0; i < itemsNumber; i++) {
+    const links = placeholders.map((item, i) => {
       const linkText = `Button Level1 ${i}`;
-      var linkSec = `level1-${i}`;
-      links.push(
-        <I13nButton className="P(4px) M(4px) Bgc(#ececec)" key={i} i13nModel={{ sec: linkSec, lv1: 'foo' }}>
+      const linkSec = `level1-${i}`;
+      return (
+        <I13nButton
+          className="P(4px) M(4px) Bgc(#ececec)"
+          key={i}
+          i13nModel={{ sec: linkSec, lv1: 'foo' }}
+        >
           {linkText}
         </I13nButton>
       );
-    }
+    });
+
     const getModelData = function () {
       return {
         sec: 'dynamical-generated'
       };
     };
+
     return (
-      <div className="P(4px) M(4px) Bgc(#d9edf7) I13nComponentLevel1">
+      <div className="P(4px) M(4px) Bgc(#d9edf7) I13nComponentLevel1" ref={this.props.innerRef}>
         Level 1 Links
         <div className="P(4px) M(4px) Bgc(#ececec) NormalLink">
           <I13nAnchor
@@ -74,7 +76,7 @@ class I13nComponentLevel1 extends React.Component {
         <div className="P(4px) M(4px) Bgc(#ececec) NormalButton">
           <form action="/mock-destination-page.html">
             <input type="text" name="fname" />
-            <I13nButton i13nModel={{ sec: linkSec }} href="./mock-destination-page.html">
+            <I13nButton i13nModel={{ sec: `evel1-${itemsNumber}` }} href="./mock-destination-page.html">
               NormalButton
             </I13nButton>
           </form>
@@ -112,20 +114,20 @@ I13nComponentLevel1 = createI13nNode(I13nComponentLevel1);
 
 class I13nComponentLevel2 extends React.Component {
   render() {
-    const links = [];
-    for (let i = 0; i < itemsNumber; i++) {
+    const links = placeholders.map((item, i) => {
       const linkText = `Link Level2 ${i}`;
       const linkSec = `level2-${i}`;
-      links.push(
+      return (
         <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
           <I13nAnchor i13nModel={{ sec: linkSec, lv2: 'foo' }} follow={false} href="https://yahoo.com">
             {linkText}
           </I13nAnchor>
         </div>
       );
-    }
+    });
+
     return (
-      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2">
+      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2" ref={this.props.innerRef}>
         Level 2 Links
         {links}
       </div>
@@ -142,24 +144,24 @@ class I13nComponentLevel2Hidden extends React.Component {
 
   clickHandler = () => {
     this.setState({ expend: true });
-  }
+  };
 
   render() {
-    const links = [];
+    let links = [];
     if (this.state.expend) {
-      for (let i = 0; i < itemsNumber; i++) {
+      links = placeholders.map((item, i) => {
         const linkText = `Link Level2 Hidden ${i}`;
-        links.push(
+        return (
           <div className="P(4px) M(4px) Bgc(#ececec)" key={i}>
             <I13nAnchor href="/mock-destination-page.html" follow={false}>
               {linkText}
             </I13nAnchor>
           </div>
         );
-      }
+      });
     }
     return (
-      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden">
+      <div className="P(4px) M(4px) Bgc(#fcf8e3) I13nComponentLevel2Hidden" ref={this.props.innerRef}>
         <I13nDiv
           className="HiddenBtn"
           onClick={this.clickHandler}
@@ -176,15 +178,13 @@ class I13nComponentLevel2Hidden extends React.Component {
 
 I13nComponentLevel2Hidden = createI13nNode(I13nComponentLevel2Hidden);
 
-class I13nDemo extends React.Component {
-  componentWillMount() {
-    ReactI13n.getInstance().execute('pageview', {});
-  }
+let I13nDemo = () => {
+  React.useEffect(() => {
+    getInstance().execute('pageview', {});
+  }, []);
 
-  render() {
-    return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
-  }
-}
+  return <I13nComponentLevel1 i13nModel={{ sec: 'level1' }} />;
+};
 
 window.firedEvents = [];
 
@@ -199,8 +199,10 @@ const testPlugin = {
         text: payload.i13nNode.getText(),
         position: payload.i13nNode.getPosition()
       });
+
       callback();
     },
+
     event(payload, callback) {
       // event handlers
       window.firedEvents.push({
@@ -208,6 +210,7 @@ const testPlugin = {
       });
       callback();
     },
+
     pageview(payload, callback) {
       if (payload.env === 'client') {
         // client side pageview handlers
@@ -219,10 +222,18 @@ const testPlugin = {
       }
       callback();
     },
+
     created(payload, callback) {
       // updated handlers
       window.firedEvents.push({
         name: 'created'
+      });
+      callback();
+    },
+
+    enterViewport(payload, callback) {
+      window.firedEvents.push({
+        name: 'enterViewport'
       });
       callback();
     }

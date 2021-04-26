@@ -2,7 +2,7 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-import I13nNode from '../../../src/libs/I13nNode';
+import I13nNode from '../I13nNode';
 
 describe('I13nNode', () => {
   beforeEach(() => {
@@ -121,6 +121,10 @@ describe('I13nNode', () => {
     expect(i13nNodeParent.getCustomAttribute('traversed')).toEqual(true);
     // start to append child, should get on change event and clear the traverse status
     const i13nNodeChild4 = new I13nNode(i13nNodeParent, { sec: 'child' }, true, false);
+
+    expect(i13nNodeChild1.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild2.getCustomAttribute('traversed')).toEqual(true);
+    expect(i13nNodeChild3.getCustomAttribute('traversed')).toEqual(true);
   });
 
   it('should remove child correctly', () => {

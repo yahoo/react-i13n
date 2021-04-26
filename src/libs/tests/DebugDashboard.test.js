@@ -2,8 +2,8 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-import DebugDashboard from '../../../src/libs/DebugDashboard';
-import I13nNode from '../../../src/libs/I13nNode';
+import DebugDashboard from '../DebugDashboard';
+import I13nNode from '../../core/I13nNode';
 
 describe('clickHandler', () => {
   it('should able to generate debug dashboard correctly', () => {

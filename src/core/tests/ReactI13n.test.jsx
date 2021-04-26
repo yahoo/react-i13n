@@ -2,7 +2,7 @@
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-import ReactI13n from '../../../src/libs/ReactI13n';
+import ReactI13n from '../ReactI13n';
 
 describe('ReactI13n', () => {
   it('should be created correctly', () => {
@@ -99,7 +99,7 @@ describe('ReactI13n', () => {
     const mockPlugin1 = {
       name: 'test1',
       eventHandlers: {
-        click(payload, callback) {
+        click() {
           // do nothing, without callback, simulate if event handler does not execute correctly or timeout
         }
       }

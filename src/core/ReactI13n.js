@@ -4,21 +4,22 @@
  */
 
 import { IS_CLIENT, ENVIRONMENT } from '../utils/variables';
-import EventsQueue from './EventsQueue';
+import EventsQueue from '../libs/EventsQueue';
 import I13nNode from './I13nNode';
-import isUndefined from '../utils/isUndefined';
+
 import warnAndPrintTrace from '../utils/warnAndPrintTrace';
 
 const debugLib = require('debug');
 
 const debug = debugLib('ReactI13n');
-
 const DEFAULT_HANDLER_TIMEOUT = 1000;
 
 // export the debug lib in client side
 if (IS_CLIENT) {
   window.debugLib = debugLib;
 }
+
+let _reactI13nInstance = null;
 
 /**
  * ReactI13n Library to build a tree for instrumentation
@@ -36,29 +37,24 @@ if (IS_CLIENT) {
 class ReactI13n {
   constructor(options = {}) {
     debug('init', options);
-    this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : I13nNode;
-    this._plugins = {};
     this._eventsQueues = {};
-    this._isViewportEnabled = options.isViewportEnabled || false;
+    this._plugins = {};
     this._rootModelData = options.rootModelData || {};
+
     this._handlerTimeout = options.handlerTimeout || DEFAULT_HANDLER_TIMEOUT;
-    this._scrollableContainerId = options.scrollableContainerId || undefined;
+    this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : I13nNode;
+    this._isViewportEnabled = options.isViewportEnabled || false;
+    this._scrollableContainerId = options.scrollableContainerId;
+    this._i13nInstance = null;
   }
 
-  /**
-   * Get ReactI13n Instance
-   * @method getInstance
-   * @return the ReactI13n instance
-   */
-  static getInstance() {
-    if (IS_CLIENT) {
-      return window._reactI13nInstance;
-    }
-    warnAndPrintTrace(
-      'ReactI13n instance is not avaialble on server side with ReactI13n.getInstance, '
-        + 'please use this.props.i13n or this.context.i13n to access ReactI13n utils'
-    );
-    return null;
+  get i13nInstance() {
+    return this._i13nInstance;
+  }
+
+  set i13nInstance(instance) {
+    _reactI13nInstance = instance;
+    this._i13nInstance = instance;
   }
 
   /**
@@ -82,39 +78,41 @@ class ReactI13n {
    * @param {Function} callback callback function when all handlers are executed
    * @async
    */
-  execute(eventName, payload, callback) {
-    const self = this;
+  execute = (eventName, payload, callback) => {
     payload = Object.assign({}, payload);
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     const promiseHandlers = this.getEventHandlers(eventName, payload);
+
     if (promiseHandlers && promiseHandlers.length > 0) {
       let handlerTimeout;
       promiseHandlers.push(
         new Promise((resolve) => {
           handlerTimeout = setTimeout(() => {
-            debug(`handler timeout in ${self._handlerTimeout}ms.`);
+            debug(`handler timeout in ${this._handlerTimeout}ms.`);
             resolve();
-          }, self._handlerTimeout);
+          }, this._handlerTimeout);
         })
       );
       // promised execute all handlers if plugins and then call callback function
-      Promise.race(promiseHandlers).then(
-        () => {
-          clearTimeout(handlerTimeout);
-          callback && callback();
-        },
-        (e) => {
-          clearTimeout(handlerTimeout);
-          debug('execute event failed', e);
-          callback && callback();
-        }
-      );
+      Promise
+        .race(promiseHandlers)
+        .then(
+          () => {
+            clearTimeout(handlerTimeout);
+            callback?.();
+          },
+          (e) => {
+            clearTimeout(handlerTimeout);
+            debug('execute event failed', e);
+            callback?.();
+          }
+        );
     } else {
       // if there's no handlers, execute callback directly
-      callback && callback();
+      callback?.();
     }
-  }
+  };
 
   /**
    * Setup plugins
@@ -125,9 +123,10 @@ class ReactI13n {
     if (!plugin) {
       return;
     }
+    debug('setup plugin', plugin);
+
     this._plugins[plugin.name] = plugin;
     this._eventsQueues[plugin.name] = new EventsQueue(plugin);
-    debug('setup plugin', plugin);
   }
 
   /**
@@ -137,25 +136,23 @@ class ReactI13n {
    * @param {Object} payload payload object
    * @return {Array} the promise handlers
    */
-  getEventHandlers(eventName, payload) {
-    const self = this;
+  getEventHandlers = (eventName, payload) => {
     const promiseHandlers = [];
-    if (self._plugins) {
-      Object.keys(self._plugins).forEach((pluginName) => {
-        const plugin = self._plugins[pluginName];
-        const eventsQueue = self._eventsQueues[pluginName];
+    if (this._plugins) {
+      Object.entries(this._plugins).forEach(([pluginName, plugin]) => {
+        const eventsQueue = this._eventsQueues[pluginName];
         const eventHandler = plugin && plugin.eventHandlers && plugin.eventHandlers[eventName];
         if (eventHandler) {
           promiseHandlers.push(
             new Promise((resolve, reject) => {
-              eventsQueue.executeEvent(eventName, payload, resolve, reject);
+              eventsQueue.executeEvent?.(eventName, payload, resolve, reject);
             })
           );
         }
       });
     }
     return promiseHandlers;
-  }
+  };
 
   /**
    * Get I13n node class
@@ -196,7 +193,7 @@ class ReactI13n {
 
   getScrollableContainerDOMNode() {
     if (this._scrollableContainerId) {
-      return document && document.getElementById(this._scrollableContainerId);
+      return document?.getElementById(this._scrollableContainerId);
     }
   }
 
@@ -217,15 +214,21 @@ class ReactI13n {
   updateOptions(options = {}) {
     debug('updated', options);
     this._i13nNodeClass = typeof options.i13nNodeClass === 'function' ? options.i13nNodeClass : this._i13nNodeClass;
-    this._isViewportEnabled = !isUndefined(options.isViewportEnabled)
-      ? options.isViewportEnabled
-      : this._isViewportEnabled;
-    this._rootModelData = options.rootModelData ? options.rootModelData : this._rootModelData;
-    this._handlerTimeout = options.handlerTimeout ? options.handlerTimeout : this._handlerTimeout;
-    this._scrollableContainerId = isUndefined(options.scrollableContainerId)
-      ? this._scrollableContainerId
-      : options.scrollableContainerId;
+    this._isViewportEnabled = options.isViewportEnabled ?? this._isViewportEnabled;
+    this._rootModelData = options.rootModelData ?? this._rootModelData;
+    this._handlerTimeout = options.handlerTimeout ?? this._handlerTimeout;
+    this._scrollableContainerId = options.scrollableContainerId ?? this._scrollableContainerId;
   }
 }
 
+export const getInstance = () => {
+  if (IS_CLIENT) {
+    return _reactI13nInstance;
+  }
+  warnAndPrintTrace(
+    'ReactI13n instance is not avaialble on server side with getInstance, '
+      + 'please use this.props.i13n or React context to access ReactI13n utils'
+  );
+  return null;
+};
 export default ReactI13n;

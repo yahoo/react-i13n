@@ -8,7 +8,7 @@ const getDisplayName = (Component, fallback) => {
     return fallback;
   }
   const { displayName, name } = Component;
-  return displayName || name || fallback || Component;
+  return displayName ?? name ?? fallback ?? Component;
 };
 
 export default getDisplayName;

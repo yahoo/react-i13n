@@ -1,7 +1,7 @@
 {
   "name": "react-i13n",
   "description": "React I13n provides a performant and scalable solution to application instrumentation.",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "main": "index.js",
   "module": "index.es.js",
   "repository": {
@@ -20,19 +20,23 @@
     "func-debug": "npm run dist && npm run dist-functional && grunt functional-debug",
     "lint": "eslint src",
     "prepublish": "npm run dist",
-    "test": "jest tests/unit --coverage --coverageReporters=lcov",
-    "unit": "jest tests/unit"
+    "test": "jest src --coverage --coverageReporters=lcov",
+    "unit": "jest src"
   },
   "dependencies": {
     "debug": "^4.1.1",
     "hoist-non-react-statics": "^3.3.0",
     "prop-types": "^15.7.2",
+    "react-in-viewport": "^1.0.0-alpha.16",
     "subscribe-ui-event": "^2.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.10.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.10.1",
     "@babel/plugin-transform-spread": "^7.8.3",
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
@@ -59,6 +63,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-saucelabs": "^9.0.0",
     "grunt-webpack": "^3.1.3",
+    "intersection-observer": "^0.12.0",
     "jest": "^26.0.1",
     "jest-junit": "^12.0.0",
     "minimist": "^1.2.0",
@@ -67,8 +72,8 @@
     "pre-commit": "^1.0.0",
     "prettier": "^2.0.5",
     "promise": "^8.0.2",
-    "react": "^16.8.3",
-    "react-dom": "^16.8.3",
+    "react": "^16.8.3 || ^17.0.0",
+    "react-dom": "^16.8.3 || ^17.0.0",
     "webpack": "^4.0.0",
     "webpack-dev-server": "^3.2.1",
     "xunit-file": "^1.0.0"
@@ -80,8 +85,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^16.8.0",
-    "react-dom": "^16.8.0"
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
   },
   "precommit": [
     "lint",

@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import createI13nNode from '../utils/createI13nNode';
+import createI13nNode from '../core/createI13nNode';
 
 const I13nDiv = createI13nNode('div', {
   isLeafNode: false,

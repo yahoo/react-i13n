@@ -10,7 +10,7 @@
 
 Typically, you have to manually add instrumentation code throughout your application, e.g., hooking up `onClick` handlers to the links you want to track. `react-i13n` provides a simplified approach by letting you define the data model you want to track and handling the beaconing for you.
 
-`react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do is leverage our [React component or mixin](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
+`react-i13n` does this by building an [instrumentation tree](#i13n-tree) that mirrors your applications React component hierarchy. All you have to do is leverage our [React component](./docs/guides/integrateWithComponents.md) to denote which components should fire the tracking events.
 
 ## Features
 
@@ -46,7 +46,7 @@ in order to support all browsers and older versions of Node.js. We recommend usi
 * (Optionally) follow the [event system](./docs/guides/eventSystem.md) if you want to fire events manually.
 
 ```js
-import React from 'react';
+import React, { Component } from 'react';
 import {
   ReactI13n,
   createI13nNode,
@@ -55,34 +55,38 @@ import {
 import somePlugin from 'some-i13n-plugin'; // a plugin for a certain instrumentation mechanism
 
 // create a i13n anchor for link tracking
-// or you can use the mixin to track an existing component
 const I13nAnchor = createI13nNode('a', {
-    isLeafNode: true,
-    bindClickEvent: true,
-    follow: true
+  isLeafNode: true,
+  bindClickEvent: true,
+  follow: true
 });
 
-class DemoApp extends React.Component {
-  componentWillMount () {
-    this.props.i13n.executeEvent('pageview', {}); // fire a custom event
+class DemoApp extends Component {
+  componentDidMount () {
+    // fire a custom event
+    this.props.i13n.executeEvent('pageview', {});
   }
 
   render() {
-      ...
+    <span>
       <I13nAnchor
         href="http://foo.bar"
-        i13nModel={{action: 'click', label: 'foo'}}
+        i13nModel={{
+          action: 'click',
+          label: 'foo'
+        }}
       >
         ...
       </I13nAnchor>
       // this link will be tracked, and the click event handlers provided by the plugin will get the model data as
       // {site: 'foo', action: 'click', label: 'foo'}
+    </span>
   }
 };
 
 
 const I13nDempApp = setupI13n(DemoApp, {
-  rootModelData: {site: 'foo'},
+  rootModelData: { site: 'foo' },
   isViewportEnabled: true
 }, [somePlugin]);
 
@@ -99,7 +103,7 @@ Or follow our guide and [create your own](./docs/guides/createPlugins.md).
 ## I13n Tree
 ![I13n Tree](https://cloud.githubusercontent.com/assets/3829183/7980892/0b38eb70-0a60-11e5-8cc2-712ec42089fc.png)
 
-`react-i13n` builds the instrumentation tree by leveraging the undocumented React `context` feature and the `componentWillMount` life cycle event. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
+`react-i13n` builds the instrumentation tree by leveraging the React `context` feature. Each component can define a `i13nModel` prop that defines the data it needs to track. This approach is more performant, as it means you do not need additional DOM manipulation when you want to collect the tracking data values for sending out beacons.
 
 Since the i13n data is defined at each level. Whenever you want to get the `i13nModel` for a certain node, `react-i13n` will traverse back up the tree to merge all the `i13nModel` information in the hierarchy. Since the tree is already built, you do not need extra DOM access, which is cheap and efficient.
 
@@ -112,8 +116,6 @@ link-without-react-component x 131,232 ops/sec ±1.08% (82 runs sampled)
 link-wrapped-with-react-component x 111,056 ops/sec ±1.55% (88 runs sampled)
 link-wrapped-with-react-component-with-i13n-high-order-component x 64,422 ops/sec ±1.95% (84 runs sampled)
 ```
-
-We recommend to use [createI13nNode](./docs/api/createI13nNode.md#createi13nnodecomponent-options) instead of I13nMixin as it performs better. As the benchmark result, on server side, rendering `64` react components with i13n functionalities takes `1 ms`. Let's say it takes `3 ms` overhead if you have `200` links on the page. That's a trade off if you want to organize i13n implementation better with react-i13n. We are working on performance improvement, if you have any insight or performance benchmark, please let us know!
 
 ## Presentation
 Take a look at [Rafael Martins' slides](http://www.slideshare.net/RafaelMartins21/instrumentation-talk-39547608) from a recent React meetup to understand more.
