@@ -129,6 +129,11 @@ class ReactI13n {
     this._eventsQueues[plugin.name] = new EventsQueue(plugin);
   }
 
+  cleanUpPlugins() {
+    this._eventsQueues = {};
+    this._plugins = {};
+  }
+
   /**
    * Get handlers from all plugin by event name
    * @method getEventHandlers
