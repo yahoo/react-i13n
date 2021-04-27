@@ -109,8 +109,11 @@ describe('React I13n test', () => {
     expect(events[currentEventCount - 1].position).to.eql(1);
   });
 
-  it('should fire a enterViewport', () => {
+  it('should fire a enterViewport', (done) => {
     const events = window.firedEvents;
-    expect(events.filter(({ name }) => name === 'enterViewport').length).to.greaterThan(1);
+    setTimeout(() => {
+      expect(events.filter(({ name }) => name === 'enterViewport').length).to.greaterThan(1);
+      done();
+    });
   });
 });

@@ -3,7 +3,7 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useRef } from 'react';
 import hoistNonReactStatics from 'hoist-non-react-statics';
 
 import getDisplayName from '../utils/getDisplayName';
@@ -48,23 +48,34 @@ function setupI13n(Component, options = {}, plugins = []) {
       ...restProps
     } = props;
 
+    const isPluginsInitialized = useRef(false);
     const {
       i13nInstance: reactI13n,
       executeI13nEvent: executeEvent
     } = useReactI13nRoot(options);
 
-    useEffect(() => {
-      if (reactI13n) {
+    const initializeReactI13n = () => {
+      if (reactI13n && !isPluginsInitialized.current) {
         plugins.forEach((plugin) => {
           reactI13n.plug(plugin);
         });
         reactI13n.createRootI13nNode();
+        isPluginsInitialized.current = true;
       }
+    };
+    // initial
+    initializeReactI13n();
+
+    // Update plugins if reactI13n instance changes
+    useEffect(() => {
+      isPluginsInitialized.current = false;
+      initializeReactI13n();
 
       return () => {
+        isPluginsInitialized.current = false;
         reactI13n?.cleanUpPlugins();
       };
-    }, [reactI13n, plugins]);
+    }, [reactI13n]);
 
     const parentI13nNode = reactI13n?.getRootI13nNode();
 
