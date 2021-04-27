@@ -5,5 +5,3 @@ node_js:
 after_success:
   # - "npm run func"
   - "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
-install:
-  - yarn
