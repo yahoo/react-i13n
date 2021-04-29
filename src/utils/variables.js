@@ -4,7 +4,8 @@
  */
 import isUndefined from './isUndefined';
 
-const { NODE_ENV } = process.env;
+// eslint-disable-next-line prefer-destructuring
+const NODE_ENV = process.env.NODE_ENV;
 
 export const IS_PROD = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
