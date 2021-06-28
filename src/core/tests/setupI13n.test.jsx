@@ -1,4 +1,7 @@
 /**
+ * @jest-environment jsdom
+ */
+/**
  * Copyright 2015 - Present, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
@@ -43,9 +46,7 @@ describe('setupI13n', () => {
   });
 
   it('should generate a component with custom displayName', () => {
-    const TestApp = () => {
-      return <div />;
-    };
+    const TestApp = () => <div />;
 
     // check the initial state is correct after render
     const I13nTestApp = setupI13n(TestApp, {
@@ -54,7 +55,6 @@ describe('setupI13n', () => {
     expect(I13nTestApp.displayName).toEqual('Foo');
     render(<I13nTestApp />);
   });
-
 
   it('should generate a component with setupI13n and custom display name', () => {
     const TestApp = () => <div />;

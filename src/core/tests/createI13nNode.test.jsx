@@ -1,4 +1,7 @@
 /**
+ * @jest-environment jsdom
+ */
+/**
  * Copyright 2020, Yahoo! Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
@@ -60,12 +63,11 @@ describe('createI13nNode', () => {
     eventsQueue = [];
   });
 
-  it('should generate a component with createI13nNode', (done) => {
+  it('should generate a component with createI13nNode', () => {
     const TestComponent = forwardRef((props, ref) => {
       const { i13nNode } = useContext(I13nContext);
 
       expect(i13nNode.getModel()).toEqual({ sec: 'foo' });
-      done();
 
       return <div ref={ref} />;
     });
