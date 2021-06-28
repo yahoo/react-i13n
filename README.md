@@ -1,7 +1,7 @@
 # react-i13n
 
 [![npm version](https://badge.fury.io/js/react-i13n.svg)](http://badge.fury.io/js/react-i13n)
-[![Build Status](https://travis-ci.org/yahoo/react-i13n.svg?branch=master)](https://travis-ci.org/yahoo/react-i13n)
+![Build Status](https://github.com/yahoo/react-i13n/actions/workflows/node.js.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/yahoo/react-i13n/badge.svg?branch=master&service=github)](https://coveralls.io/github/yahoo/react-i13n?branch=master)
 
 `react-i13n` provides a performant, scalable and pluggable approach to instrumenting your React application.
