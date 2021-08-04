@@ -2,13 +2,13 @@
  * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-const isLeftClickEvent = e => e.button === 0;
-const isModifiedEvent = e => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+const isLeftClickEvent = (e) => e.button === 0;
+const isModifiedEvent = (e) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 
 const getLinkTarget = (target, props) => props.target || (target?.target) || '_self';
 const isNewWindow = (target, props) => getLinkTarget(target, props) === '_blank';
 
-const isLink = target => target.tagName === 'A';
+const isLink = (target) => target.tagName === 'A';
 const isButtonLike = (target) => {
   const { tagName, type } = target;
   if (tagName === 'BUTTON') {
@@ -49,7 +49,7 @@ const isFormSubmit = (target) => {
  * @method ClickHandler
  */
 const clickHandler = (e, options = {}) => {
-  const target = e.target || e.srcElement;
+  const target = e.currentTarget;
   const isForm = isFormSubmit(target);
 
   let isRedirectLink = isDefaultRedirectLink(target);
