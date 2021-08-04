@@ -90,6 +90,7 @@ describe('clickHandler', () => {
 
     mockClickEvent.currentTarget = {
       tagName: 'BUTTON',
+      type: 'submit',
       form: {
         submit() {
           executedActions.push('submit');
