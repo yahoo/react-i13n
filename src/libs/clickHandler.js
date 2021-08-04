@@ -37,7 +37,7 @@ const isFormSubmit = (target) => {
   // if it's a
   // 1. button
   // 2. input with submit or button type
-  if (isButtonLike(target)) {
+  if (isButtonLike(target) && target.type === 'submit') {
     return true;
   }
   return false;
@@ -79,7 +79,7 @@ const clickHandler = (e, options = {}) => {
   if (
     (!isDefaultRedirectLink(target))
     || (isLink(target) && (!href || (href && href[0] === '#')))
-    || (isButtonLike(target) && !target.form)
+    || (isButtonLike(target) && !isForm)
   ) {
     isRedirectLink = false;
     isPreventDefault = false;
