@@ -37,7 +37,7 @@ describe('clickHandler', () => {
     };
 
     mockClickEvent = {
-      target: {},
+      currentTarget: {},
       button: 0,
       preventDefault: jest.fn()
     };
@@ -72,7 +72,7 @@ describe('clickHandler', () => {
       done();
     };
 
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A',
       href: 'https://foobar.com'
     };
@@ -88,7 +88,7 @@ describe('clickHandler', () => {
   it('should run click handler correctly if target is an button', (done) => {
     const executedActions = [];
 
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'BUTTON',
       form: {
         submit() {
@@ -111,7 +111,7 @@ describe('clickHandler', () => {
 
   it('should run click handler correctly if target is input with submit', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'INPUT',
       type: 'submit',
       form: {
@@ -135,7 +135,7 @@ describe('clickHandler', () => {
 
   it('should not follow it if follow is set to false', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A',
       href: 'https://foobar.com'
     };
@@ -154,7 +154,7 @@ describe('clickHandler', () => {
 
   it('should follow it while follow is set to true', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A',
       href: 'https://foobar.com'
     };
@@ -178,7 +178,7 @@ describe('clickHandler', () => {
 
   it('should simply execute event without prevent default and redirection if the link is #', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A'
     };
     mockClickEvent.preventDefault = function () {
@@ -196,7 +196,7 @@ describe('clickHandler', () => {
 
   it('should simply execute event without prevent default and redirection is a modified click', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A'
     };
     mockClickEvent.metaKey = true;
@@ -215,7 +215,7 @@ describe('clickHandler', () => {
 
   it('should simply execute event without prevent default and redirection if props.target=_blank', (done) => {
     const executedActions = [];
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'SPAN'
     };
     mockClickEvent.preventDefault = function () {
@@ -237,7 +237,7 @@ describe('clickHandler', () => {
       executedActions.push('assign');
     };
 
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A',
       href: 'foo'
     };
@@ -262,7 +262,7 @@ describe('clickHandler', () => {
       executedActions.push('assign');
     };
 
-    mockClickEvent.target = {
+    mockClickEvent.currentTarget = {
       tagName: 'A',
       href: 'foo'
     };
