@@ -76,7 +76,7 @@
     "react-dom": "^16.8.3 || ^17.0.0",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.0.0",
-    "xunit-file": "^1.0.0"
+    "xunit-file": "^2.0.0"
   },
   "keywords": [
     "react",
