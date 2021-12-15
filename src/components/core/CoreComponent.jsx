@@ -46,7 +46,7 @@ const CoreComponent = (props) => {
 
   // create event
   useEffect(() => {
-    executeEvent?.('created', {});
+    executeEvent?.('created', { i13nNode });
   }, []);
 
   // auto bind click event
