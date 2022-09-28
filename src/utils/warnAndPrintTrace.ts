@@ -5,7 +5,7 @@
 
 import { IS_PROD, IS_TEST } from './variables';
 
-const warnAndPrintTrace = (errorMessage) => {
+const warnAndPrintTrace = (errorMessage: string) => {
   if (!IS_PROD) {
     console?.warn?.(errorMessage);
     !IS_TEST && console?.trace?.();

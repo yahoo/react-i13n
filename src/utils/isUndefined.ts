@@ -3,6 +3,6 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-const isUndefined = (data) => typeof data === 'undefined';
+const isUndefined = (data: any) => typeof data === 'undefined';
 
 export default isUndefined;

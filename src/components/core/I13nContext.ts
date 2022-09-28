@@ -5,12 +5,16 @@
 
 import { createContext } from 'react';
 
-const I13nContext = createContext({
+import type { ExecuteEvent, ContextType } from './types';
+
+const defaultContext: ContextType = {
   executeEvent: (name, payload, callback) => { callback?.(); },
   i13nInstance: null,
   i13nNode: null,
-  parentI13nNode: null
-});
+  parentI13nNode: null,
+};
+
+const I13nContext = createContext(defaultContext);
 
 I13nContext.displayName = 'ReactI13nContext';
 

@@ -3,7 +3,9 @@
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
 
-const getDisplayName = (Component, fallback) => {
+import React from 'react';
+
+const getDisplayName = (Component: React.ComponentType<any> | null | undefined, fallback?: string) => {
   if (!Component) {
     return fallback;
   }

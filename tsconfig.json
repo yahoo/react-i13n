@@ -1,0 +1,19 @@
+{
+  "include": [
+    "src/**/*",
+    "test/**/*",
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "outDir": "dist/types",
+    "skipLibCheck": true,
+    "target": "ESNext",
+  }
+}

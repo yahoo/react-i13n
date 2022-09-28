@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['airbnb'],
+  extends: ['airbnb', 'airbnb-typescript'],
   rules: {
     'comma-dangle': 0,
     'consistent-return': 0,
@@ -17,15 +17,21 @@ module.exports = {
     'import/no-named-as-default': 0,
     'import/no-named-as-default-member': 0,
     'react/no-find-dom-node': 0,
-    'react/prop-types': 0
+    'react/prop-types': 0,
   },
   env: {
     browser: true,
     es6: true,
     jasmine: true,
     jest: true,
-    node: true
+    node: true,
   },
-  plugins: ['import', 'react', 'react-hooks'],
-  parser: 'babel-eslint'
+  plugins: ['import', 'react', 'react-hooks', '@typescript-eslint'],
+  parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+      experimentalObjectRestSpread: true,
+    },
+    project: './tsconfig.json',
+  },
 };
