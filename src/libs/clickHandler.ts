@@ -2,14 +2,14 @@
  * Copyright 2015 - Present, Yahoo Inc.
  * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
  */
-const isLeftClickEvent = (e) => e.button === 0;
-const isModifiedEvent = (e) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
+const isLeftClickEvent = (e: MouseEvent) => e.button === 0;
+const isModifiedEvent = (e: KeyboardEvent) => !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey);
 
 const getLinkTarget = (target, props) => props.target || (target?.target) || '_self';
 const isNewWindow = (target, props) => getLinkTarget(target, props) === '_blank';
 
-const isLink = (target) => target.tagName === 'A';
-const isButtonLike = (target) => {
+const isLink = (target: HTMLElement) => target.tagName === 'A';
+const isButtonLike = (target: HTMLElement) => {
   const { tagName, type } = target;
   if (tagName === 'BUTTON') {
     return true;
@@ -33,7 +33,7 @@ const isDefaultRedirectLink = (target) => {
   return false;
 };
 
-const isFormSubmit = (target) => {
+const isFormSubmit = (target: HTMLElement) => {
   // if it's a
   // 1. button
   // 2. input with submit or button type
@@ -48,8 +48,8 @@ const isFormSubmit = (target) => {
  * @param {Object} e the click event
  * @method ClickHandler
  */
-const clickHandler = (e, options = {}) => {
-  const target = e.currentTarget;
+const clickHandler = (e: MouseEvent, options = {}) => {
+  const target = e.currentTarget as HTMLElement;
   const isForm = isFormSubmit(target);
 
   let isRedirectLink = isDefaultRedirectLink(target);
