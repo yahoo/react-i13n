@@ -48,6 +48,17 @@ class ReactI13n {
     this._i13nInstance = null;
   }
 
+  static getInstance() {
+    if (IS_CLIENT) {
+      return _reactI13nInstance;
+    }
+    warnAndPrintTrace(
+      'ReactI13n instance is not avaialble on server side with getInstance, '
+        + 'please use this.props.i13n or React context to access ReactI13n utils'
+    );
+    return null;
+  }
+
   get i13nInstance() {
     return this._i13nInstance;
   }
