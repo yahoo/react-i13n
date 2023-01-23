@@ -53,7 +53,7 @@ class ReactI13n {
       return _reactI13nInstance;
     }
     warnAndPrintTrace(
-      'ReactI13n instance is not avaialble on server side with getInstance, '
+      'ReactI13n instance is not available on server side with getInstance, '
         + 'please use this.props.i13n or React context to access ReactI13n utils'
     );
     return null;
