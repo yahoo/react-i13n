@@ -3,6 +3,7 @@
 /* global window */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import {
   createI13nNode,
@@ -24,6 +25,7 @@ if (!Object.assign) {
 
 window.React = React;
 window.ReactDOM = ReactDOM;
+window.createRoot = createRoot;
 
 window.I13nAnchor = I13nAnchor;
 window.I13nButton = I13nButton;
