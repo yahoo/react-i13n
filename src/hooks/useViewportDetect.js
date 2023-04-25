@@ -10,7 +10,7 @@ const useViewportDetect = ({
 }) => {
   const onEnterViewport = useCallback(() => {
     node.setIsInViewport(true);
-    executeEvent?.('enterViewport');
+    executeEvent?.('enterViewport', {i13nNode: node});
   }, [executeEvent, node]);
 
   const onLeaveViewport = useCallback(() => {
