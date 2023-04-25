@@ -1,4 +1,4 @@
-/* global document, React, ReactDOM */
+/* global document, React, ReactDOM, createRoot */
 function getJsonFromUrl() {
   const query = location.search.substr(1);
   const result = {};
@@ -251,7 +251,10 @@ try {
     },
     [testPlugin]
   );
-  const Demo = ReactDOM.render(<I13nDemo />, container);
+  // const Demo = ReactDOM.render(<I13nDemo />, container);
+
+  const root = createRoot(container);
+  root.render(<I13nDemo />);
 } catch (e) {
   alert(e);
 }

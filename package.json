@@ -41,7 +41,7 @@
     "@babel/preset-env": "^7.9.6",
     "@babel/preset-react": "^7.9.4",
     "@babel/register": "^7.9.0",
-    "@testing-library/react": "^12.0.0",
+    "@testing-library/react": "^14.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^9.0.1",
     "babel-plugin-dynamic-import-node": "^2.2.0",
@@ -73,8 +73,8 @@
     "pre-commit": "^1.0.0",
     "prettier": "^2.0.5",
     "promise": "^8.0.2",
-    "react": "^16.8.3 || ^17.0.0",
-    "react-dom": "^16.8.3 || ^17.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^4.0.0",
     "xunit-file": "^2.0.0"
@@ -86,8 +86,8 @@
     "instrumentation"
   ],
   "peerDependencies": {
-    "react": "^16.8.0 || ^17.0.0",
-    "react-dom": "^16.8.0 || ^17.0.0"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "precommit": [
     "lint",
