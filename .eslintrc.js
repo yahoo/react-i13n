@@ -3,8 +3,10 @@ module.exports = {
   rules: {
     'comma-dangle': 0,
     'consistent-return': 0,
+    'default-param-last': 0,
     'func-names': 0,
     'max-len': [2, 120, 4],
+    'no-console': 0,
     'no-continue': 0,
     'no-func-assign': 0,
     'no-param-reassign': 0,
@@ -21,11 +23,11 @@ module.exports = {
   },
   env: {
     browser: true,
-    es6: true,
+    es2022: true,
     jasmine: true,
     jest: true,
     node: true
   },
   plugins: ['import', 'react', 'react-hooks'],
-  parser: 'babel-eslint'
+  parser: '@babel/eslint-parser',
 };

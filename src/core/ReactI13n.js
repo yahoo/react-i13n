@@ -90,7 +90,7 @@ class ReactI13n {
    * @async
    */
   execute = (eventName, payload, callback) => {
-    payload = Object.assign({}, payload);
+    payload = { ...payload };
     payload.env = ENVIRONMENT;
     payload.i13nNode = payload.i13nNode || this.getRootI13nNode();
     const promiseHandlers = this.getEventHandlers(eventName, payload);
