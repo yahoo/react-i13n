@@ -4,7 +4,7 @@
  */
 
 import React, { Suspense, lazy } from 'react';
-import { render, unmountComponentAtNode } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { subscribe } from 'subscribe-ui-event';
 
 // Dashboard only used in client side, could safely defered load
@@ -112,7 +112,8 @@ const DebugDashboard = function DebugDashboard(i13nNode) {
     });
   };
 
-  render(
+  this.root = createRoot(container);
+  this.root.render(
     React.createElement(
       Suspense,
       { fallback: null },
@@ -142,7 +143,7 @@ DebugDashboard.prototype.destroy = function () {
     this.resizeHandler.unsubscribe();
   }
   if (this.container) {
-    unmountComponentAtNode(this.container);
+    this.root.unmount();
     document.body.removeChild(this.container);
   }
 };
