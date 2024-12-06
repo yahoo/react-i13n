@@ -74,7 +74,7 @@
     "pre-commit": "^1.0.0",
     "prettier": "^3.0.0",
     "promise": "^8.0.2",
-    "react": "^18.0.0",
+    "react": "^19.0.0",
     "react-dom": "^18.0.0",
     "webpack": "^5.64.4",
     "webpack-dev-server": "^5.0.4",
