@@ -7,7 +7,6 @@ import {
   useEffect,
   useState
 } from 'react';
-import { findDOMNode } from 'react-dom';
 import { listen } from 'subscribe-ui-event';
 
 import { IS_DEBUG_MODE } from '../utils/variables';
@@ -40,7 +39,7 @@ const useScanLinks = ({
   }
 
   useEffect(() => {
-    const DOMNode = findDOMNode(node);
+    const DOMNode = node;
     if (!DOMNode) {
       return;
     }
