@@ -249,9 +249,11 @@ describe('clickHandler', () => {
     mockOptions.props.target = '_top';
     mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
-      expect(executedActions).toEqual(['preventDefault']);
-      expect(global.window.top.location.href).toEqual('foo');
-      done();
+      setTimeout(() => {
+        expect(executedActions).toEqual(['preventDefault']);
+        expect(global.window.top.location.href).toEqual('foo');
+        done();
+      }, 0);
     };
 
     clickHandler(mockClickEvent, mockOptions);
@@ -274,11 +276,89 @@ describe('clickHandler', () => {
     mockOptions.props.target = '_parent';
     mockOptions.executeEvent = function (eventName, payload, callback) {
       callback();
-      expect(executedActions).toEqual(['preventDefault']);
-      expect(global.window.parent.location.href).toEqual('foo');
-      done();
+      setTimeout(() => {
+        expect(executedActions).toEqual(['preventDefault']);
+        expect(global.window.parent.location.href).toEqual('foo');
+        done();
+      }, 0);
     };
 
     clickHandler(mockClickEvent, mockOptions);
+  });
+
+  it('should submit the form with requestSubmit so submit handlers and validation run', (done) => {
+    const button = {
+      tagName: 'BUTTON',
+      type: 'submit'
+    };
+    button.form = {
+      requestSubmit(submitter) {
+        expect(submitter).toBe(button);
+        done();
+      },
+      submit() {
+        done(new Error('form.submit() should not be called when requestSubmit exists'));
+      }
+    };
+    mockClickEvent.currentTarget = button;
+    mockOptions.executeEvent = (eventName, payload, callback) => { callback(); };
+
+    clickHandler(mockClickEvent, mockOptions);
+  });
+
+  // https://github.com/yahoo/react-i13n/issues/569
+  it('should not submit the form if a later handler calls preventDefault', (done) => {
+    const submit = jest.fn();
+    mockClickEvent.currentTarget = {
+      tagName: 'BUTTON',
+      type: 'submit',
+      form: { submit }
+    };
+    mockOptions.executeEvent = (eventName, payload, callback) => { callback(); };
+
+    clickHandler(mockClickEvent, mockOptions);
+    // e.g. a React onClick, which runs after the native listener
+    mockClickEvent.preventDefault();
+
+    setTimeout(() => {
+      expect(submit).not.toHaveBeenCalled();
+      done();
+    }, 0);
+  });
+
+  // https://github.com/yahoo/react-i13n/issues/568
+  it('should not redirect if a later handler calls preventDefault', (done) => {
+    mockClickEvent.currentTarget = {
+      tagName: 'A',
+      href: 'https://foobar.com'
+    };
+    mockOptions.executeEvent = (eventName, payload, callback) => { callback(); };
+
+    clickHandler(mockClickEvent, mockOptions);
+    mockClickEvent.preventDefault();
+
+    setTimeout(() => {
+      expect(window.location.assign).not.toHaveBeenCalled();
+      done();
+    }, 0);
+  });
+
+  it('should not redirect if an earlier handler already called preventDefault', (done) => {
+    mockClickEvent.currentTarget = {
+      tagName: 'A',
+      href: 'https://foobar.com'
+    };
+    mockClickEvent.defaultPrevented = true;
+    mockOptions.executeEvent = (eventName, payload, callback) => {
+      expect(eventName).toEqual('click');
+      callback();
+    };
+
+    clickHandler(mockClickEvent, mockOptions);
+
+    setTimeout(() => {
+      expect(window.location.assign).not.toHaveBeenCalled();
+      done();
+    }, 0);
   });
 });
