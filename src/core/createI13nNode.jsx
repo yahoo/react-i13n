@@ -38,7 +38,25 @@ function createI13nNode(Component, defaultProps, options = {}) {
     refToWrappedComponent
   } = options;
 
-  const I13nComponentWrapper = (props) => {
+  // function component defaultProps are ignored by React 19, so apply them manually
+  const mergedDefaultProps = {
+    i13nModel: undefined,
+    isLeafNode: false,
+    bindClickEvent: false,
+    follow: false,
+    scanLinks: undefined,
+    ...defaultProps
+  };
+
+  const I13nComponentWrapper = (rawProps) => {
+    // match defaultProps semantics: a default applies when the prop is undefined
+    const props = { ...rawProps };
+    Object.keys(mergedDefaultProps).forEach((key) => {
+      if (props[key] === undefined) {
+        props[key] = mergedDefaultProps[key];
+      }
+    });
+
     const {
       // i13n props
       bindClickEvent,
@@ -106,15 +124,6 @@ function createI13nNode(Component, defaultProps, options = {}) {
   };
 
   I13nComponentWrapper.displayName = options.displayName ?? `I13n${componentName}`;
-
-  I13nComponentWrapper.defaultProps = {
-    i13nModel: undefined,
-    isLeafNode: false,
-    bindClickEvent: false,
-    follow: false,
-    scanLinks: undefined,
-    ...defaultProps
-  };
 
   if (componentIsFunction) {
     return hoistNonReactStatics(I13nComponentWrapper, Component);
