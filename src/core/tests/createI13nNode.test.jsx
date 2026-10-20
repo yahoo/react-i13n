@@ -214,4 +214,22 @@ describe('createI13nNode', () => {
     const I13nTestComponent = createI13nNode(undefined);
     expect(I13nTestComponent).toEqual(null);
   });
+
+  it('should apply defaultProps passed to createI13nNode', () => {
+    let receivedProps;
+    function TestComponent(props) {
+      receivedProps = props;
+      return <div />;
+    }
+    const I13nTestComponent = createI13nNode(TestComponent, { foo: 'bar' });
+
+    render(<I13nTestComponent />);
+    expect(receivedProps.foo).toEqual('bar');
+
+    render(<I13nTestComponent foo={undefined} />);
+    expect(receivedProps.foo).toEqual('bar');
+
+    render(<I13nTestComponent foo="baz" />);
+    expect(receivedProps.foo).toEqual('baz');
+  });
 });
