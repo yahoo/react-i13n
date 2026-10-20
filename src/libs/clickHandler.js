@@ -92,29 +92,55 @@ const clickHandler = (e, options = {}) => {
     isRedirectLink = false;
   }
 
+  // a handler that ran before this listener already cancelled the default action
+  let isUserPrevented = !!e.defaultPrevented;
+
   if (isPreventDefault) {
     if (e.preventDefault) {
-      e.preventDefault();
+      const nativePreventDefault = e.preventDefault;
+      nativePreventDefault.call(e);
+      // handlers that run after this listener (e.g. React onClick, delegated to the root)
+      // can still cancel the redirect by calling preventDefault
+      e.preventDefault = function preventDefault(...args) {
+        isUserPrevented = true;
+        return nativePreventDefault.apply(this, args);
+      };
     } else {
       e.returnValue = false;
     }
   }
 
+  const redirect = () => {
+    if (isUserPrevented) {
+      return;
+    }
+
+    if (isForm) {
+      const { form } = target;
+      // requestSubmit fires the submit event and runs validation, form.submit() skips both
+      if (form?.requestSubmit) {
+        form.requestSubmit(target);
+      } else {
+        form?.submit();
+      }
+    } else {
+      const linkTarget = getLinkTarget(target, props);
+
+      if (linkTarget === '_top') {
+        window.top.location.href = href;
+      } else if (linkTarget === '_parent') {
+        window.parent.location.href = href;
+      } else {
+        window.location.assign(href);
+      }
+    }
+  };
+
   executeEvent('click', { i13nNode, e }, () => {
     if (isRedirectLink) {
-      if (isForm) {
-        target.form?.submit();
-      } else {
-        const linkTarget = getLinkTarget(target, props);
-
-        if (linkTarget === '_top') {
-          window.top.location.href = href;
-        } else if (linkTarget === '_parent') {
-          window.parent.location.href = href;
-        } else {
-          window.location.assign(href);
-        }
-      }
+      // the callback can run synchronously, wait for the click dispatch to finish
+      // so every other click handler gets the chance to call preventDefault
+      setTimeout(redirect, 0);
     }
   });
 };
