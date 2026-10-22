@@ -4,8 +4,26 @@
  */
 
 import React, { Suspense, lazy } from 'react';
-import { createRoot } from 'react-dom/client';
+import * as ReactDOM from 'react-dom';
 import { subscribe } from 'subscribe-ui-event';
+
+// react-dom/client only exists in React 18+, fall back to the legacy API for React 16/17
+let createRoot = null;
+try {
+  // eslint-disable-next-line global-require
+  ({ createRoot } = require('react-dom/client'));
+} catch {
+  createRoot = null;
+}
+
+/* eslint-disable react/no-deprecated */
+const legacyRoot = (container) => ({
+  render: (...args) => {
+    ReactDOM.render(...args);
+  },
+  unmount: () => ReactDOM.unmountComponentAtNode(container)
+});
+/* eslint-enable react/no-deprecated */
 
 // Dashboard only used in client side, could safely defered load
 const Dashboard = lazy(() => import(/* webpackChunkName: "i13n-debug-dashboard" */ '../components/debug/Dashboard'));
@@ -112,7 +130,7 @@ const DebugDashboard = function DebugDashboard(i13nNode) {
     });
   };
 
-  this.root = createRoot(container);
+  this.root = createRoot ? createRoot(container) : legacyRoot(container);
   this.root.render(
     React.createElement(
       Suspense,
