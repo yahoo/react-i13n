@@ -80,7 +80,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "webpack": "^5.64.4",
-    "webpack-dev-server": "^5.0.4",
+    "webpack-dev-server": "^6.0.0",
     "xunit-file": "^2.0.0"
   },
   "keywords": [
